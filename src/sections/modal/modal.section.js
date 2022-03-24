@@ -17,14 +17,14 @@ const ModalSection = () => {
                         <p className="mb-20">Please select a wallet to connect to this marketplace</p>
                         <div className="connect-section">
                             <ul className="heading-list">
-                                <li><a href="#"><span><img src={meta_mask_img} alt="Meta-mask"/></span>MetaMask</a></li>
-                                <li><a href="#"><span><img src={coinbase_img} alt="Coinbase"/></span>Coinbase</a></li>
-                                <li><a href="#"><span><img src={trust_img} alt="Trust"/></span>Trust Wallet</a></li>
-                                <li><a href="#"><span><img src={wallet_img} alt="Wallet"/></span>WalletConnect</a></li>
+                                <li><a href="#!"><span><img src={meta_mask_img} alt="Meta-mask"/></span>MetaMask</a></li>
+                                <li><a href="#!"><span><img src={coinbase_img} alt="Coinbase"/></span>Coinbase</a></li>
+                                <li><a href="#!"><span><img src={trust_img} alt="Trust"/></span>Trust Wallet</a></li>
+                                <li><a href="#!"><span><img src={wallet_img} alt="Wallet"/></span>WalletConnect</a></li>
                             </ul>
                         </div>
-                        <p>By connecting your wallet, you agree to our <a href="#"><span className="modal-title">Terms of Service </span>
-                        </a>and our <a href="#"><span className="modal-title"> Privacy Policy</span></a>
+                        <p>By connecting your wallet, you agree to our <a href="#!"><span className="modal-title">Terms of Service </span>
+                        </a>and our <a href="#!"><span className="modal-title"> Privacy Policy</span></a>
                         </p>
                     </div>
                 </div>

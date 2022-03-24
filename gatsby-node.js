@@ -18,7 +18,8 @@ exports.onCreateWebpackConfig = ({
             },
         },
         externals: {
-            jquery: 'jQuery', // important: 'Q' capitalized
+            jquery: 'jQuery', 
+            WOW: 'WOW'
         }
     })
 }

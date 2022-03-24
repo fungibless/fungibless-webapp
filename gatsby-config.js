@@ -4,7 +4,7 @@ module.exports = {
     titleTemplate: `%s | Fungibless`,
     siteUrl: `https://www.fungibless.xyz`,
     description: `We pursue fun community-based blockchain experiments such as NFTs, tokens, and staking. We challenge together and share profits together.`,
-    url: '',
+    url: 'https://www.fungibless.xyz',
     image: "",
     twitterUsername: ""
   },
@@ -15,7 +15,8 @@ module.exports = {
       resolve: `gatsby-plugin-google-fonts`,
       options: {
         fonts: [
-          `VT323\:400`
+          `Russo+One`,
+          `Inter:wght@300;400;500;600;700;800;900`
         ],
         display: 'swap'
       }

@@ -1,105 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
-@charset "utf-8";
-
-/** 
-* 
-* -----------------------------------------------------------------------------
-*
-* Template : GamFi - Metaverse Web3 IGO/IDO Token Launchpad HTML 5 Template
-* Author : uigigs
-* Author URI : http://www.uigigs.com/
-*
-* -----------------------------------------------------------------------------
-* 
-**/
-/* TABLE OF CONTENT
----------------------------------------------------------
-01. Gamfi General CSS
-02. Gamfi Header Section CSS
-03. Gamfi Banner Section CSS
-04. Gamfi Breadcrumbs Section CSS
-05. Gamfi About Section CSS
-06. Gamfi Project Section CSS
-07. Gamfi Project Details Section CSS
-08. Gamfi previous Section CSS
-09. Gamfi farming Section CSS
-10. Gamfi Calendar Section CSS
-11. Gamfi Leaderboard Section CSS
-12. Gamfi Igo-Rankging Section CSS
-13. Gamfi Tokenomics Section CSS
-14. Gamfi Team Section CSS
-15. Gamfi Partner Section CSS
-16. Gamfi Form Content Section CSS
-17. Gamfi Explore Content Section CSS
-18. Gamfi footer Section CSS
-19. Modal Section CSS
-20. Preloader CSS
---------------------------------------------------------*/
-@font-face {
-    font-family: 'Russo One';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/russoone/v13/Z9XUDmZRWg6M1LvRYsH-yA.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/inter/v7/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuOKfMZg.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/inter/v7/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfMZg.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/inter/v7/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fMZg.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/inter/v7/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYMZg.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/inter/v7/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYMZg.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 800;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/inter/v7/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuDyYMZg.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 900;
-    font-display: swap;
-    src: url(http://fonts.gstatic.com/s/inter/v7/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuBWYMZg.ttf) format('truetype');
-}
-
 /* -----------------------------------/
     01. Gamfi General CSS
 -------------------------------------*/
@@ -112,7 +10,7 @@ body {
     line-height: 1.6;
     font-weight: 500;
     overflow-x: hidden;
-    background-color: #151625;
+    background-color: #090a1a;
 }
 
 img {
@@ -3158,8 +3056,6 @@ body .modal-backdrop {
     14. Gamfi Team Section CSS
 ---------------------------------------*/
 .gamfi-team-section {
-    background: url(../images/bg/team-bg.jpg);
-    background-repeat: no-repeat;
     background-position: center bottom;
     background-color: #090a1a;
 }
@@ -3567,6 +3463,8 @@ body .gamfi-explore-content .project-item {
 .gamfi-footer-section {
     background-color: #090a1a;
     position: relative;
+    margin-top: 50px;
+
 }
 
 .gamfi-footer-section .footer-cta-area {
@@ -3637,13 +3535,11 @@ body .gamfi-explore-content .project-item {
 }
 
 .gamfi-footer-section .footer-area {
-    background: url(../images/bg/footer-bg.jpg);
+    /* background: url(../images/bg/footer-bg.jpg); */
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: cover;
     position: relative;
-    padding-top: 250px;
-    margin-top: -150px;
 }
 
 .gamfi-footer-section .footer-listing .footer-icon-list {
@@ -5024,7 +4920,7 @@ Kyc Upload Docs
     min-height: 253px;
     margin-top: 60px;
     background-repeat: no-repeat;
-    background-size: cover;
+
     background-position: center center;
 }
 .RodmapConetentbox2{
@@ -5032,21 +4928,20 @@ Kyc Upload Docs
     min-height: 216px;
     margin-top: 190px;
     background-repeat: no-repeat;
-    background-size: cover;
+
     background-position: center center;
 }
 .RodmapConetentbox3{
     background: url(../images/kycimg/roadMapcpntentBg2.svg);
     min-height: 216px;
     background-repeat: no-repeat;
-    background-size: cover;
+
     background-position: center center;
 }
 .RodmapConetentbox4{
     background: url(../images/kycimg/roadMapcpntentBg6.svg);
     min-height: 253px;
     margin-top: 100px;
-    background-repeat: no-repeat;
     background-position: center center;
 }
 .RodmapConetentbox5{
@@ -7812,6 +7707,7 @@ Kyc Upload Docs
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(5px);
 }
+
 .Menu_column ul li span.hot{
     background: #F82552;
     backdrop-filter: blur(5px);

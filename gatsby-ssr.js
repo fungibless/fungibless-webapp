@@ -18,7 +18,6 @@ export function onRenderBody(
         <script key="owl.carousel" src={withPrefix("js/owl.carousel.min.js")}></script>,
         <script key="plugins" src={withPrefix("js/plugins.js")}></script>,
         <script key="time-counter" src={withPrefix("js/time-counter.js")}></script>,
-        <script key="main" src={withPrefix("js/main.js")}></script>
     ]);
 
 }

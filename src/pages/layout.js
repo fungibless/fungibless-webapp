@@ -4,8 +4,9 @@ import SearchEngineOptimization from '../components/seo/seo'
 import HeaderSection from "../sections/header/header.section"
 import FooterSection from "../sections/footer/footer.section"
 import ModalSection from "../sections/modal/modal.section"
+import SpinnerSection from '../sections/spinner/spinner.section'
 
-const Layout = ({ children }) => {
+const Layout = ({ headerType, children }) => {
   return (
     <React.Fragment>
       <Helmet>
@@ -15,8 +16,9 @@ const Layout = ({ children }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Helmet>
 
-      <SearchEngineOptimization />      
-      <HeaderSection />
+      <SearchEngineOptimization />
+      <SpinnerSection/>
+      <HeaderSection headerType={headerType}/>
       {children}
       <FooterSection/>
       <ModalSection/>
