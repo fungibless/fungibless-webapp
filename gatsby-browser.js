@@ -10,6 +10,18 @@ import "./src/assets/css/responsive.css"
 
 import $ from 'jquery'
 import WOW from 'WOW'
+import wrapWithProvider from "./wrap-with-provider"
+export const wrapRootElement = wrapWithProvider
+
+export const onRouteUpdate = ({ location, prevLocation }) => {
+    console.log('new pathname', location.pathname)
+    console.log('old pathname', prevLocation ? prevLocation.pathname : null)
+
+    $(".loader_first").delay(500).fadeOut(300);
+    $(".circular-spinner").on('click', function () {
+        $(".loader_first").fadeOut(300);
+    })
+}
 
 export const onInitialClientRender = () => {
 
@@ -115,4 +127,10 @@ export const onInitialClientRender = () => {
     });
 }
 
-// export const onClientEntry = () => {}
+export const onClientEntry = () => {
+
+    // $(".loader_first").delay(500).fadeOut(300);
+    // $(".circular-spinner").on('click', function () {
+    //     $(".loader_first").fadeOut(300);
+    // })
+}

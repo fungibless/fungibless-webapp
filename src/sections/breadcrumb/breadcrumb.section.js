@@ -1,5 +1,4 @@
 import * as React from "react"
-import steps_img from '../../assets/images/icons/steps.png'
 
 const BreadcrumbPageSection = ({ pageTitle }) => {
     return (

@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Helmet } from "react-helmet"
-import SearchEngineOptimization from '../components/seo/seo'
+import SearchEngineOptimization from './seo/seo'
 import HeaderSection from "../sections/header/header.section"
 import FooterSection from "../sections/footer/footer.section"
-import ModalSection from "../sections/modal/modal.section"
+import WalletSection from "../sections/wallet/wallet.section"
 import SpinnerSection from '../sections/spinner/spinner.section'
 
 const Layout = ({ headerType, children }) => {
@@ -15,13 +15,12 @@ const Layout = ({ headerType, children }) => {
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Helmet>
-
       <SearchEngineOptimization />
-      <SpinnerSection/>
-      <HeaderSection headerType={headerType}/>
+      <SpinnerSection />
+      <HeaderSection headerType={headerType} />
       {children}
-      <FooterSection/>
-      <ModalSection/>
+      <FooterSection />
+      <WalletSection />
     </React.Fragment>
   )
 }

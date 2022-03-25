@@ -14,12 +14,20 @@ exports.onCreateWebpackConfig = ({
                 "https": false,
                 "os": false,
                 "url": false,
-                "fs": false          
+                "fs": false
             },
         },
         externals: {
-            jquery: 'jQuery', 
+            jquery: 'jQuery',
             WOW: 'WOW'
         }
     })
 }
+
+exports.onCreatePage = ({ page, actions }) => {
+    const { createPage } = actions;
+    if (page.path === `/`) {
+        page.matchPath = `/*`;
+        createPage(page);
+    }
+};

@@ -4,8 +4,13 @@ import connect_img from '../../assets/images/icons/connect.png'
 import connect_white_img from '../../assets/images/icons/connect_white.png'
 import logo_dark_img from '../../assets/images/logo-dark.png'
 import classnames from 'classnames'
+import { useSelector } from 'react-redux'
+import { Link } from 'gatsby'
 
-const HeaderSection = ({headerType}) => {
+const HeaderSection = ({ headerType }) => {
+
+    const walletConnected = useSelector((state) => state.wallet.connected )
+    
     return (
         <header id="gamfi-header" className={classnames("gamfi-header-section", headerType)}>
             <div className="menu-area menu-sticky">
@@ -13,26 +18,26 @@ const HeaderSection = ({headerType}) => {
                     <div className="heaader-inner-area d-flex justify-content-between align-items-center">
                         <div className="gamfi-logo-area d-flex justify-content-between align-items-center">
                             <div className="logo">
-                                <a href="/"><img src={logo_img} alt="logo" /></a>
+                                <Link to="/"><img src={logo_img} alt="logo" />&nbsp;</Link>
                             </div>
                             <div className="header-menu">
                                 <ul className="nav-menu">
-                                    <li><a href="/">Home</a>
+                                    <li><Link to="/">Home</Link>
                                     </li>
-                                    <li><a href="/tww">NFT</a>
+                                    <li><Link to="/tww">NFT</Link>
                                         <ul className="sub-menu">
                                             <li><a href="/tww">Typical Wage Workers</a></li>
                                             <li><a href="/suc">Super Urban Cat</a></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="/staking">Staking</a>
+                                        <Link to="/staking">Staking</Link>
                                     </li>
                                     <li>
-                                        <a href="/roadmap">Roadmap</a>
+                                        <Link to="/roadmap">Roadmap</Link>
                                     </li>
                                     <li>
-                                        <a href="/tokenomics">Tokenomics</a>
+                                        <Link to="/tokenomics">Tokenomics</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -50,7 +55,7 @@ const HeaderSection = ({headerType}) => {
                                 </li>
                                 <li>
                                     <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal"><img src={connect_img} alt="Icon" />
-                                        <span className="btn-text">Connect </span>
+                                        <span className="btn-text">Connect:{walletConnected.toString()}</span>
                                         <span className="hover-shape1"></span>
                                         <span className="hover-shape2"></span>
                                         <span className="hover-shape3"></span>
@@ -72,25 +77,25 @@ const HeaderSection = ({headerType}) => {
                     </a>
                 </div>
                 <div className="sidebar-logo mb-30">
-                    <a href="index.html"><img src={logo_dark_img} alt="logo" /></a>
+                    <Link to="/"><img src={logo_dark_img} alt="logo" /></Link>
                 </div>
                 <ul className="nav-menu">
-                    <li className="current-menu-item"><a href="/">Home</a>                       
+                    <li className="current-menu-item"><a href="/">Home</a>
                     </li>
-                    <li><a href="/tww">NFT</a>
+                    <li><Link to="/tww">NFT</Link>
                         <ul className="sub-menu">
-                            <li><a href="/tww">Typical Wage Workers</a></li>
-                            <li><a href="/suc">Super Urban Cat</a></li>
+                            <li><Link to="/tww">Typical Wage Workers</Link></li>
+                            <li><Link to="/suc">Super Urban Cat</Link></li>
                         </ul>
                     </li>
-                    <li><a href="/staking">Staking</a>                        
+                    <li><Link to="/staking">Staking</Link>
                     </li>
-                    <li><a href="/roadmap">Roadmap</a>                        
+                    <li><Link to="/roadmap">Roadmap</Link>
                     </li>
-                    <li><a href="/tokenomics">Tokenomics</a>                        
+                    <li><Link to="/tokenomics">Tokenomics</Link>
                     </li>
                     <li>
-                        <button type="button" className="readon black-shape-big connectWalletBtnforMobile" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src={connect_white_img} alt="connect" />
+                        <button type="button" className="readon black-shape-big connectWalletBtnforMobile" data-bs-toggle="modal" data-bs-target="#modal"><img src={connect_white_img} alt="connect" />
                             <span className="btn-text">Connect </span>
                             <span className="hover-shape1"></span>
                             <span className="hover-shape2"></span>
@@ -98,7 +103,7 @@ const HeaderSection = ({headerType}) => {
                         </button>
                     </li>
                 </ul>
-            </nav>
+            </nav>            
         </header>
     );
 };

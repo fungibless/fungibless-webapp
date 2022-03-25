@@ -1,12 +1,12 @@
 import * as React from "react"
-import Layout from "./layout"
+import Layout from "../components/layout"
 import PageSection from "../sections/page-secion";
 import BreadcrumbPageSection from '../sections/breadcrumb/breadcrumb.section'
 
-const TokenomicsPage = () => {
+const StakingPage = () => {
     return (
         <Layout headerType="default-header">
-            <BreadcrumbPageSection pageTitle="Tokenomics"/>
+            <BreadcrumbPageSection pageTitle="Staking"/>
             <PageSection className="pt-115 pb-85 md-pt-75 md-pb-42">
                 <div>Comming Soon!</div>
             </PageSection>
@@ -14,4 +14,4 @@ const TokenomicsPage = () => {
     )
 };
 
-export default TokenomicsPage;
+export default StakingPage

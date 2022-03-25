@@ -1,5 +1,5 @@
 import * as React from "react"
-import Layout from "./layout"
+import Layout from "../components/layout"
 import BreadcrumbPageSection from '../sections/breadcrumb/breadcrumb.section'
 import check_icon from '../assets/images/kycimg/RMcheckicon.svg'
 import munies_icon from '../assets/images/kycimg/munies.svg'

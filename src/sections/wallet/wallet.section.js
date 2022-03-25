@@ -4,7 +4,12 @@ import coinbase_img from '../../assets/images/icons/coinbase.png'
 import trust_img from '../../assets/images/icons/trust.png'
 import wallet_img from '../../assets/images/icons/wallet.png'
 
-const ModalSection = () => {
+import { useSelector, useDispatch } from 'react-redux'
+import { setConnected } from "../../features/wallet-slice"
+
+const WalletSection = () => {
+    const dispatch = useDispatch()
+
     return (
         <div className="modal fade " id="modal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
@@ -17,7 +22,7 @@ const ModalSection = () => {
                         <p className="mb-20">Please select a wallet to connect to this marketplace</p>
                         <div className="connect-section">
                             <ul className="heading-list">
-                                <li><a href="#!"><span><img src={meta_mask_img} alt="Meta-mask"/></span>MetaMask</a></li>
+                                <li><a href="#!" onClick={() => dispatch(setConnected(true))}><span><img src={meta_mask_img} alt="Meta-mask"/></span>MetaMask</a></li>
                                 <li><a href="#!"><span><img src={coinbase_img} alt="Coinbase"/></span>Coinbase</a></li>
                                 <li><a href="#!"><span><img src={trust_img} alt="Trust"/></span>Trust Wallet</a></li>
                                 <li><a href="#!"><span><img src={wallet_img} alt="Wallet"/></span>WalletConnect</a></li>
@@ -33,4 +38,4 @@ const ModalSection = () => {
     );
 };
 
-export default ModalSection;
+export default WalletSection;
