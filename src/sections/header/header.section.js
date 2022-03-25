@@ -19,7 +19,7 @@ const HeaderSection = ({headerType}) => {
                                 <ul className="nav-menu">
                                     <li><a href="/">Home</a>
                                     </li>
-                                    <li><a href="#!">NFT</a>
+                                    <li><a href="/tww">NFT</a>
                                         <ul className="sub-menu">
                                             <li><a href="/tww">Typical Wage Workers</a></li>
                                             <li><a href="/suc">Super Urban Cat</a></li>
@@ -77,7 +77,7 @@ const HeaderSection = ({headerType}) => {
                 <ul className="nav-menu">
                     <li className="current-menu-item"><a href="/">Home</a>                       
                     </li>
-                    <li><a href="#!">NFT</a>
+                    <li><a href="/tww">NFT</a>
                         <ul className="sub-menu">
                             <li><a href="/tww">Typical Wage Workers</a></li>
                             <li><a href="/suc">Super Urban Cat</a></li>
