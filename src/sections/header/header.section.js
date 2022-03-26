@@ -5,12 +5,15 @@ import connect_white_img from '../../assets/images/icons/connect_white.png'
 import logo_dark_img from '../../assets/images/logo-dark.png'
 import classnames from 'classnames'
 import { useSelector } from 'react-redux'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 
 const HeaderSection = ({ headerType }) => {
 
-    const walletConnected = useSelector((state) => state.wallet.connected )
-    
+    const walletConnected = useSelector((state) => state.wallet.connected)
+    const walletInstalled = useSelector((state) => state.wallet.installed)
+    const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
+    const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
+
     return (
         <header id="gamfi-header" className={classnames("gamfi-header-section", headerType)}>
             <div className="menu-area menu-sticky">
@@ -54,12 +57,42 @@ const HeaderSection = ({ headerType }) => {
                                     </a>
                                 </li>
                                 <li>
-                                    <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal"><img src={connect_img} alt="Icon" />
-                                        <span className="btn-text">Connect:{walletConnected.toString()}</span>
-                                        <span className="hover-shape1"></span>
-                                        <span className="hover-shape2"></span>
-                                        <span className="hover-shape3"></span>
-                                    </button>
+                                    {
+                                        !walletInstalled &&
+                                        <button type="button" className="readon white-btn hover-shape" onClick={() => { navigate("https://metamask.io/") }}><img src={connect_img} alt="Icon" />
+                                            <span className="btn-text">Install Wallet</span>
+                                            <span className="hover-shape1"></span>
+                                            <span className="hover-shape2"></span>
+                                            <span className="hover-shape3"></span>
+                                        </button>
+                                    }
+                                    {
+                                        walletInstalled && !rightNetwork &&
+                                        <button type="button" className="readon white-btn hover-shape"><img src={connect_img} alt="Icon" />
+                                            <span className="btn-text">Wrong Network</span>
+                                            <span className="hover-shape1"></span>
+                                            <span className="hover-shape2"></span>
+                                            <span className="hover-shape3"></span>
+                                        </button>
+                                    }
+                                    {
+                                        walletInstalled && rightNetwork && !walletConnected &&
+                                        <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal"><img src={connect_img} alt="Icon" />
+                                            <span className="btn-text">Connect</span>
+                                            <span className="hover-shape1"></span>
+                                            <span className="hover-shape2"></span>
+                                            <span className="hover-shape3"></span>
+                                        </button>
+                                    }
+                                    {
+                                        walletInstalled && walletConnected && rightNetwork &&
+                                        <button type="button" className="readon white-btn hover-shape"><img src={connect_img} alt="Icon" />
+                                            <span className="btn-text">{shortenAccount}</span>
+                                            <span className="hover-shape1"></span>
+                                            <span className="hover-shape2"></span>
+                                            <span className="hover-shape3"></span>
+                                        </button>
+                                    }
                                 </li>
                             </ul>
                         </div>
@@ -103,7 +136,7 @@ const HeaderSection = ({ headerType }) => {
                         </button>
                     </li>
                 </ul>
-            </nav>            
+            </nav>
         </header>
     );
 };

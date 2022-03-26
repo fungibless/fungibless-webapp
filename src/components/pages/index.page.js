@@ -1,5 +1,5 @@
 import * as React from "react"
-import icon1_img from '../../assets/images/icons/icon1.png'
+import main_section_icon from '../../assets/images/icons/main_section_icon.png'
 import steps_img from '../../assets/images/icons/steps.png'
 import steps2_img from '../../assets/images/icons/steps2.png'
 import tokenomics_img from '../../assets/images/project/tokenomices-image.jpg'
@@ -18,7 +18,7 @@ const IndexPage = () => {
             <div id="sc-banner" className="sc-banner banner-bg position-relative">
                 <div className="container">
                     <div className="banner-content text-center">
-                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={icon1_img} alt="icon" />
+                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={main_section_icon} alt="icon" />
                         <h1 className="banner-title wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             Fun challenges in the blockchain world.
                         </h1>
