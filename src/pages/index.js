@@ -1,6 +1,6 @@
 import React from "react"
 import { Router } from "@reach/router"
-import Layout from "../components/Layout"
+import Layout from "../components/layout"
 import StakingPage from "../components/pages/staking.page"
 import IndexPage from "../components/pages/index.page"
 import TypicalWageWorkersPage from "../components/pages/tww.page"
