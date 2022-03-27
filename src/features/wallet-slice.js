@@ -9,6 +9,7 @@ export const walletSlice = createSlice({
         installed: false,
         rightNetwork: false,
         chainId: 0,
+        isMetaMask: false,
     },
     reducers: {
         setAccount: (state, action) => {
@@ -23,7 +24,8 @@ export const walletSlice = createSlice({
             }
         },
         setInstalled: (state, action) => {
-            state.installed = action.payload
+            state.installed = action.payload.installed
+            state.isMetaMask = action.payload.isMetaMask
         },
         setChainIdAndRightNetwork: (state, action) => {
             state.chainId = action.payload.chainId

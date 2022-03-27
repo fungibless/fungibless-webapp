@@ -3,6 +3,7 @@ import logo_img from '../../assets/images/logo.png'
 import connect_img from '../../assets/images/icons/connect.png'
 import connect_white_img from '../../assets/images/icons/connect_white.png'
 import logo_dark_img from '../../assets/images/logo-dark.png'
+import meta_mask_img from '../../assets/images/icons/meta-mask.png'
 import classnames from 'classnames'
 import { useSelector } from 'react-redux'
 import { Link, navigate } from 'gatsby'
@@ -11,6 +12,7 @@ const HeaderSection = ({ headerType }) => {
 
     const walletConnected = useSelector((state) => state.wallet.connected)
     const walletInstalled = useSelector((state) => state.wallet.installed)
+    const isMetaMask = useSelector((state) => state.wallet.isMetaMask)
     const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
     const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
 
@@ -86,7 +88,7 @@ const HeaderSection = ({ headerType }) => {
                                     }
                                     {
                                         walletInstalled && walletConnected && rightNetwork &&
-                                        <button type="button" className="readon white-btn hover-shape"><img src={connect_img} alt="Icon" />
+                                        <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal"><img src={isMetaMask ? meta_mask_img : connect_img} alt="Icon" />
                                             <span className="btn-text">{shortenAccount}</span>
                                             <span className="hover-shape1"></span>
                                             <span className="hover-shape2"></span>

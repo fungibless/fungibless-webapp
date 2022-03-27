@@ -1,16 +1,11 @@
 import * as React from "react"
-import main_section_icon from '../../assets/images/icons/main_section_icon.png'
+import main_section_icon from '../../assets/images/icons/main_section_icon2.png'
 import steps_img from '../../assets/images/icons/steps.png'
 import steps2_img from '../../assets/images/icons/steps2.png'
 import tokenomics_img from '../../assets/images/project/tokenomices-image.jpg'
-import team_img from '../../assets/images/team/team-image.png'
-import team2_img from '../../assets/images/team/team-image2.png'
-import team3_img from '../../assets/images/team/team-image3.png'
-import team4_img from '../../assets/images/team/team-image4.png'
-import team5_img from '../../assets/images/team/team-image5.png'
-import team6_img from '../../assets/images/team/team-image6.png'
-import team7_img from '../../assets/images/team/team-image7.png'
-import team8_img from '../../assets/images/team/team-image8.png'
+import team_syous from '../../assets/images/team/team-syous.png'
+import veil1_png from '../../assets/images/team/veil1.png'
+import veil2_png from '../../assets/images/team/veil2.png'
 
 const IndexPage = () => {
     return (
@@ -18,7 +13,7 @@ const IndexPage = () => {
             <div id="sc-banner" className="sc-banner banner-bg position-relative">
                 <div className="container">
                     <div className="banner-content text-center">
-                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={main_section_icon} alt="icon" />
+                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={main_section_icon} alt="icon" tabIndex="-1"/>
                         <h1 className="banner-title wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             Fun challenges in the blockchain world.
                         </h1>
@@ -121,14 +116,9 @@ const IndexPage = () => {
                     <div className="row">
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team_img} alt="member1" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Berneice Tran</a></h4>
+                                <img src={team_syous} alt="member1" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Syous</a></h4>
                                 <div className="dsc">Director</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-twitter"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-facebook"></i>&nbsp;</a></li>
-                                </ul>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -137,13 +127,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team2_img} alt="member2" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Genaro Nadel</a></h4>
-                                <div className="dsc">VP of Engineering</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-twitter"></i>&nbsp;</a></li>
-                                </ul>
+                                <img src={veil1_png} alt="member2" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <div className="dsc">waiting to participate</div>                                
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -152,13 +138,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team3_img} alt="member3" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Lynnette Wilkes</a></h4>
-                                <div className="dsc">Fullstack Developer</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-twitter"></i>&nbsp;</a></li>
-                                </ul>
+                                <img src={veil2_png} alt="member3" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <div className="dsc">waiting to participate</div>                               
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -167,12 +149,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team4_img} alt="member4" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Claudia Hicks</a></h4>
-                                <div className="dsc">Sr. Developer</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                </ul>
+                                <img src={veil2_png} alt="member4" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <div className="dsc">waiting to participate</div>                               
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -181,13 +160,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team5_img} alt="member5" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Louis Baker</a></h4>
-                                <div className="dsc">Software Engineer</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-twitter"></i>&nbsp;</a></li>
-                                </ul>
+                                <img src={veil1_png} alt="member5" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <div className="dsc">waiting to participate</div>                               
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -196,12 +171,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team6_img} alt="team6" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Nathan Bean</a></h4>
-                                <div className="dsc">Sr. UI Designer</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                </ul>
+                                <img src={veil1_png} alt="team6" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <div className="dsc">waiting to participate</div>                                
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -210,14 +182,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team7_img} alt="team7" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">R. Hawley</a></h4>
-                                <div className="dsc">Jr. UI/UX Designer</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-twitter"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-facebook"></i>&nbsp;</a></li>
-                                </ul>
+                                <img src={veil2_png} alt="team7" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <div className="dsc">waiting to participate</div>                               
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -226,13 +193,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team8_img} alt="team8" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Pedro Carrera</a></h4>
-                                <div className="dsc">Graphic Designer</div>
-                                <ul className="team-icon-list">
-                                    <li><a href="#!"><i className="icon-linkedin"></i>&nbsp;</a></li>
-                                    <li><a href="#!"><i className="icon-twitter"></i>&nbsp;</a></li>
-                                </ul>
+                                <img src={veil1_png} alt="team8" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <div className="dsc">waiting to participate</div>                               
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>

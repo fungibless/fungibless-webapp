@@ -10,7 +10,7 @@ import RoadmapPage from "../components/pages/roadmap.page"
 
 
 const Index = () => (
-    <Layout headerType="transparent-header">
+    <Layout headerType="default-header">
         <Router>
             <IndexPage path="/" />
             <StakingPage path="/staking" />

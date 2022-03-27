@@ -1,8 +1,5 @@
 import * as React from "react"
 import meta_mask_img from '../../assets/images/icons/meta-mask.png'
-import coinbase_img from '../../assets/images/icons/coinbase.png'
-import trust_img from '../../assets/images/icons/trust.png'
-import wallet_img from '../../assets/images/icons/wallet.png'
 
 import { ethers } from "ethers";
 
@@ -12,6 +9,11 @@ import { setConnectedAndAccount, setAccount, setInstalled, setChainIdAndRightNet
 const WalletSection = () => {
     const dispatch = useDispatch()
     const walletInstalled = useSelector((state) => state.wallet.installed)
+    const walletConnected = useSelector((state) => state.wallet.connected)
+    
+    const isMetaMask = useSelector((state) => state.wallet.isMetaMask)
+    const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
+    const closeButton = React.useRef()
 
     React.useEffect(() => {
         const desiredChainId = 80001
@@ -31,11 +33,12 @@ const WalletSection = () => {
                 }
             })
         }
-
+     
         if (window.ethereum) { // Check if wallet is installed.
             const web3 = new ethers.providers.Web3Provider(window.ethereum)
             if (web3.provider) { // Check if we can get installed web3 provider.     
-                dispatch(setInstalled(true))
+                dispatch(setInstalled({installed: true, isMetaMask:web3.provider.isMetaMask}))
+                console.log(web3.provider.isMetaMask)
                 //Add wallet event listeners
                 web3.provider.on("chainChanged", (chainId) => {
                     console.log("chainChanged", chainId)
@@ -53,13 +56,12 @@ const WalletSection = () => {
                 })
 
                 // Trying to get account from the provider.
-                checkNetwork(web3.provider)
+                checkNetwork(web3.provider)    
                 checkConnected(web3.provider)
-                // getAccount(web3.provider)
             }
 
         } else {
-            dispatch(setInstalled(false))
+            dispatch(setInstalled({installed:false, isMetaMask:false}))
             //after install the provider. the browser needs to be refreshed. plase notify users about it
         }
 
@@ -70,10 +72,12 @@ const WalletSection = () => {
         if (walletInstalled) {
             try {
                 const web3 = new ethers.providers.Web3Provider(window.ethereum)
-                web3.provider.request("eth_requestAccounts", []).then((accounts) => {
-                    console.log(accounts.result)
+                
+                web3.provider.send("eth_requestAccounts", []).then((accounts) => {
+                    console.log("eth_requestAccounts", accounts.result)
                     if (accounts.result) {
-                        dispatch(setConnectedAndAccount({ connected: true, account: accounts.result[0] }))
+                        dispatch(setConnectedAndAccount({ connected: true, account: accounts.result[0] }))                        
+                        closeButton.current.click()
                     }
                 })
             } catch (error) {
@@ -82,7 +86,6 @@ const WalletSection = () => {
         } else {
             console.warn("There is no wallet")
         }
-
     }
 
     return (
@@ -91,16 +94,14 @@ const WalletSection = () => {
                 <div className="modal-content">
                     <div className="modal-header">
                         <h4 className="modals-title  mb-0" id="modalLabel">Connect Wallet</h4>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"><i className="icon-x"></i></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ref={closeButton}><i className="icon-x"></i></button>
                     </div>
                     <div className="modal-body">
                         <p className="mb-20">Please select a wallet to connect to this marketplace</p>
                         <div className="connect-section">
                             <ul className="heading-list">
-                                <li><a href="#!" onClick={() => { connectToWallet() }}><span><img src={meta_mask_img} alt="Meta-mask" /></span>MetaMask</a></li>
-                                <li><a href="#!"><span><img src={coinbase_img} alt="Coinbase" /></span>Coinbase</a></li>
-                                <li><a href="#!"><span><img src={trust_img} alt="Trust" /></span>Trust Wallet</a></li>
-                                <li><a href="#!"><span><img src={wallet_img} alt="Wallet" /></span>WalletConnect</a></li>
+                                <li style={ (walletConnected && isMetaMask) ? {background:'green'} : {}}><a href="#!" onClick={() => { connectToWallet() }}><span><img src={meta_mask_img} alt="MetaMask" /></span>{ (walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</a></li>
+                                {/* <li><a href="#!"><span><img src={wallet_img} alt="WalletConnect" /></span>WalletConnect</a></li> */}
                             </ul>
                         </div>
                         <p>By connecting your wallet, you agree to our <a href="#!"><span className="modal-title">Terms of Service </span>
