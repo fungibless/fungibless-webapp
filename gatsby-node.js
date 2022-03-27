@@ -8,7 +8,7 @@ exports.onCreateWebpackConfig = ({
                 "crypto": false,
                 "path": require.resolve("path-browserify"),
                 "stream": require.resolve("stream-browserify"),
-                "zlib": require.resolve("browserify-zlib"),
+                "zlib": false,
                 "assert": false,
                 "util": false,
                 "http": false,
