@@ -10,6 +10,9 @@ export const walletSlice = createSlice({
         rightNetwork: false,
         chainId: 0,
         isMetaMask: false,
+        balance: {
+            eth: 0,
+        }
     },
     reducers: {
         setAccount: (state, action) => {
@@ -30,6 +33,9 @@ export const walletSlice = createSlice({
         setChainIdAndRightNetwork: (state, action) => {
             state.chainId = action.payload.chainId
             state.rightNetwork = action.payload.right
+        },
+        setBalance:(state, action) => {
+            state.balance.eth = action.payload.eth
         }
     },
 })
@@ -43,7 +49,8 @@ export const {
     setAccount,
     setConnectedAndAccount,
     setInstalled,
-    setChainIdAndRightNetwork
+    setChainIdAndRightNetwork,
+    setBalance
 } = walletSlice.actions
 export { shortenWalletAddress }
 export default walletSlice.reducer

@@ -1687,6 +1687,15 @@ body .modal-backdrop {
     top: -10px;
 }
 
+.project-details-conent .project-item .big-text.red {
+    color: #f82552;
+}
+
+.project-details-conent .project-item .big-text.blue {
+    color: #0b58fe;
+}
+
+
 .project-details-conent .project-item .project-form-list .balance-form-area {
     position: relative;
 }
@@ -1816,32 +1825,12 @@ body .modal-backdrop {
 
 .project-details-conent table {
     width: 100%;
+    color: white
 }
 
-.project-details-conent table .table-header {
+.project-details-conent table tr:nth-child(2n-1) td {
+    
     background: #1e1f35;
-    text-transform: uppercase;
-    font-family: "Russo One", sans-serif;
-}
-
-.project-details-conent table .table-header th {
-    background: #1e1f35;
-    font-weight: 400;
-    padding: 17px 30px;
-}
-
-.project-details-conent table .table-header th:nth-child(2) {
-    padding-left: 45px;
-}
-
-.project-details-conent table td {
-    position: relative;
-    padding: 17px 30px;
-    border-bottom: 1px solid #2e2f3c;
-}
-
-.project-details-conent table td:nth-child(2) {
-    left: 16px;
 }
 
 .project-details-conent .project-service {
