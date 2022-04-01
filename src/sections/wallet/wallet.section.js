@@ -10,7 +10,7 @@ const WalletSection = () => {
     const dispatch = useDispatch()
     const walletInstalled = useSelector((state) => state.wallet.installed)
     const walletConnected = useSelector((state) => state.wallet.connected)
-
+         
     const isMetaMask = useSelector((state) => state.wallet.isMetaMask)
     const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
     const closeButton = React.useRef()
