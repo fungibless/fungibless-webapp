@@ -31,8 +31,8 @@ const HeaderSection = ({ headerType }) => {
                                     </li>
                                     <li><Link to="/tww">NFT</Link>
                                         <ul className="sub-menu">
-                                            <li><a href="/tww">Typical Wage Workers</a></li>
-                                            <li><a href="/suc">Super Urban Cat</a></li>
+                                            <li><Link to="/tww">Typical Wage Workers</Link></li>
+                                            <li><Link to="/suc">Super Urban Cat</Link></li>
                                         </ul>
                                     </li>
                                     <li>
