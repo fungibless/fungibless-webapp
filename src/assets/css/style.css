@@ -1762,11 +1762,6 @@ body .modal-backdrop {
     padding-bottom: 0;
 }
 
-.project-details-conent .project-media li strong {
-    font-weight: 400;
-    color: #fff;
-}
-
 .project-details-conent .project-media li span {
     float: right;
 }

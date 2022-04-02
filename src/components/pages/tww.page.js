@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux'
 import numeral from 'numeral'
 import { ethers } from "ethers";
 
+import * as styles from "../../styles/tww.module.css"
+
 const TypicalWageWorkersPage = () => {
 
     const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS
@@ -17,59 +19,116 @@ const TypicalWageWorkersPage = () => {
     const [totalSupply, setTotalSupply] = React.useState(0);
     const [price, setPrice] = React.useState(0);
     const [isPaused, setPaused] = React.useState(false);
-    
+    const [round, setRound] = React.useState(0);
+    const [maxMintAmount, setMaxMintAmount] = React.useState(0);
+
+    const roundData = {
+        100: { no: 1, saleAmount: 100, maxSupply: 100, price: '1 MATIC' },
+        200: { no: 2, saleAmount: 100, maxSupply: 200, price: 'Based on voting' },
+        300: { no: 3, saleAmount: 100, maxSupply: 300, price: 'Based on voting' },
+        400: { no: 4, saleAmount: 100, maxSupply: 400, price: 'Based on voting' },
+        500: { no: 5, saleAmount: 100, maxSupply: 500, price: 'Based on voting' },
+        1000: { no: 6, saleAmount: 500, maxSupply: 1000, price: 'Based on voting' },
+        1500: { no: 7, saleAmount: 500, maxSupply: 1500, price: 'Based on voting' },
+        2000: { no: 8, saleAmount: 500, maxSupply: 2000, price: 'Based on voting' },
+        2500: { no: 9, saleAmount: 500, maxSupply: 2500, price: 'Based on voting' },
+        3000: { no: 10, saleAmount: 500, maxSupply: 3000, price: 'Based on voting' },
+        3500: { no: 11, saleAmount: 500, maxSupply: 3500, price: 'Based on voting' },
+        4000: { no: 12, saleAmount: 500, maxSupply: 4000, price: 'Based on voting' },
+        5000: { no: 13, saleAmount: 1000, maxSupply: 5000, price: 'Based on voting' },
+        6000: { no: 14, saleAmount: 1000, maxSupply: 6000, price: 'Based on voting' },
+        7000: { no: 15, saleAmount: 1000, maxSupply: 7000, price: 'Based on voting' },
+        8000: { no: 16, saleAmount: 1000, maxSupply: 8000, price: 'Based on voting' },
+        9000: { no: 17, saleAmount: 1000, maxSupply: 9000, price: 'Based on voting' },
+        10000: { no: 18, saleAmount: 1000, maxSupply: 10000, price: 'Based on voting' },
+    }
+
     const progress = React.useMemo(() => {
+        console.log("progress memo");
         return totalSupply / maxSupply;
-    })
+    }, [totalSupply, maxSupply])
+
+    const leftQty = React.useMemo(() => {
+        console.log("leftQty memo");
+        return maxSupply - totalSupply;
+    }, [maxSupply, totalSupply])
 
     const status = React.useMemo(() => {
+        console.log("status memo");
         if (isPaused) {
             return "Paused"
         } else {
-            if(totalSupply < maxSupply) {
+            if (totalSupply < maxSupply) {
                 return "On Minting"
             } else {
                 return "Round End"
             }
         }
-    })
+    }, [isPaused, totalSupply, maxSupply])
 
-    
+    const fetchABI = React.useCallback(async () => {
+        const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        });
+        return abiResponse.json();
+    }, [CONTRACT_TWW_ABI_LOCATION])
+
+    const loadContract = React.useCallback(async () => {
+
+        const roundMap = {
+            100: 1,
+            200: 2,
+            300: 3,
+            400: 4,
+            500: 5,
+            1000: 6,
+            1500: 7,
+            2000: 8,
+            2500: 9,
+            3000: 10,
+            3500: 11,
+            4000: 12,
+            5000: 13,
+            6000: 14,
+            7000: 15,
+            8000: 16,
+            9000: 17,
+            10000: 18
+        }
+
+        fetchABI().then(async (abi) => {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, provider);
+
+            const _cost = await erc721.cost()
+            const _maximumSupply = (await erc721.maxSupply()).toNumber()
+            const _totalSupply = (await erc721.totalSupply()).toNumber()
+            const _paused = (await erc721.paused())
+            const _round = roundMap[_maximumSupply];
+            const _maxMintAmount = (await erc721.maxMintAmount()).toNumber();
+            console.log("cost:", _cost);
+            console.log("maximumSupply:", _maximumSupply)
+            console.log("totalSupply:", _totalSupply)
+            console.log("paused:", _paused)
+            console.log("max mint amount:", _maxMintAmount)
+            setPrice(_cost)
+            setMaxSupply(_maximumSupply)
+            setTotalSupply(_totalSupply)
+            setPaused(_paused)
+            setRound(_round)
+            setMaxMintAmount(_maxMintAmount)
+        });
+    }, [CONTRACT_TWW_ADDRESS, fetchABI])
 
     React.useEffect(() => {
-        async function fetchABI() {
-            const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-            });
-            return abiResponse.json();
-        }
         if (window.ethereum) {
             console.log("Loading the contract...")
-
-            fetchABI().then(async (abi) => {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, provider);
-
-                const cost = await erc721.cost()
-                setPrice(cost)
-                setMaxSupply(await erc721.maxSupply())
-                setTotalSupply(await erc721.totalSupply())
-                setPaused(await erc721.paused())
-
-            });
-
-            // const erc721_rw = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, provider.getSigner());
-            // loadContractInfo();/
+            loadContract();
         }
-    }, [])
-
-    const loadContractInfo = () => {
-        // console.log("LoadContractINfo", ethereum)
-
-    }
+    }, [loadContract])
 
     return (
         <React.Fragment>
@@ -88,12 +147,11 @@ const TypicalWageWorkersPage = () => {
                                     <div className="StakeTabcontent">
                                         <div className="project-media mb-40">
                                             <ul className="project-listing">
-                                                <li>Final Maximum Supply: <strong>{numeral(maxSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <span>Round </span></li>
-                                                <li>Current Maximum Supply: <strong>{numeral(maxSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <a href="#!"><span className="big-text">#1</span></a></li>
-                                                <li>Sold amount: <strong>{numeral(totalSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <span>Status</span></li>
-                                                <li>Left <strong>0 {CONTRACT_TWW_SYMBOL}</strong> on this round. <a href="#!"><span className="big-text">{status}</span></a></li>
-                                                <li>Price: <strong>{ethers.utils.formatEther(price, 'ether')} MATIC</strong></li>
-                                                <li>Progress (sold {numeral(totalSupply).format('#,#')} out of {numeral(maxSupply).format('#,#')})
+                                                <li>Total Supply <strong className={styles.strong}>{numeral(maxSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <span className="big-text">{round > 0 ? 'Round #' + round : '-'}</span></li>
+                                                <li>Total Minted <strong className={styles.strong}>{numeral(totalSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong></li>
+                                                <li>Left <strong className={styles.strong}>{numeral(leftQty).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> on this round. <span className="big-text">{status}</span></li>
+                                                <li>Price <strong className={styles.strong}>{ethers.utils.formatEther(price, 'ether')} MATIC</strong></li>
+                                                <li>Progress (sold <strong className={styles.strong}>{numeral(totalSupply).format('#,#')} out of {numeral(maxSupply).format('#,#')}</strong>)
                                                     <div className="progress">
                                                         <div className="progress-bar" role="progressbar" style={{ width: progress + '%' }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">{numeral(totalSupply).format('#,#')} / {numeral(maxSupply).format('#,#')}</div>
                                                     </div>
@@ -104,16 +162,19 @@ const TypicalWageWorkersPage = () => {
                                 </div>
                                 <div className="project-form-list">
                                     <h5 className="mb-18">Balance: {numeral(ethBalance).format('0.000')} MATIC</h5>
-                                    <div className="balance-form-area mb-27">
-                                        <input type="text" placeholder="amount" />
-                                        <a href="#!" onClick={() => { console.log('max') }}><span className="max">MAX</span></a>
+                                    <div className="input-group balance-form-area mb-27 ">
+                                        {/* <input type="text" placeholder="amount" /> */}
+                                        <select className={styles.select}>
+                                            {[...Array(maxMintAmount)].map((x, i) =>
+                                                <option value={i + 1} key={i + 1}>{i + 1} TWW</option>
+                                            )}
+                                        </select>
                                         <div className="white-shape-small approve">
-                                            <input type="submit" value="Approve" />
+                                            <input type="submit" value="Mint" />
                                             <span className="hover-shape1"></span>
                                             <span className="hover-shape2"></span>
                                             <span className="hover-shape3"></span>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -134,24 +195,14 @@ const TypicalWageWorkersPage = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr><td>#1</td><td>100</td><td>100</td><td>1 MATIC</td></tr>
-                                            <tr><td>#2</td><td>100</td><td>200</td><td>based on voting</td></tr>
-                                            <tr><td>#3</td><td>100</td><td>300</td><td>based on voting</td></tr>
-                                            <tr><td>#4</td><td>100</td><td>400</td><td>based on voting</td></tr>
-                                            <tr><td>#5</td><td>100</td><td>500</td><td>based on voting</td></tr>
-                                            <tr><td>#6</td><td>500</td><td>1,000</td><td>based on voting</td></tr>
-                                            <tr><td>#7</td><td>500</td><td>1,500</td><td>based on voting</td></tr>
-                                            <tr><td>#8</td><td>500</td><td>2,000</td><td>based on voting</td></tr>
-                                            <tr><td>#9</td><td>500</td><td>2,500</td><td>based on voting</td></tr>
-                                            <tr><td>#10</td><td>500</td><td>3,000</td><td>based on voting</td></tr>
-                                            <tr><td>#11</td><td>500</td><td>3,500</td><td>based on voting</td></tr>
-                                            <tr><td>#12</td><td>500</td><td>4,000</td><td>based on voting</td></tr>
-                                            <tr><td>#13</td><td>1,000</td><td>5,000</td><td>based on voting</td></tr>
-                                            <tr><td>#14</td><td>1,000</td><td>6,000</td><td>based on voting</td></tr>
-                                            <tr><td>#15</td><td>1,000</td><td>7,000</td><td>based on voting</td></tr>
-                                            <tr><td>#16</td><td>1,000</td><td>8,000</td><td>based on voting</td></tr>
-                                            <tr><td>#17</td><td>1,000</td><td>9,000</td><td>based on voting</td></tr>
-                                            <tr><td>#18</td><td>1,000</td><td>10,000</td><td>based on voting</td></tr>
+                                            {
+                                                Object.entries(roundData).map(([key, value]) => <tr key={key}>
+                                                    <td>#{value.no}</td>
+                                                    <td>{numeral(value.saleAmount).format('#,#')}</td>
+                                                    <td>{numeral(value.maxSupply).format('#,#')}</td>
+                                                    <td>{value.price}</td>
+                                                </tr>)
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
