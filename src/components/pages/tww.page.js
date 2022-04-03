@@ -12,15 +12,18 @@ const TypicalWageWorkersPage = () => {
     const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS
     const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION
     const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL
+    const CONTRACT_GAS_PRICE_IN_GWEI = process.env.GATSBY_CONTRACT_GAS_PRICE_IN_GWEI
 
     const ethBalance = useSelector((state) => state.wallet.balance.eth)
 
+    const [abi, setABI] = React.useState(null);
     const [maxSupply, setMaxSupply] = React.useState(0);
     const [totalSupply, setTotalSupply] = React.useState(0);
     const [price, setPrice] = React.useState(0);
     const [isPaused, setPaused] = React.useState(false);
     const [round, setRound] = React.useState(0);
     const [maxMintAmount, setMaxMintAmount] = React.useState(0);
+    const [mintAmount, setMintAmount] = React.useState(1);
 
     const roundData = {
         100: { no: 1, saleAmount: 100, maxSupply: 100, price: '1 MATIC' },
@@ -76,7 +79,10 @@ const TypicalWageWorkersPage = () => {
         return abiResponse.json();
     }, [CONTRACT_TWW_ABI_LOCATION])
 
-    const loadContract = React.useCallback(async () => {
+    
+
+    
+    const getContract = React.useCallback(async (abiData) => {
 
         const roundMap = {
             100: 1,
@@ -98,30 +104,36 @@ const TypicalWageWorkersPage = () => {
             9000: 17,
             10000: 18
         }
+        
+        console.log("getContract - abi:", abiData)
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abiData, provider);
 
-        fetchABI().then(async (abi) => {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, provider);
+        const _cost = await erc721.cost()
+        const _maximumSupply = (await erc721.maxSupply()).toNumber()
+        const _totalSupply = (await erc721.totalSupply()).toNumber()
+        const _paused = (await erc721.paused())
+        const _round = roundMap[_maximumSupply];
+        const _maxMintAmount = (await erc721.maxMintAmount()).toNumber();
+        console.log("cost:", _cost);
+        console.log("maximumSupply:", _maximumSupply)
+        console.log("totalSupply:", _totalSupply)
+        console.log("paused:", _paused)
+        console.log("max mint amount:", _maxMintAmount)
+        setPrice(_cost)
+        setMaxSupply(_maximumSupply)
+        setTotalSupply(_totalSupply)
+        setPaused(_paused)
+        setRound(_round)
+        setMaxMintAmount(_maxMintAmount)
+    }, [CONTRACT_TWW_ADDRESS])
 
-            const _cost = await erc721.cost()
-            const _maximumSupply = (await erc721.maxSupply()).toNumber()
-            const _totalSupply = (await erc721.totalSupply()).toNumber()
-            const _paused = (await erc721.paused())
-            const _round = roundMap[_maximumSupply];
-            const _maxMintAmount = (await erc721.maxMintAmount()).toNumber();
-            console.log("cost:", _cost);
-            console.log("maximumSupply:", _maximumSupply)
-            console.log("totalSupply:", _totalSupply)
-            console.log("paused:", _paused)
-            console.log("max mint amount:", _maxMintAmount)
-            setPrice(_cost)
-            setMaxSupply(_maximumSupply)
-            setTotalSupply(_totalSupply)
-            setPaused(_paused)
-            setRound(_round)
-            setMaxMintAmount(_maxMintAmount)
+    const loadContract = React.useCallback(async () => {
+        fetchABI().then(async (abiObj) => {
+            setABI(abiObj)
+            await getContract(abiObj)
         });
-    }, [CONTRACT_TWW_ADDRESS, fetchABI])
+    }, [fetchABI, getContract])
 
     React.useEffect(() => {
         if (window.ethereum) {
@@ -129,6 +141,33 @@ const TypicalWageWorkersPage = () => {
             loadContract();
         }
     }, [loadContract])
+
+
+    const mint = async () => {
+        console.log("mint abi:", abi)
+        console.log("mint amount:", mintAmount)
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, provider);
+        const signer = provider.getSigner();
+        const twwWithSigner = erc721.connect(signer);
+
+        const payableAmount = price.mul(mintAmount).toString()
+        console.log("payable amount:", payableAmount)
+
+        twwWithSigner.on("Transfer", async (from, to, amount, event) => {
+            console.log(event)
+            console.log(`${from} sent ${ethers.utils.formatEther(amount)} to ${to}`);
+            await getContract(abi)
+        });
+
+        console.log("GAS PRICE", CONTRACT_GAS_PRICE_IN_GWEI)
+        try {
+            await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <React.Fragment>
@@ -164,16 +203,13 @@ const TypicalWageWorkersPage = () => {
                                     <h5 className="mb-18">Balance: {numeral(ethBalance).format('0.000')} MATIC</h5>
                                     <div className="input-group balance-form-area mb-27 ">
                                         {/* <input type="text" placeholder="amount" /> */}
-                                        <select className={styles.select}>
+                                        <select value={mintAmount} className={styles.select} onChange={(e) => { setMintAmount(e.target.value) }}>
                                             {[...Array(maxMintAmount)].map((x, i) =>
                                                 <option value={i + 1} key={i + 1}>{i + 1} TWW</option>
                                             )}
                                         </select>
                                         <div className="white-shape-small approve">
-                                            <input type="submit" value="Mint" />
-                                            <span className="hover-shape1"></span>
-                                            <span className="hover-shape2"></span>
-                                            <span className="hover-shape3"></span>
+                                            <input type="submit" value="Mint" disabled={(abi == null)} onClick={mint} />
                                         </div>
                                     </div>
                                 </div>
