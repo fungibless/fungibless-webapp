@@ -8,6 +8,8 @@ import classnames from 'classnames'
 import { useSelector } from 'react-redux'
 import { Link, navigate } from 'gatsby'
 
+import { ethers } from "ethers";
+
 const HeaderSection = ({ headerType }) => {
 
     const walletConnected = useSelector((state) => state.wallet.connected)
@@ -15,6 +17,38 @@ const HeaderSection = ({ headerType }) => {
     const isMetaMask = useSelector((state) => state.wallet.isMetaMask)
     const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
     const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
+
+    const switchNetwork = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const { provider: ethereum } = provider;
+
+        if (ethereum) {
+            try {
+                await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: process.env.GATSBY_WALLET_NETWORK_CHAIN_ID }] })
+            } catch (switchError) {
+                try {
+                    await ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: process.env.GATSBY_WALLET_NETWORK_CHAIN_ID,
+                                chainName: process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME,
+                                nativeCurrency: {
+                                    name: process.env.GATSBY_WALLET_NETWORK_NATIVE_CURRENCY_NAME,
+                                    symbol: process.env.GATSBY_WALLET_NETWORK_NATIVE_SYMBOL,
+                                    decimals: parseInt(process.env.GATSBY_WALLET_NETWORK_NATIVE_DECIMALS)
+                                },
+                                rpcUrls: [process.env.GATSBY_WALLET_NETWORK_RPC_URL],
+                                blockExplorerUrls: [process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS]
+                            }
+                        ],
+                    });
+                } catch (addError) {
+                    console.log(addError);
+                }
+            }
+        }
+    }
 
     return (
         <header id="gamfi-header" className={classnames("gamfi-header-section", headerType)}>
@@ -70,7 +104,7 @@ const HeaderSection = ({ headerType }) => {
                                     }
                                     {
                                         walletInstalled && !rightNetwork &&
-                                        <button type="button" className="readon white-btn hover-shape"><img src={connect_img} alt="Icon" />
+                                        <button type="button" className="readon white-btn hover-shape" onClick={switchNetwork}><img src={connect_img} alt="Icon" />
                                             <span className="btn-text">Wrong Network</span>
                                             <span className="hover-shape1"></span>
                                             <span className="hover-shape2"></span>

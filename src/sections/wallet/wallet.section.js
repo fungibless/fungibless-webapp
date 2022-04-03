@@ -10,7 +10,7 @@ const WalletSection = () => {
     const dispatch = useDispatch()
     const walletInstalled = useSelector((state) => state.wallet.installed)
     const walletConnected = useSelector((state) => state.wallet.connected)
-         
+
     const isMetaMask = useSelector((state) => state.wallet.isMetaMask)
     const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
     const closeButton = React.useRef()
@@ -31,16 +31,17 @@ const WalletSection = () => {
                 // Trying to get account from the provider.
                 const getBalance = async () => {
                     const signer = provider.getSigner(); // user
-                    const contractUser = await signer.getAddress();
-                    console.log(contractUser)
+                    const contractUser = await signer.getAddress()
+                    console.log("User Address:", contractUser)
                     const contractUserBalance = await provider.getBalance(contractUser);
-                    const amount = ethers.utils.formatEther(contractUserBalance)                    
-                    dispatch(setBalance({eth: amount}))
+                    const amount = ethers.utils.formatEther(contractUserBalance)
+                    console.log("User Balance:", amount)
+                    dispatch(setBalance({ eth: amount }))
                 }
 
                 const checkNetwork = () => {
                     ethereum.request({ method: 'eth_chainId', params: [] }).then(onChainId);
-                }
+                }               
 
                 const onChainId = async (chainId) => {
                     dispatch(setChainIdAndRightNetwork({ chainId: chainId, right: (chainId === desiredChainId) }))
@@ -48,10 +49,9 @@ const WalletSection = () => {
                 }
 
                 const onAccountChanged = async (accounts) => {
-                    if (accounts) {
-                        console.log("OnConnected", accounts)
+                    console.log("onAccountChanged", accounts)
+                    if (accounts && accounts.length > 0) {                        
                         dispatch(setConnectedAndAccount({ connected: true, account: accounts[0] }))
-
                         await getBalance()
                     } else {
                         dispatch(setConnectedAndAccount({ connected: false, account: null }))
@@ -72,6 +72,7 @@ const WalletSection = () => {
                 ethereum.on("chainChanged", (chainId) => {
                     console.log("chainChanged", chainId)
                     checkNetwork()
+                    getBalance()
                 })
 
                 ethereum.on("accountsChanged", onAccountChanged)
