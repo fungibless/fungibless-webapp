@@ -172,7 +172,7 @@ const TypicalWageWorkersPage = () => {
     return (
         <React.Fragment>
             <BreadcrumbPageSection pageTitle="Typical Wage Workers" />
-            <PageSection className="participat-information project-details-conent gamfi-about-secion pb-80 md-pb-50">
+            <PageSection className="project-details-conent pb-80 md-pb-50">
                 <div className="container">
                     <div className="row pt-70">
                         <div className="col-lg-12 pr-25 md-pr-15">

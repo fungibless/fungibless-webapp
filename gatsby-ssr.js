@@ -1,5 +1,5 @@
 import React from "react";
-import { withPrefix } from "gatsby"
+import { withPrefix, withAssetPrefix } from "gatsby"
 
 import wrapWithProvider from "./wrap-with-provider"
 export const wrapRootElement = wrapWithProvider

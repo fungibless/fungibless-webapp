@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = {  
   siteMetadata: {
     title: `Fun challenges in the blockchain world for the community.`,
     titleTemplate: `%s | Fungibless`,
