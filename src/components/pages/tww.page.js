@@ -3,7 +3,7 @@ import PageSection from "../../sections/page-secion";
 import BreadcrumbPageSection from '../../sections/breadcrumb/breadcrumb.section'
 import { useSelector } from 'react-redux'
 import numeral from 'numeral'
-import { ethers } from "ethers";
+import { ethers } from "ethers"
 
 const selectStyles = {
     border: '1px solid #313245',
@@ -25,6 +25,9 @@ const TypicalWageWorkersPage = () => {
     const CONTRACT_GAS_PRICE_IN_GWEI = process.env.GATSBY_CONTRACT_GAS_PRICE_IN_GWEI
 
     const ethBalance = useSelector((state) => state.wallet.balance.eth)
+    const walletInstalled = useSelector((state) => state.wallet.installed)
+    const walletConnected = useSelector((state) => state.wallet.connected)
+    const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
 
     const [abi, setABI] = React.useState(null);
     const [maxSupply, setMaxSupply] = React.useState(0);
@@ -34,6 +37,7 @@ const TypicalWageWorkersPage = () => {
     const [round, setRound] = React.useState(0);
     const [maxMintAmount, setMaxMintAmount] = React.useState(0);
     const [mintAmount, setMintAmount] = React.useState(1);
+    const [contractLoadFinished, setContractLoadFinished] = React.useState(false)
 
     const roundData = {
         100: { no: 1, saleAmount: 100, maxSupply: 100, price: '1 MATIC' },
@@ -72,7 +76,7 @@ const TypicalWageWorkersPage = () => {
             return "Paused"
         } else {
             if (totalSupply < maxSupply) {
-                return "On Minting"
+                return "On Sale"
             } else {
                 return "Round End"
             }
@@ -113,26 +117,32 @@ const TypicalWageWorkersPage = () => {
         }
 
         console.log("getContract - abi:", abiData)
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abiData, provider);
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abiData, provider);
 
-        const _cost = await erc721.cost()
-        const _maximumSupply = (await erc721.maxSupply()).toNumber()
-        const _totalSupply = (await erc721.totalSupply()).toNumber()
-        const _paused = (await erc721.paused())
-        const _round = roundMap[_maximumSupply];
-        const _maxMintAmount = (await erc721.maxMintAmount()).toNumber();
-        console.log("cost:", _cost);
-        console.log("maximumSupply:", _maximumSupply)
-        console.log("totalSupply:", _totalSupply)
-        console.log("paused:", _paused)
-        console.log("max mint amount:", _maxMintAmount)
-        setPrice(_cost)
-        setMaxSupply(_maximumSupply)
-        setTotalSupply(_totalSupply)
-        setPaused(_paused)
-        setRound(_round)
-        setMaxMintAmount(_maxMintAmount)
+            const _cost = await erc721.cost()
+            const _maximumSupply = (await erc721.maxSupply()).toNumber()
+            const _totalSupply = (await erc721.totalSupply()).toNumber()
+            const _paused = (await erc721.paused())
+            const _round = roundMap[_maximumSupply];
+            const _maxMintAmount = (await erc721.maxMintAmount()).toNumber();
+            console.log("cost:", _cost);
+            console.log("maximumSupply:", _maximumSupply)
+            console.log("totalSupply:", _totalSupply)
+            console.log("paused:", _paused)
+            console.log("max mint amount:", _maxMintAmount)
+            setPrice(_cost)
+            setMaxSupply(_maximumSupply)
+            setTotalSupply(_totalSupply)
+            setPaused(_paused)
+            setRound(_round)
+            setMaxMintAmount(_maxMintAmount)
+        } catch (err) {
+            console.err(err)
+        } finally {
+            setContractLoadFinished(true)
+        }
     }, [CONTRACT_TWW_ADDRESS])
 
     const loadContract = React.useCallback(async () => {
@@ -178,18 +188,45 @@ const TypicalWageWorkersPage = () => {
 
     const TwwInformation = () => {
         return (
-            <div className="project-media mb-40">
-                <ul className="project-listing">
-                    <li>Total Supply <strong style={strongText}>{numeral(maxSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <span className="big-text">{round > 0 ? 'Round #' + round : '-'}</span></li>
-                    <li>Total Minted <strong style={strongText}>{numeral(totalSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong></li>
-                    <li>Left <strong style={strongText}>{numeral(leftQty).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> on this round. <span className="big-text">{status}</span></li>
-                    <li>Price <strong style={strongText}>{ethers.utils.formatEther(price, 'ether')} MATIC</strong></li>
-                    <li>Progress (sold <strong style={strongText}>{numeral(totalSupply).format('#,#')} out of {numeral(maxSupply).format('#,#')}</strong>)
-                        <div className="progress">
-                            <div className="progress-bar" role="progressbar" style={{ width: progress + '%' }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">{numeral(progress).format('#,#')}%</div>
+            <React.Fragment>
+                {contractLoadFinished &&
+                    <React.Fragment>
+                        <div className="project-media mb-40">
+                            <ul className="project-listing">
+                                <li>Total Supply <strong style={strongText}>{numeral(maxSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <span className="big-text">{round > 0 ? 'Round #' + round : '-'}</span></li>
+                                <li>Total Minted <strong style={strongText}>{numeral(totalSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong></li>
+                                <li>Left <strong style={strongText}>{numeral(leftQty).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> on this round. <span className="big-text">{status}</span></li>
+                                <li>Price <strong style={strongText}>{ethers.utils.formatEther(price, 'ether')} MATIC</strong></li>
+                                <li>Progress (sold <strong style={strongText}>{numeral(totalSupply).format('#,#')} out of {numeral(maxSupply).format('#,#')}</strong>)
+                                    <div className="progress">
+                                        <div className="progress-bar" role="progressbar" style={{ width: progress + '%' }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">{numeral(progress).format('#,#')}%</div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                    </li>
-                </ul>
+                        <div className="project-form-list">
+                            <h5 className="mb-18">Balance: {numeral(ethBalance).format('0.000')} MATIC</h5>
+                            <div className="input-group balance-form-area mb-27 ">
+                                <select value={mintAmount} style={selectStyles} onChange={(e) => { setMintAmount(e.target.value) }}>
+                                    {[...Array(maxMintAmount)].map((x, i) =>
+                                        <option value={i + 1} key={i + 1} style={{ color: 'black' }}>{i + 1} TWW</option>
+                                    )}
+                                </select>
+                                <div className="white-shape-small approve">
+                                    <input type="submit" value="Mint" disabled={(abi == null)} onClick={mint} />
+                                </div>
+                            </div>
+                        </div>
+                    </React.Fragment>
+                }
+            </React.Fragment>
+        )
+    }
+
+    const TwwInformationError = ({ children }) => {
+        return (
+            <div className="project-media mb-40 text-center">
+                {children}
             </div>
         )
     }
@@ -203,31 +240,34 @@ const TypicalWageWorkersPage = () => {
                     <div className="row pt-70">
                         <div className="col-lg-12 pr-25 md-pr-15">
                             <div className="project-item">
+
                                 <div className="project-info border-bottom-2 text-center">
                                     <h3 className="mb-15">BUY {CONTRACT_TWW_SYMBOL} (Typical Wage Workers)</h3>
                                     <h4 className="mb-15">1 <span className="buse">{CONTRACT_TWW_SYMBOL}</span> = {ethers.utils.formatEther(price, 'ether')} <span className="buse">MATIC</span></h4>
                                     {/* <span>Total Stake</span> */}
                                 </div>
-                                <div className="project-content mt-4">
-                                    {/* <div class="text-center">
-                                        <div class="spinner-border" role="status">
-                                            <span class="sr-only"></span>
-                                        </div>
-                                    </div> */}
-                                    <TwwInformation/>
-                                </div>
-                                <div className="project-form-list">
-                                    <h5 className="mb-18">Balance: {numeral(ethBalance).format('0.000')} MATIC</h5>
-                                    <div className="input-group balance-form-area mb-27 ">
-                                        <select value={mintAmount} style={selectStyles} onChange={(e) => { setMintAmount(e.target.value) }}>
-                                            {[...Array(maxMintAmount)].map((x, i) =>
-                                                <option value={i + 1} key={i + 1} style={{ color: 'black' }}>{i + 1} TWW</option>
-                                            )}
-                                        </select>
-                                        <div className="white-shape-small approve">
-                                            <input type="submit" value="Mint" disabled={(abi == null)} onClick={mint} />
+                                {
+                                    !contractLoadFinished &&
+                                    <div className="text-center">
+                                        <div className="spinner-border" role="status">
+                                            <span className="sr-only"></span>
                                         </div>
                                     </div>
+                                }
+
+                                <div className="project-content mt-4">
+                                    {
+                                        !walletInstalled && <TwwInformationError>Please install Metamask</TwwInformationError>
+                                    }
+                                    {
+                                        walletInstalled && walletConnected && rightNetwork && <TwwInformation />
+                                    }
+                                    {
+                                        !walletConnected && <TwwInformationError>Please connect to your wallet.</TwwInformationError>
+                                    }
+                                    {
+                                        !rightNetwork && <TwwInformationError>Set your network to {process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME}</TwwInformationError>
+                                    }
                                 </div>
                             </div>
                         </div>

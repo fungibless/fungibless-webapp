@@ -2,7 +2,7 @@ import * as React from "react"
 import meta_mask_img from '../../assets/images/icons/meta-mask.png'
 
 import { ethers } from "ethers";
-
+// import { walletModule } from "../../module/wallet-module"
 import { useSelector, useDispatch } from 'react-redux'
 import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork } from "../../features/wallet-slice"
 

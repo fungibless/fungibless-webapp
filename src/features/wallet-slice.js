@@ -34,7 +34,7 @@ export const walletSlice = createSlice({
             state.chainId = action.payload.chainId
             state.rightNetwork = action.payload.right
         },
-        setBalance:(state, action) => {
+        setBalance: (state, action) => {
             state.balance.eth = action.payload.eth
         }
     },
