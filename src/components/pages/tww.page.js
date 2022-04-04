@@ -5,7 +5,17 @@ import { useSelector } from 'react-redux'
 import numeral from 'numeral'
 import { ethers } from "ethers";
 
-import * as styles from "../../styles/tww.module.css"
+const selectStyles = {
+    border: '1px solid #313245',
+    background: 'transparent',
+    padding: '16px 20px',
+    color: 'rgba(255, 255, 255, 0.7)',
+    width: '60%'
+}
+
+const strongText = {
+    color: '#a3ff12'
+}
 
 const TypicalWageWorkersPage = () => {
 
@@ -79,9 +89,6 @@ const TypicalWageWorkersPage = () => {
         return abiResponse.json();
     }, [CONTRACT_TWW_ABI_LOCATION])
 
-    
-
-    
     const getContract = React.useCallback(async (abiData) => {
 
         const roundMap = {
@@ -104,7 +111,7 @@ const TypicalWageWorkersPage = () => {
             9000: 17,
             10000: 18
         }
-        
+
         console.log("getContract - abi:", abiData)
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abiData, provider);
@@ -169,43 +176,52 @@ const TypicalWageWorkersPage = () => {
         }
     }
 
+    const TwwInformation = () => {
+        return (
+            <div className="project-media mb-40">
+                <ul className="project-listing">
+                    <li>Total Supply <strong style={strongText}>{numeral(maxSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <span className="big-text">{round > 0 ? 'Round #' + round : '-'}</span></li>
+                    <li>Total Minted <strong style={strongText}>{numeral(totalSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong></li>
+                    <li>Left <strong style={strongText}>{numeral(leftQty).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> on this round. <span className="big-text">{status}</span></li>
+                    <li>Price <strong style={strongText}>{ethers.utils.formatEther(price, 'ether')} MATIC</strong></li>
+                    <li>Progress (sold <strong style={strongText}>{numeral(totalSupply).format('#,#')} out of {numeral(maxSupply).format('#,#')}</strong>)
+                        <div className="progress">
+                            <div className="progress-bar" role="progressbar" style={{ width: progress + '%' }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">{numeral(totalSupply).format('#,#')} / {numeral(maxSupply).format('#,#')}</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        )
+    }
+
     return (
         <React.Fragment>
             <BreadcrumbPageSection pageTitle="Typical Wage Workers" />
+
             <PageSection className="project-details-conent pb-80 md-pb-50">
                 <div className="container">
                     <div className="row pt-70">
                         <div className="col-lg-12 pr-25 md-pr-15">
                             <div className="project-item">
                                 <div className="project-info border-bottom-2 text-center">
-                                    <h4 className="mb-15">BUY {CONTRACT_TWW_SYMBOL} (Typical Wage Workers)</h4>
-                                    <h3 className="mb-15">1 <span className="buse">{CONTRACT_TWW_SYMBOL}</span> = 1 <span className="buse">MATIC</span></h3>
+                                    <h3 className="mb-15">BUY {CONTRACT_TWW_SYMBOL} (Typical Wage Workers)</h3>
+                                    <h4 className="mb-15">1 <span className="buse">{CONTRACT_TWW_SYMBOL}</span> = {ethers.utils.formatEther(price, 'ether')} <span className="buse">MATIC</span></h4>
                                     {/* <span>Total Stake</span> */}
                                 </div>
-                                <div className="project-contentm mt-4">
-                                    <div className="StakeTabcontent">
-                                        <div className="project-media mb-40">
-                                            <ul className="project-listing">
-                                                <li>Total Supply <strong className={styles.strong}>{numeral(maxSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> <span className="big-text">{round > 0 ? 'Round #' + round : '-'}</span></li>
-                                                <li>Total Minted <strong className={styles.strong}>{numeral(totalSupply).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong></li>
-                                                <li>Left <strong className={styles.strong}>{numeral(leftQty).format('#,#')} {CONTRACT_TWW_SYMBOL}</strong> on this round. <span className="big-text">{status}</span></li>
-                                                <li>Price <strong className={styles.strong}>{ethers.utils.formatEther(price, 'ether')} MATIC</strong></li>
-                                                <li>Progress (sold <strong className={styles.strong}>{numeral(totalSupply).format('#,#')} out of {numeral(maxSupply).format('#,#')}</strong>)
-                                                    <div className="progress">
-                                                        <div className="progress-bar" role="progressbar" style={{ width: progress + '%' }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">{numeral(totalSupply).format('#,#')} / {numeral(maxSupply).format('#,#')}</div>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                <div className="project-content mt-4">
+                                    {/* <div class="text-center">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only"></span>
                                         </div>
-                                    </div>
+                                    </div> */}
+                                    <TwwInformation/>
                                 </div>
                                 <div className="project-form-list">
                                     <h5 className="mb-18">Balance: {numeral(ethBalance).format('0.000')} MATIC</h5>
                                     <div className="input-group balance-form-area mb-27 ">
-                                        {/* <input type="text" placeholder="amount" /> */}
-                                        <select value={mintAmount} className={styles.select} onChange={(e) => { setMintAmount(e.target.value) }}>
+                                        <select value={mintAmount} style={selectStyles} onChange={(e) => { setMintAmount(e.target.value) }}>
                                             {[...Array(maxMintAmount)].map((x, i) =>
-                                                <option value={i + 1} key={i + 1}>{i + 1} TWW</option>
+                                                <option value={i + 1} key={i + 1} style={{ color: 'black' }}>{i + 1} TWW</option>
                                             )}
                                         </select>
                                         <div className="white-shape-small approve">
@@ -218,7 +234,7 @@ const TypicalWageWorkersPage = () => {
                         <div className="col-lg-12 pr-25 md-pr-15">
                             <div className="project-item">
                                 <div className="project-info border-bottom-2 text-center">
-                                    <h4 className="mb-15">TWW Token Sale Plan</h4>
+                                    <h3 className="mb-15">TWW Token Sale Plan</h3>
                                 </div>
                                 <div className="project-contentm mt-4">
                                     <table className="table text-center">

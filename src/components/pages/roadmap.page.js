@@ -21,9 +21,9 @@ const RoadmapPage = () => {
                                         <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox3}`}>
                                             <h3>Q1 2022</h3>
                                             <ul>
-                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Launch NFT: Super Urban Cat(SUC)</li>
-                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Giveaway Super Urban Cat Monthly</li>
+                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Fungibless Initiation</li>
                                                 <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Launch Website</li>
+                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Create TWW Arts</li>                                                
                                             </ul>
                                         </div>
                                     </div>

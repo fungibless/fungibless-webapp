@@ -66,7 +66,6 @@ const HeaderSection = ({ headerType }) => {
                                     <li><Link to="/tww">NFT</Link>
                                         <ul className="sub-menu">
                                             <li><Link to="/tww">Typical Wage Workers</Link></li>
-                                            <li><Link to="/suc">Super Urban Cat</Link></li>
                                         </ul>
                                     </li>
                                     <li>

@@ -16,11 +16,8 @@ export const wrapRootElement = wrapWithProvider
 export const onRouteUpdate = ({ location, prevLocation }) => {
     console.log('new pathname', location.pathname)
     console.log('old pathname', prevLocation ? prevLocation.pathname : null)
-
-    $(".loader_first").delay(500).fadeOut(300);
-    $(".circular-spinner").on('click', function () {
-        $(".loader_first").fadeOut(300);
-    })
+    $(".loader_first").show()
+    $(".loader_first").delay(500).fadeOut(300)
 }
 
 export const onInitialClientRender = () => {
