@@ -58,7 +58,7 @@ const TypicalWageWorkersPage = () => {
 
     const progress = React.useMemo(() => {
         console.log("progress memo");
-        return totalSupply / maxSupply;
+        return totalSupply / maxSupply * 100;
     }, [totalSupply, maxSupply])
 
     const leftQty = React.useMemo(() => {
@@ -186,7 +186,7 @@ const TypicalWageWorkersPage = () => {
                     <li>Price <strong style={strongText}>{ethers.utils.formatEther(price, 'ether')} MATIC</strong></li>
                     <li>Progress (sold <strong style={strongText}>{numeral(totalSupply).format('#,#')} out of {numeral(maxSupply).format('#,#')}</strong>)
                         <div className="progress">
-                            <div className="progress-bar" role="progressbar" style={{ width: progress + '%' }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">{numeral(totalSupply).format('#,#')} / {numeral(maxSupply).format('#,#')}</div>
+                            <div className="progress-bar" role="progressbar" style={{ width: progress + '%' }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">{numeral(progress).format('#,#')}%</div>
                         </div>
                     </li>
                 </ul>
@@ -236,7 +236,7 @@ const TypicalWageWorkersPage = () => {
                                 <div className="project-info border-bottom-2 text-center">
                                     <h3 className="mb-15">TWW Token Sale Plan</h3>
                                 </div>
-                                <div className="project-contentm mt-4">
+                                <div className="project-content mt-4">
                                     <table className="table text-center">
                                         <thead>
                                             <tr>

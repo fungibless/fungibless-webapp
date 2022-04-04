@@ -14,7 +14,7 @@ import wrapWithProvider from "./wrap-with-provider"
 export const wrapRootElement = wrapWithProvider
 
 export const onRouteUpdate = ({ location, prevLocation }) => {
-    console.log(prevLocation ? prevLocation.pathname : null, " => ",location.pathname)    
+    console.log(prevLocation ? prevLocation.pathname : null, " => ", location.pathname)
     $(".loader_first").show()
     $(".loader_first").delay(500).fadeOut(300)
 }
@@ -22,6 +22,18 @@ export const onRouteUpdate = ({ location, prevLocation }) => {
 export const onInitialClientRender = () => {
 
     new WOW().init();
+
+    $('.expeander-iteam-area').on("click", function () {
+        $(this).parent().toggleClass('expeand-bottom-content')
+    });
+
+    var navexpander = $('#nav-expander');
+    if (navexpander.length) {
+        $('#nav-expander,  #nav-close2').on('click', function (e) {
+            e.preventDefault();
+            $('body').toggleClass('nav-expanded');
+        });
+    }
 
     $('.mobile-navbar-menu a').each(function () {
         var href = $(this).attr("href");

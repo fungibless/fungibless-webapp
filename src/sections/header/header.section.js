@@ -148,12 +148,11 @@ const HeaderSection = ({ headerType }) => {
                     <Link to="/"><img src={logo_dark_img} alt="logo" /></Link>
                 </div>
                 <ul className="nav-menu">
-                    <li className="current-menu-item"><a href="/">Home</a>
+                    <li className="current-menu-item"><Link to="/">Home</Link>
                     </li>
                     <li><Link to="/tww">NFT</Link>
                         <ul className="sub-menu">
-                            <li><Link to="/tww">Typical Wage Workers</Link></li>
-                            <li><Link to="/suc">Super Urban Cat</Link></li>
+                            <li><Link to="/tww">Typical Wage Workers</Link></li>                            
                         </ul>
                     </li>
                     <li><Link to="/staking">Staking</Link>
