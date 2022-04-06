@@ -38,6 +38,7 @@ const TypicalWageWorkersPage = () => {
     const [maxMintAmount, setMaxMintAmount] = React.useState(0);
     const [mintAmount, setMintAmount] = React.useState(1);
     const [contractLoadFinished, setContractLoadFinished] = React.useState(false)
+    const [isMinting, setMinting] = React.useState(false)
 
     const roundData = {
         100: { no: 1, saleAmount: 100, maxSupply: 100, price: '1 MATIC' },
@@ -175,14 +176,17 @@ const TypicalWageWorkersPage = () => {
         twwWithSigner.on("Transfer", async (from, to, amount, event) => {
             console.log(event)
             console.log(`${from} sent ${ethers.utils.formatEther(amount)} to ${to}`);
+            setMinting(false);
             await getContract(abi)
         });
 
         console.log("GAS PRICE", CONTRACT_GAS_PRICE_IN_GWEI)
         try {
+            setMinting(true);
             await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
         } catch (err) {
             console.log(err)
+            setMinting(false);
         }
     }
 
@@ -213,7 +217,10 @@ const TypicalWageWorkersPage = () => {
                                     )}
                                 </select>
                                 <div className="white-shape-small approve">
-                                    <input type="submit" value="Mint" disabled={(abi == null)} onClick={mint} />
+                                    <button type="button" class="btn" disabled={ (abi == null) || isMinting } onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif;' }}>
+                                        { isMinting && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+                                        &nbsp;MINT
+                                    </button>
                                 </div>
                             </div>
                         </div>
