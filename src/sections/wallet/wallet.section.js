@@ -5,6 +5,8 @@ import WalletModule from "../../module/wallet-module"
 import { useSelector, useDispatch } from 'react-redux'
 import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork } from "../../features/wallet-slice"
 
+export const walletModule = new WalletModule();
+
 const WalletSection = () => {
     const dispatch = useDispatch()
     const walletConnected = useSelector((state) => state.wallet.connected)
@@ -13,14 +15,12 @@ const WalletSection = () => {
     const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
     const closeButton = React.useRef()
 
-    const walletModule = new WalletModule(
+    walletModule.initialize(
         onProviderDetected,
         onWalletInstalled,
         onBalanceChanged,
         onChainChanged,
-        onAccountChanged,
-    );
-
+        onAccountChanged);
 
     function onProviderDetected(detected) {
         console.log("onProivderDetected:", detected)

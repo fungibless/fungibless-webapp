@@ -1,9 +1,11 @@
 import * as React from "react"
 import PageSection from "../../sections/page-secion";
 import BreadcrumbPageSection from '../../sections/breadcrumb/breadcrumb.section'
+import VerticallyCenteredModal from '../vertically-centered-modal'
 import { useSelector } from 'react-redux'
 import numeral from 'numeral'
 import { ethers } from "ethers"
+import { walletModule } from "../../sections/wallet/wallet.section";
 
 const selectStyles = {
     border: '1px solid #313245',
@@ -39,6 +41,8 @@ const TypicalWageWorkersPage = () => {
     const [mintAmount, setMintAmount] = React.useState(1);
     const [contractLoadFinished, setContractLoadFinished] = React.useState(false)
     const [isMinting, setMinting] = React.useState(false)
+    const [showModal, setShowModal] = React.useState(false)
+    const [modalMessage, setModalMessage] = React.useState("-")
 
     const roundData = {
         100: { no: 1, saleAmount: 100, maxSupply: 100, price: '1 MATIC' },
@@ -176,8 +180,11 @@ const TypicalWageWorkersPage = () => {
         twwWithSigner.on("Transfer", async (from, to, amount, event) => {
             console.log(event)
             console.log(`${from} sent ${ethers.utils.formatEther(amount)} to ${to}`);
+            setModalMessage(`Minting was successful. Congratulations.`);
+            setShowModal(true)
             setMinting(false);
-            await getContract(abi)
+            await getContract(abi);
+            await walletModule.loadBalance();            
         });
 
         console.log("GAS PRICE", CONTRACT_GAS_PRICE_IN_GWEI)
@@ -186,6 +193,8 @@ const TypicalWageWorkersPage = () => {
             await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
         } catch (err) {
             console.log(err)
+            setModalMessage(err);
+            setShowModal(true)
             setMinting(false);
         }
     }
@@ -217,8 +226,8 @@ const TypicalWageWorkersPage = () => {
                                     )}
                                 </select>
                                 <div className="white-shape-small approve">
-                                    <button type="button" class="btn" disabled={ (abi == null) || isMinting } onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif;' }}>
-                                        { isMinting && <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+                                    <button type="button" className="btn" disabled={(abi == null) || isMinting} onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif;' }}>
+                                        {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
                                         &nbsp;MINT
                                     </button>
                                 </div>
@@ -309,7 +318,12 @@ const TypicalWageWorkersPage = () => {
                         </div>
                     </div>
                 </div>
+
             </PageSection>
+            <VerticallyCenteredModal show={showModal} onHide={() => setShowModal(false)}>
+                {modalMessage}
+            </VerticallyCenteredModal>
+
         </React.Fragment>
     )
 };
