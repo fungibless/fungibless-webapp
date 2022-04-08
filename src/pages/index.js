@@ -9,14 +9,14 @@ import RoadmapPage from "../components/pages/roadmap.page"
 
 
 const Index = () => (
-    <Layout headerType="default-header">
+    <Layout>
         <Router>
             <IndexPage path="/" />
             <StakingPage path="/staking" />
-            <TypicalWageWorkersPage path="/tww"/>
-            <TokenomicsPage path="/tokenomics"/>
-            <RoadmapPage path="/roadmap"/>
-        </Router>               
+            <TypicalWageWorkersPage path="/tww" />
+            <TokenomicsPage path="/tokenomics" />
+            <RoadmapPage path="/roadmap" />
+        </Router>
     </Layout>
 )
 

@@ -788,7 +788,7 @@ body .modal-backdrop {
     z-index: 9;
     overflow: hidden;
     padding: 170px 0 225px;
-    background: url(../images/bg/banner-bg.jpg);
+    background: url(../images/bg/bgV2.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -2734,9 +2734,9 @@ body .modal-backdrop {
     background: #090A1A;
 }
 
-.gamfi-form-content .container {
+/* .gamfi-form-content .container {
     max-width: 580px;
-}
+} */
 
 .gamfi-form-content .form-title {
     margin-top: 35px;

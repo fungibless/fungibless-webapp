@@ -9,11 +9,11 @@ import veil2_png from '../../assets/images/team/veil2.png'
 
 const IndexPage = () => {
     return (
-        <React.Fragment>
-            <div id="sc-banner" className="sc-banner banner-bg position-relative">
+        <>
+            <section id="sc-banner" className="sc-banner banner-bg position-relative">
                 <div className="container">
                     <div className="banner-content text-center">
-                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={main_section_icon} alt="icon" tabIndex="-1"/>
+                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={main_section_icon} alt="icon" tabIndex="-1" />
                         <h1 className="banner-title wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             Fun challenges in the blockchain world.
                         </h1>
@@ -28,9 +28,9 @@ const IndexPage = () => {
                         </a>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="gamfi-tokenomics-section tokenomics-left-right-shape pb-115 pt-115 md-pt-75 md-pb-45">
+            <section className="gamfi-tokenomics-section tokenomics-left-right-shape pb-115 pt-115 md-pt-75 md-pb-45">
                 <div className="container">
                     <div className="sec-heading">
                         <div className="sub-inner mb-15">
@@ -101,9 +101,9 @@ const IndexPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="gamfi-team-section pt-115 pb-85 md-pt-75 md-pb-42">
+            <section className="gamfi-team-section pt-115 pb-85 md-pt-75 md-pb-42">
                 <div className="container">
                     <div className="sec-heading text-center mb-55">
                         <div className="sub-inner  mb-15">
@@ -129,7 +129,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="member2" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                                
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -140,7 +140,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="member3" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -151,7 +151,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="member4" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -162,7 +162,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="member5" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -173,7 +173,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="team6" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                                
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -184,7 +184,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="team7" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -195,7 +195,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="team8" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -204,8 +204,8 @@ const IndexPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </React.Fragment>
+            </section>
+        </>
     )
 };
 

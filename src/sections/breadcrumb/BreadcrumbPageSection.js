@@ -6,14 +6,14 @@ const BreadcrumbPageSection = ({ pageTitle }) => {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-5">
-                        <div className="breadcrumbs-area sec-heading">                           
+                        <div className="breadcrumbs-area sec-heading">
                             <h2 className="title mb-0">{pageTitle}</h2>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
 
-export default BreadcrumbPageSection;
+export default BreadcrumbPageSection

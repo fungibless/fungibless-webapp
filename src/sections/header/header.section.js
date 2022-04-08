@@ -4,13 +4,12 @@ import connect_img from '../../assets/images/icons/connect.png'
 import connect_white_img from '../../assets/images/icons/connect_white.png'
 import logo_dark_img from '../../assets/images/logo-dark.png'
 import meta_mask_img from '../../assets/images/icons/meta-mask.png'
-import classnames from 'classnames'
 import { useSelector } from 'react-redux'
 import { Link, navigate } from 'gatsby'
 
 import { ethers } from "ethers";
 
-const HeaderSection = ({ headerType }) => {
+const HeaderSection = () => {
 
     const walletConnected = useSelector((state) => state.wallet.connected)
     const walletInstalled = useSelector((state) => state.wallet.installed)
@@ -51,7 +50,7 @@ const HeaderSection = ({ headerType }) => {
     }
 
     return (
-        <header id="gamfi-header" className={classnames("gamfi-header-section", headerType)}>
+        <header id="gamfi-header" className="gamfi-header-section default-header">
             <div className="menu-area menu-sticky">
                 <div className="container">
                     <div className="heaader-inner-area d-flex justify-content-between align-items-center">

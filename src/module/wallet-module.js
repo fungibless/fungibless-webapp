@@ -39,30 +39,33 @@ export default class WalletModule {
         onChainChanged_,
         onAccountChanged_) {
 
-        if (window.ethereum) { // Check if wallet is installed.     
-            this._onProviderDetected = onProviderDetected_;
-            this._onWalletInstalled = onWalletInstalled_;
-            this._onBalanceChanged = onBalanceChanged_;
-            this._onChainChanged = onChainChanged_;
-            this._onAccountChanged = onAccountChanged_;
+        if (typeof window !== "undefined") {
+            if (window.ethereum) { // Check if wallet is installed.     
+                this._onProviderDetected = onProviderDetected_;
+                this._onWalletInstalled = onWalletInstalled_;
+                this._onBalanceChanged = onBalanceChanged_;
+                this._onChainChanged = onChainChanged_;
+                this._onAccountChanged = onAccountChanged_;
 
-            this._onProviderDetected(true)
-            console.log("Wallet Provider Exists!", window.ethereum);
-            this._provider = new ethers.providers.Web3Provider(window.ethereum);
-            const { provider: ethereum } = this._provider;
-            this._ethereum = ethereum;
+                this._onProviderDetected(true)
+                console.log("Wallet Provider Exists!", window.ethereum);
+                this._provider = new ethers.providers.Web3Provider(window.ethereum);
+                const { provider: ethereum } = this._provider;
+                this._ethereum = ethereum;
 
-            console.log("Ethers Provider", this._provider);
-            console.log("Ethereum Provider", this._ethereum);
+                console.log("Ethers Provider", this._provider);
+                console.log("Ethereum Provider", this._ethereum);
 
-            if (ethereum) { // Check if we can get installed web3 provider.     
-                this._addEventListeners(ethereum);
-                // useDispatch(setInstalled({ installed: true, isMetaMask: ethereum.isMetaMask }))
-                this._onWalletInstalled({ installed: true, isMetaMask: ethereum.isMetaMask })
-                this._checkNetwork()
+                if (ethereum) { // Check if we can get installed web3 provider.     
+                    this._addEventListeners(ethereum);
+                    // useDispatch(setInstalled({ installed: true, isMetaMask: ethereum.isMetaMask }))
+                    this._onWalletInstalled({ installed: true, isMetaMask: ethereum.isMetaMask })
+                    this._checkNetwork()
+                }
             }
-        } else {
-            this._onProviderDetected(false)
+            else {
+                this._onProviderDetected(false)
+            }
         }
     }
 
@@ -79,7 +82,7 @@ export default class WalletModule {
     get balance() {
         return this.balance;
     }
-    
+
     async connect() {
         let successCalback = this._onAccountChanged;
         if (this._ethereum) {

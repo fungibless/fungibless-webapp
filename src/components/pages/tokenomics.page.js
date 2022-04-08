@@ -1,15 +1,16 @@
 import * as React from "react"
-import PageSection from "../../sections/page-secion";
-import BreadcrumbPageSection from '../../sections/breadcrumb/breadcrumb.section'
+import PageSection from "../../sections/PageSection";
+import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSection'
 
 const TokenomicsPage = () => {
     return (
-        <React.Fragment>
-            <BreadcrumbPageSection pageTitle="Tokenomics"/>
+        <>
+            <BreadcrumbPageSection pageTitle="Tokenomics" />
             <PageSection className="pt-115 pb-85 md-pt-75 md-pb-42">
+                
                 <div>Comming Soon!</div>
             </PageSection>
-        </React.Fragment>
+        </>
     )
 };
 

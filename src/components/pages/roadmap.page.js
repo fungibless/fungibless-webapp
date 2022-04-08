@@ -1,5 +1,5 @@
 import * as React from "react"
-import BreadcrumbPageSection from '../../sections/breadcrumb/breadcrumb.section'
+import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSection'
 import check_icon from '../../assets/images/kycimg/RMcheckicon.svg'
 import munies_icon from '../../assets/images/kycimg/munies.svg'
 import * as styles from '../../styles/roadmap.module.css'

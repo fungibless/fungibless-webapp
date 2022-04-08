@@ -1,6 +1,6 @@
 import * as React from "react"
-import PageSection from "../../sections/page-secion";
-import BreadcrumbPageSection from '../../sections/breadcrumb/breadcrumb.section'
+import PageSection from "../../sections/PageSection";
+import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSection'
 import VerticallyCenteredModal from '../vertically-centered-modal'
 import { useSelector } from 'react-redux'
 import numeral from 'numeral'
@@ -184,7 +184,7 @@ const TypicalWageWorkersPage = () => {
             setShowModal(true)
             setMinting(false);
             await getContract(abi);
-            await walletModule.loadBalance();            
+            await walletModule.loadBalance();
         });
 
         console.log("GAS PRICE", CONTRACT_GAS_PRICE_IN_GWEI)
@@ -248,83 +248,80 @@ const TypicalWageWorkersPage = () => {
     }
 
     return (
-        <React.Fragment>
+        <>
             <BreadcrumbPageSection pageTitle="Typical Wage Workers" />
 
             <PageSection className="project-details-conent pb-80 md-pb-50">
-                <div className="container">
-                    <div className="row pt-70">
-                        <div className="col-lg-12 pr-25 md-pr-15">
-                            <div className="project-item">
+                <div className="row pt-70">
+                    <div className="col-lg-12 pr-25 md-pr-15">
+                        <div className="project-item">
 
-                                <div className="project-info border-bottom-2 text-center">
-                                    <h3 className="mb-15">BUY {CONTRACT_TWW_SYMBOL} (Typical Wage Workers)</h3>
-                                    <h4 className="mb-15">1 <span className="buse">{CONTRACT_TWW_SYMBOL}</span> = {ethers.utils.formatEther(price, 'ether')} <span className="buse">MATIC</span></h4>
-                                    {/* <span>Total Stake</span> */}
-                                </div>
-                                {
-                                    !contractLoadFinished &&
-                                    <div className="text-center">
-                                        <div className="spinner-border" role="status">
-                                            <span className="sr-only"></span>
-                                        </div>
+                            <div className="project-info border-bottom-2 text-center">
+                                <h3 className="mb-15">BUY {CONTRACT_TWW_SYMBOL} (Typical Wage Workers)</h3>
+                                <h4 className="mb-15">1 <span className="buse">{CONTRACT_TWW_SYMBOL}</span> = {ethers.utils.formatEther(price, 'ether')} <span className="buse">MATIC</span></h4>
+                                {/* <span>Total Stake</span> */}
+                            </div>
+                            {
+                                !contractLoadFinished &&
+                                <div className="text-center">
+                                    <div className="spinner-border" role="status">
+                                        <span className="sr-only"></span>
                                     </div>
-                                }
-
-                                <div className="project-content mt-4">
-                                    {
-                                        !walletInstalled && <TwwInformationError>Please install Metamask</TwwInformationError>
-                                    }
-                                    {
-                                        walletInstalled && walletConnected && rightNetwork && <TwwInformation />
-                                    }
-                                    {
-                                        !walletConnected && <TwwInformationError>Please connect to your wallet.</TwwInformationError>
-                                    }
-                                    {
-                                        !rightNetwork && <TwwInformationError>Set your network to {process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME}</TwwInformationError>
-                                    }
                                 </div>
+                            }
+
+                            <div className="project-content mt-4">
+                                {
+                                    !walletInstalled && <TwwInformationError>Please install Metamask</TwwInformationError>
+                                }
+                                {
+                                    walletInstalled && walletConnected && rightNetwork && <TwwInformation />
+                                }
+                                {
+                                    !walletConnected && <TwwInformationError>Please connect to your wallet.</TwwInformationError>
+                                }
+                                {
+                                    !rightNetwork && <TwwInformationError>Set your network to {process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME}</TwwInformationError>
+                                }
                             </div>
                         </div>
-                        <div className="col-lg-12 pr-25 md-pr-15">
-                            <div className="project-item">
-                                <div className="project-info border-bottom-2 text-center">
-                                    <h3 className="mb-15">TWW Token Sale Plan</h3>
-                                </div>
-                                <div className="project-content mt-4">
-                                    <table className="table text-center">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Round</th>
-                                                <th scope="col">Sales Volume</th>
-                                                <th scope="col">Total Supply</th>
-                                                <th scope="col">Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                Object.entries(roundData).map(([key, value]) => <tr key={key}>
-                                                    <td>#{value.no}</td>
-                                                    <td>{numeral(value.saleAmount).format('#,#')}</td>
-                                                    <td>{numeral(value.maxSupply).format('#,#')}</td>
-                                                    <td>{value.price}</td>
-                                                </tr>)
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
+                    </div>
+                    <div className="col-lg-12 pr-25 md-pr-15">
+                        <div className="project-item">
+                            <div className="project-info border-bottom-2 text-center">
+                                <h3 className="mb-15">TWW Token Sale Plan</h3>
+                            </div>
+                            <div className="project-content mt-4">
+                                <table className="table text-center">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Round</th>
+                                            <th scope="col">Sales Volume</th>
+                                            <th scope="col">Total Supply</th>
+                                            <th scope="col">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            Object.entries(roundData).map(([key, value]) => <tr key={key}>
+                                                <td>#{value.no}</td>
+                                                <td>{numeral(value.saleAmount).format('#,#')}</td>
+                                                <td>{numeral(value.maxSupply).format('#,#')}</td>
+                                                <td>{value.price}</td>
+                                            </tr>)
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </PageSection>
             <VerticallyCenteredModal show={showModal} onHide={() => setShowModal(false)}>
                 {modalMessage}
             </VerticallyCenteredModal>
 
-        </React.Fragment>
+        </>
     )
 };
 
