@@ -4,11 +4,12 @@ import connect_img from '../../assets/images/icons/connect.png'
 import connect_white_img from '../../assets/images/icons/connect_white.png'
 import logo_dark_img from '../../assets/images/logo-dark.png'
 import meta_mask_img from '../../assets/images/icons/meta-mask.png'
-import classnames from 'classnames'
 import { useSelector } from 'react-redux'
 import { Link, navigate } from 'gatsby'
 
-const HeaderSection = ({ headerType }) => {
+import { ethers } from "ethers";
+
+const HeaderSection = () => {
 
     const walletConnected = useSelector((state) => state.wallet.connected)
     const walletInstalled = useSelector((state) => state.wallet.installed)
@@ -16,8 +17,40 @@ const HeaderSection = ({ headerType }) => {
     const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
     const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
 
+    const switchNetwork = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const { provider: ethereum } = provider;
+
+        if (ethereum) {
+            try {
+                await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: process.env.GATSBY_WALLET_NETWORK_CHAIN_ID }] })
+            } catch (switchError) {
+                try {
+                    await ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: process.env.GATSBY_WALLET_NETWORK_CHAIN_ID,
+                                chainName: process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME,
+                                nativeCurrency: {
+                                    name: process.env.GATSBY_WALLET_NETWORK_NATIVE_CURRENCY_NAME,
+                                    symbol: process.env.GATSBY_WALLET_NETWORK_NATIVE_SYMBOL,
+                                    decimals: parseInt(process.env.GATSBY_WALLET_NETWORK_NATIVE_DECIMALS)
+                                },
+                                rpcUrls: [process.env.GATSBY_WALLET_NETWORK_RPC_URL],
+                                blockExplorerUrls: [process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS]
+                            }
+                        ],
+                    });
+                } catch (addError) {
+                    console.log(addError);
+                }
+            }
+        }
+    }
+
     return (
-        <header id="gamfi-header" className={classnames("gamfi-header-section", headerType)}>
+        <header id="gamfi-header" className="gamfi-header-section default-header">
             <div className="menu-area menu-sticky">
                 <div className="container">
                     <div className="heaader-inner-area d-flex justify-content-between align-items-center">
@@ -31,8 +64,7 @@ const HeaderSection = ({ headerType }) => {
                                     </li>
                                     <li><Link to="/tww">NFT</Link>
                                         <ul className="sub-menu">
-                                            <li><a href="/tww">Typical Wage Workers</a></li>
-                                            <li><a href="/suc">Super Urban Cat</a></li>
+                                            <li><Link to="/tww">Typical Wage Workers</Link></li>
                                         </ul>
                                     </li>
                                     <li>
@@ -70,7 +102,7 @@ const HeaderSection = ({ headerType }) => {
                                     }
                                     {
                                         walletInstalled && !rightNetwork &&
-                                        <button type="button" className="readon white-btn hover-shape"><img src={connect_img} alt="Icon" />
+                                        <button type="button" className="readon white-btn hover-shape" onClick={switchNetwork}><img src={connect_img} alt="Icon" />
                                             <span className="btn-text">Wrong Network</span>
                                             <span className="hover-shape1"></span>
                                             <span className="hover-shape2"></span>
@@ -115,12 +147,11 @@ const HeaderSection = ({ headerType }) => {
                     <Link to="/"><img src={logo_dark_img} alt="logo" /></Link>
                 </div>
                 <ul className="nav-menu">
-                    <li className="current-menu-item"><a href="/">Home</a>
+                    <li className="current-menu-item"><Link to="/">Home</Link>
                     </li>
                     <li><Link to="/tww">NFT</Link>
                         <ul className="sub-menu">
-                            <li><Link to="/tww">Typical Wage Workers</Link></li>
-                            <li><Link to="/suc">Super Urban Cat</Link></li>
+                            <li><Link to="/tww">Typical Wage Workers</Link></li>                            
                         </ul>
                     </li>
                     <li><Link to="/staking">Staking</Link>

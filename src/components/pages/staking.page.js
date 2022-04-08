@@ -1,13 +1,13 @@
 import * as React from "react"
-import PageSection from "../../sections/page-secion";
-import BreadcrumbPageSection from '../../sections/breadcrumb/breadcrumb.section'
+import PageSection from "../../sections/PageSection";
+import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSection'
 
 const StakingPage = () => {
     return (
-        <React.Fragment>
-            <BreadcrumbPageSection pageTitle="Staking" />
-            <PageSection className="participat-information project-details-conent gamfi-about-secion pb-80 md-pb-50">
-                <div class="container">
+        <>
+            <BreadcrumbPageSection pageTitle="Staking - Coming soon" />
+            <PageSection className="project-details-conent pb-80 md-pb-50">
+                {/* <div class="container">
                     <div class="row pt-70">
                         <div class="col-lg-6 pr-25 md-pr-15">
                             <div class="project-item">
@@ -85,9 +85,9 @@ const StakingPage = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </PageSection>
-        </React.Fragment>
+        </>
     )
 };
 

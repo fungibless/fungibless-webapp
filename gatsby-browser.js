@@ -14,58 +14,19 @@ import wrapWithProvider from "./wrap-with-provider"
 export const wrapRootElement = wrapWithProvider
 
 export const onRouteUpdate = ({ location, prevLocation }) => {
-    console.log('new pathname', location.pathname)
-    console.log('old pathname', prevLocation ? prevLocation.pathname : null)
-
-    $(".loader_first").delay(500).fadeOut(300);
-    $(".circular-spinner").on('click', function () {
-        $(".loader_first").fadeOut(300);
-    })
+    console.log(prevLocation ? prevLocation.pathname : null, " => ", location.pathname)
+    $(".loader_first").show()
+    $(".loader_first").delay(500).fadeOut(300)
 }
 
 export const onInitialClientRender = () => {
 
-    var header = $(".menu-sticky");
-    var win = $(window);
-
-    win.on("scroll", function () {
-        var scroll = win.scrollTop();
-        if (scroll < 1) {
-            header.removeClass("sticky");
-        } else {
-            header.addClass("sticky");
-        }
-
-        $("section").each(function () {
-            var elementTop = $(this).offset().top - $("#sc-header").outerHeight();
-            if (scroll >= elementTop) {
-                $(this).addClass("loaded");
-            }
-        });
-    });
-
     new WOW().init();
 
-    var counter = $('.counter');
-    if (counter.length) {
-        $('.counter').counterUp({
-            delay: 20,
-            time: 1500
-        });
-    }
-
-    $(".loader_first").delay(500).fadeOut(300);
-    $(".circular-spinner").on('click', function () {
-        $(".loader_first").fadeOut(300);
-    })
-
-    //expeander Class
     $('.expeander-iteam-area').on("click", function () {
         $(this).parent().toggleClass('expeand-bottom-content')
     });
 
-
-    //canvas menu
     var navexpander = $('#nav-expander');
     if (navexpander.length) {
         $('#nav-expander,  #nav-close2').on('click', function (e) {
@@ -74,7 +35,6 @@ export const onInitialClientRender = () => {
         });
     }
 
-    /******** Mobile Menu Start ********/
     $('.mobile-navbar-menu a').each(function () {
         var href = $(this).attr("href");
         if (href === "#") {
@@ -127,10 +87,4 @@ export const onInitialClientRender = () => {
     });
 }
 
-export const onClientEntry = () => {
-
-    // $(".loader_first").delay(500).fadeOut(300);
-    // $(".circular-spinner").on('click', function () {
-    //     $(".loader_first").fadeOut(300);
-    // })
-}
+// export const onClientEntry = () => {}

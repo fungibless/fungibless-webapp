@@ -1,35 +1,36 @@
 import * as React from "react"
-import BreadcrumbPageSection from '../../sections/breadcrumb/breadcrumb.section'
+import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSection'
 import check_icon from '../../assets/images/kycimg/RMcheckicon.svg'
 import munies_icon from '../../assets/images/kycimg/munies.svg'
+import * as styles from '../../styles/roadmap.module.css'
 
 const RoadmapPage = () => {
     return (
         <React.Fragment>
             <BreadcrumbPageSection pageTitle="Roadmap" />
-            <div className="gamfiRoadMap">
-                <div className="RoadMapSect">
-                    <div className="container RoadMapContainer">
-                        <div className="Roadmap2021">
-                            <div className="roadmap2021Divider">
+            <div className={styles.gamfiRoadMap}>
+                <div className={styles.RoadMapSect}>
+                    <div className={`container ${styles.RoadMapContainer}`}>
+                        <div className={styles.roadmap}>
+                            <div className={styles.divider}>
                                 <span>2022</span>
                             </div>
                             <div className="row m-0">
                                 <div className="col-md-6">
-                                    <div className="RodmapConetent RodmapLeftConetent">
-                                        <div className="RodmapConetentbox RodmapConetentbox3">
+                                    <div className={styles.roadmapLeft}>
+                                        <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox3}`}>
                                             <h3>Q1 2022</h3>
                                             <ul>
-                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Launch NFT: Super Urban Cat(SUC)</li>
-                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Giveaway Super Urban Cat Monthly</li>
+                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Fungibless Initiation</li>
                                                 <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Launch Website</li>
+                                                <li><span><img src={check_icon} alt="icon" className="img-fluid" /></span>Create TWW Arts</li>                                                
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <div className="RodmapConetent RodmapRightConetent">
-                                        <div className="RodmapConetentbox RodmapConetentbox2">
+                                    <div className={styles.roadmapRight}>
+                                        <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox2}`}>
                                             <h3>Q2 2022</h3>
                                             <ul>
                                                 <li><span><img src={munies_icon} alt="icon" className="img-fluid" /></span>Launch NFT: Typical Wage Workers(TWW)</li>
@@ -41,8 +42,8 @@ const RoadmapPage = () => {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <div className="RodmapConetent RodmapLeftConetent">
-                                        <div className="RodmapConetentbox RodmapConetentbox3">
+                                    <div className={styles.roadmapLeft}>
+                                        <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox3}`}>
                                             <h3>Q3 2022</h3>
                                             <ul>
                                                 <li><span><img src={munies_icon} alt="icon" className="img-fluid" /></span>IDO(Initial Dex Offering)</li>
@@ -54,8 +55,8 @@ const RoadmapPage = () => {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <div className="RodmapConetent RodmapRightConetent">
-                                        <div className="RodmapConetentbox RodmapConetentbox2">
+                                    <div className={styles.roadmapRight}>
+                                        <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox2}`}>
                                             <h3>Q4 2022</h3>
                                             <ul>
                                                 <li><span><img src={munies_icon} alt="icon" className="img-fluid" /></span>Development of NFT Marketplace</li>
@@ -66,14 +67,14 @@ const RoadmapPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="Roadmap2021">
-                            <div className="roadmap2021Divider">
+                        <div className={styles.roadmap}>
+                            <div className={styles.divider}>
                                 <span>2023</span>
                             </div>
                             <div className="row m-0">
                                 <div className="col-md-6">
-                                    <div className="RodmapConetent RodmapLeftConetent">
-                                        <div className="RodmapConetentbox RodmapConetentbox3">
+                                    <div className={styles.roadmapLeft}>
+                                        <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox3}`}>
                                             <h3>Q1 2023</h3>
                                             <ul>
                                                 <li><span><img src={munies_icon} alt="icon" className="img-fluid" /></span>IGO (Initial Game Offering)</li>
@@ -85,8 +86,8 @@ const RoadmapPage = () => {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <div className="RodmapConetent RodmapRightConetent">
-                                        <div className="RodmapConetentbox RodmapConetentbox2">
+                                    <div className={styles.roadmapRight}>
+                                        <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox2}`}>
                                             <h3>Q2 2023</h3>
                                             <ul>
                                                 <li><span><img src={munies_icon} alt="icon" className="img-fluid" /></span>Game launch</li>
@@ -97,8 +98,8 @@ const RoadmapPage = () => {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <div className="RodmapConetent RodmapLeftConetent">
-                                        <div className="RodmapConetentbox RodmapConetentbox3">
+                                    <div className={styles.roadmapLeft}>
+                                        <div className={`${styles.roadmapContentBox} ${styles.roadmapContentBox3}`}>
                                             <h3>Q3 2023</h3>
                                             <ul>
                                                 <li><span><img src={munies_icon} alt="icon" className="img-fluid" />TBD</span></li>

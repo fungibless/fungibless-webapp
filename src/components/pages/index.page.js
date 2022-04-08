@@ -2,18 +2,26 @@ import * as React from "react"
 import main_section_icon from '../../assets/images/icons/main_section_icon2.png'
 import steps_img from '../../assets/images/icons/steps.png'
 import steps2_img from '../../assets/images/icons/steps2.png'
-import tokenomics_img from '../../assets/images/project/tokenomices-image.jpg'
 import team_syous from '../../assets/images/team/team-syous.png'
 import veil1_png from '../../assets/images/team/veil1.png'
 import veil2_png from '../../assets/images/team/veil2.png'
 
+
+const tokenDistribution = {
+    display: 'flex',
+    flexDirection:'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: `"Russo One"`
+}
+
 const IndexPage = () => {
     return (
-        <React.Fragment>
-            <div id="sc-banner" className="sc-banner banner-bg position-relative">
+        <>
+            <section id="sc-banner" className="sc-banner banner-bg position-relative">
                 <div className="container">
                     <div className="banner-content text-center">
-                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={main_section_icon} alt="icon" tabIndex="-1"/>
+                        <img className="banner-icon wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms" src={main_section_icon} alt="icon" tabIndex="-1" />
                         <h1 className="banner-title wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             Fun challenges in the blockchain world.
                         </h1>
@@ -28,9 +36,9 @@ const IndexPage = () => {
                         </a>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="gamfi-tokenomics-section tokenomics-left-right-shape pb-115 pt-115 md-pt-75 md-pb-45">
+            <section className="gamfi-tokenomics-section tokenomics-left-right-shape pb-115 pt-115 md-pt-75 md-pb-45">
                 <div className="container">
                     <div className="sec-heading">
                         <div className="sub-inner mb-15">
@@ -39,71 +47,27 @@ const IndexPage = () => {
                         </div>
                         <h2 className="title">Tokenomics</h2>
                     </div>
-                    <div className="tokenomics-item d-flex">
-                        <div className="tokenomics-menu pr-60">
-                            <div className="dsc">Team</div>
-                            <h5>7.5%</h5>
+                    <div style={{ display: 'flex', height: '50px' }}>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#3f0081', width: '20%', }}>
+                            <div className="dsc">Team</div><div>30%</div>
                         </div>
-                        <div className="tokenomics-menu pr-63">
-                            <div className="dsc">Staking</div>
-                            <h5>9.50%</h5>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#440087', width: '30%' }}>
+                            <div className="dsc">Community</div>40%
                         </div>
-                        <div className="tokenomics-menu pr-65">
-                            <div className="dsc">Advisors</div>
-                            <h5>10.00%</h5>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#4b3987', width: '20%' }}>
+                            <div className="dsc">Future</div><div>20%</div>
                         </div>
-                        <div className="tokenomics-menu pr-95">
-                            <div className="dsc">Liquidity</div>
-                            <h5>12.00%</h5>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#6e61ab', width: '25%' }}>
+                            <div className="dsc">Bounty</div> 7%
                         </div>
-                        <div className="tokenomics-menu pr-105">
-                            <div className="dsc">Ecosystem</div>
-                            <h5>16.33%</h5>
-                        </div>
-                        <div className="tokenomics-menu pr-122">
-                            <div className="dsc">Marketing</div>
-                            <h5>18.00%</h5>
-                        </div>
-                        <div className="tokenomics-menu">
-                            <div className="dsc">Private Sale</div>
-                            <h5>30.00%</h5>
-                        </div>
-                    </div>
-                    <div className="tokenomics-image mb-60 md-mb-40">
-                        <img src={tokenomics_img} alt="tokenomics" />
-                    </div>
-                    <div className="tokenomics-counter">
-                        <div className="row">
-                            <div className="col-lg-3 col-md-6 mb-30">
-                                <div className="counter-info">
-                                    <h4 className="counter-number mb-6"><span className="counter">386</span></h4>
-                                    <h5>Funded Projects</h5>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 mb-30">
-                                <div className="counter-info">
-                                    <h4 className="counter-number mb-6"><span className="counter">486</span></h4>
-                                    <h5>Unique Participants</h5>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 mb-30">
-                                <div className="counter-info">
-                                    <h4 className="counter-number mb-6">$<span className="counter">9</span>M+</h4>
-                                    <h5>Raised Capital</h5>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 mb-30">
-                                <div className="counter-info">
-                                    <h4 className="counter-number mb-6">$<span className="counter">18</span>M+</h4>
-                                    <h5>Initial Market Cap</h5>
-                                </div>
-                            </div>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#928fce', width: '15%' }}>
+                            <div className="dsc">LP</div> 3%
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="gamfi-team-section pt-115 pb-85 md-pt-75 md-pb-42">
+            <section className="gamfi-team-section pt-115 pb-85 md-pt-75 md-pb-42">
                 <div className="container">
                     <div className="sec-heading text-center mb-55">
                         <div className="sub-inner  mb-15">
@@ -129,7 +93,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="member2" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                                
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -140,7 +104,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="member3" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -151,7 +115,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="member4" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -162,7 +126,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="member5" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -173,7 +137,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="team6" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                                
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -184,7 +148,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="team7" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -195,7 +159,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="team8" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>                               
+                                <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -204,8 +168,8 @@ const IndexPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </React.Fragment>
+            </section>
+        </>
     )
 };
 

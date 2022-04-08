@@ -4,21 +4,19 @@ import Layout from "../components/layout"
 import StakingPage from "../components/pages/staking.page"
 import IndexPage from "../components/pages/index.page"
 import TypicalWageWorkersPage from "../components/pages/tww.page"
-import SuperUrbanCatPage from "../components/pages/suc.page"
 import TokenomicsPage from "../components/pages/tokenomics.page"
 import RoadmapPage from "../components/pages/roadmap.page"
 
 
 const Index = () => (
-    <Layout headerType="default-header">
+    <Layout>
         <Router>
             <IndexPage path="/" />
             <StakingPage path="/staking" />
-            <TypicalWageWorkersPage path="/tww"/>
-            <SuperUrbanCatPage path="/suc"/>
-            <TokenomicsPage path="/tokenomics"/>
-            <RoadmapPage path="/roadmap"/>
-        </Router>               
+            <TypicalWageWorkersPage path="/tww" />
+            <TokenomicsPage path="/tokenomics" />
+            <RoadmapPage path="/roadmap" />
+        </Router>
     </Layout>
 )
 

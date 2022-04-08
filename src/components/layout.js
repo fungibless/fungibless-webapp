@@ -6,9 +6,9 @@ import FooterSection from "../sections/footer/footer.section"
 import WalletSection from "../sections/wallet/wallet.section"
 import SpinnerSection from '../sections/spinner/spinner.section'
 
-const Layout = ({ headerType, children }) => {
+const Layout = ({ children }) => {
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <html lang="en" />
         <meta charSet="utf-8" />
@@ -17,11 +17,11 @@ const Layout = ({ headerType, children }) => {
       </Helmet>
       <SearchEngineOptimization />
       <SpinnerSection />
-      <HeaderSection headerType={headerType} />
+      <HeaderSection/>
       {children}
       <FooterSection />
       <WalletSection />
-    </React.Fragment>
+    </>
   )
 }
 

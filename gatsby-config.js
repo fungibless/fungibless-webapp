@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = {  
   siteMetadata: {
     title: `Fun challenges in the blockchain world for the community.`,
     titleTemplate: `%s | Fungibless`,
@@ -9,6 +9,12 @@ module.exports = {
     twitterUsername: ""
   },
   plugins: [
+    // {
+    //   resolve: 'gatsby-plugin-remove-console',
+    //   options: {
+    //     exclude: ['error', 'warn'], // <- will be removed all console calls except these
+    //   }
+    // },
     "gatsby-plugin-emotion",
     "gatsby-plugin-image",
     {
