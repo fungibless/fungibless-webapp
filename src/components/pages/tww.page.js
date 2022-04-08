@@ -144,7 +144,7 @@ const TypicalWageWorkersPage = () => {
             setRound(_round)
             setMaxMintAmount(_maxMintAmount)
         } catch (err) {
-            console.err(err)
+            console.error(err)
         } finally {
             setContractLoadFinished(true)
         }
@@ -226,7 +226,7 @@ const TypicalWageWorkersPage = () => {
                                     )}
                                 </select>
                                 <div className="white-shape-small approve">
-                                    <button type="button" className="btn" disabled={(abi == null) || isMinting} onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif;' }}>
+                                    <button type="button" className="btn" disabled={(abi == null) || (totalSupply < maxSupply) || isMinting} onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif;' }}>
                                         {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
                                         &nbsp;MINT
                                     </button>
