@@ -2,10 +2,18 @@ import * as React from "react"
 import main_section_icon from '../../assets/images/icons/main_section_icon2.png'
 import steps_img from '../../assets/images/icons/steps.png'
 import steps2_img from '../../assets/images/icons/steps2.png'
-import tokenomics_img from '../../assets/images/project/tokenomices-image.jpg'
 import team_syous from '../../assets/images/team/team-syous.png'
 import veil1_png from '../../assets/images/team/veil1.png'
 import veil2_png from '../../assets/images/team/veil2.png'
+
+
+const tokenDistribution = {
+    display: 'flex',
+    flexDirection:'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: `"Russo One"`
+}
 
 const IndexPage = () => {
     return (
@@ -39,28 +47,23 @@ const IndexPage = () => {
                         </div>
                         <h2 className="title">Tokenomics</h2>
                     </div>
-                    <div style={{textAlign:'center', display:'flex', verticalAlign:'middle', justifyContent:'center'}}>
-                        <div style={{backgroundColor:'#28055C', width:'30%'}}>
-                            {/* <div className="dsc">Team</div> */}
-                            TEAM 30%
+                    <div style={{ display: 'flex', height: '50px' }}>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#3f0081', width: '20%', }}>
+                            <div className="dsc">Team</div><div>30%</div>
                         </div>
-                        <div style={{backgroundColor:'#37008A', width:'40%'}}>
-                            <div className="dsc">Community - Staking, Game</div>
-                            <h5>40%</h5>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#440087', width: '30%' }}>
+                            <div className="dsc">Community</div>40%
                         </div>
-                        <div style={{backgroundColor:'#50288D', width:'20%'}}>
-                            <div className="dsc">Future Development</div>
-                            <h5>20%</h5>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#4b3987', width: '20%' }}>
+                            <div className="dsc">Future</div><div>20%</div>
                         </div>
-                        <div style={{backgroundColor:'#6C44A6', width:'5%'}}>
-                            <div className="dsc">Liqudity</div>
-                            <h5>5%</h5>
+                        <div style={{ ...tokenDistribution, backgroundColor: '#6e61ab', width: '25%' }}>
+                            <div className="dsc">Bounty</div> 7%
                         </div>
-                        <div style={{backgroundColor:'#7E5AB5', width:'5%'}}>
-                            <div className="dsc">Bounty</div>
-                            <h5>5%</h5>
-                        </div>                       
-                    </div>                   
+                        <div style={{ ...tokenDistribution, backgroundColor: '#928fce', width: '15%' }}>
+                            <div className="dsc">LP</div> 3%
+                        </div>
+                    </div>
                 </div>
             </section>
 

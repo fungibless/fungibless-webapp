@@ -40,7 +40,8 @@ const WalletSection = () => {
 
     function onAccountChanged(accounts) {
         if (accounts && accounts.length > 0) {
-            dispatch(setConnectedAndAccount({ connected: true, account: accounts[0] }))
+            dispatch(setConnectedAndAccount({ connected: true, account: accounts[0] }))            
+            closeButton.current.click();
         } else {
             dispatch(setConnectedAndAccount({ connected: false, account: null }))
         }
