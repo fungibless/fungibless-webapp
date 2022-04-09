@@ -4,7 +4,6 @@ import SearchEngineOptimization from './seo/seo'
 import HeaderSection from "../sections/header/header.section"
 import FooterSection from "../sections/footer/footer.section"
 import WalletSection from "../sections/wallet/wallet.section"
-import SpinnerSection from '../sections/spinner/spinner.section'
 
 const Layout = ({ children }) => {
   return (
@@ -16,7 +15,6 @@ const Layout = ({ children }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Helmet>
       <SearchEngineOptimization />
-      <SpinnerSection />
       <HeaderSection/>
       {children}
       <FooterSection />

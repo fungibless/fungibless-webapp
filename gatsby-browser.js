@@ -13,11 +13,11 @@ import WOW from 'WOW'
 import wrapWithProvider from "./wrap-with-provider"
 export const wrapRootElement = wrapWithProvider
 
-export const onRouteUpdate = ({ location, prevLocation }) => {
-    console.log(prevLocation ? prevLocation.pathname : null, " => ", location.pathname)
-    $(".loader_first").show()
-    $(".loader_first").delay(500).fadeOut(300)
-}
+// export const onRouteUpdate = ({ location, prevLocation }) => {
+//     console.log(prevLocation ? prevLocation.pathname : null, " => ", location.pathname)
+//     $(".loader_first").show()
+//     $(".loader_first").delay(500).fadeOut(300)
+// }
 
 export const onInitialClientRender = () => {
 

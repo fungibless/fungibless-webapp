@@ -1,4 +1,4 @@
-module.exports = {  
+module.exports = {
   siteMetadata: {
     title: `Fun challenges in the blockchain world for the community.`,
     titleTemplate: `%s | Fungibless`,
@@ -9,12 +9,12 @@ module.exports = {
     twitterUsername: ""
   },
   plugins: [
-    // {
-    //   resolve: 'gatsby-plugin-remove-console',
-    //   options: {
-    //     exclude: ['error', 'warn'], // <- will be removed all console calls except these
-    //   }
-    // },
+    {
+      resolve: 'gatsby-plugin-remove-console',
+      options: {
+        exclude: ['error', 'warn'],
+      }
+    },
     "gatsby-plugin-emotion",
     "gatsby-plugin-image",
     {
@@ -41,5 +41,22 @@ module.exports = {
         "path": "./src/images/"
       },
       __key: "images"
-    }]
+    },
+    {
+      resolve: `gatsby-plugin-google-gtag`,
+      options: {        
+        trackingIds: [
+          "G-TPRKPY1LE3"          
+        ],                
+        gtagConfig: {
+          anonymize_ip: true,
+          cookie_expires: 0,
+        },       
+        pluginConfig: {
+          head: true,
+          respectDNT: true
+        },
+      },
+    },
+  ]
 };
