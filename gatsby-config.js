@@ -5,8 +5,8 @@ module.exports = {
     siteUrl: `https://www.fungibless.xyz`,
     description: `We pursue fun community-based blockchain experiments such as NFTs, tokens, and staking. We challenge together and share profits together.`,
     url: 'https://www.fungibless.xyz',
-    image: "",
-    twitterUsername: ""
+    image: "https://fungibless.s3.us-east-2.amazonaws.com/image/hj.png",
+    twitterUsername: "@syous_seo"
   },
   plugins: [
     {
@@ -44,14 +44,14 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-google-gtag`,
-      options: {        
+      options: {
         trackingIds: [
-          "G-TPRKPY1LE3"          
-        ],                
+          "G-TPRKPY1LE3"
+        ],
         gtagConfig: {
           anonymize_ip: true,
           cookie_expires: 0,
-        },       
+        },
         pluginConfig: {
           head: true,
           respectDNT: true
