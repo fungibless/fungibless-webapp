@@ -9,7 +9,7 @@ import { graphql, useStaticQuery } from "gatsby"
 
 const Layout = ({ children }) => {
   const { pathname } = useLocation()
-  const site = useStaticQuery(graphql`
+  const data = useStaticQuery(graphql`
     query {
       site {
         siteMetadata {
@@ -25,33 +25,33 @@ const Layout = ({ children }) => {
   `)
   return (
     <>
-      <Helmet title={site.title} titleTemplate={site.titleTemplate}>
+      <Helmet title={data.site.siteMetadata.title} titleTemplate={data.site.siteMetadata.titleTemplate}>
         <html lang="en" />
         <meta charSet="utf-8" />
-        <meta name="description" content={site.description} />
-        <meta name="image" content={site.image} />
+        <meta name="description" content={data.site.siteMetadata.description} />
+        <meta name="image" content={data.site.siteMetadata.image} />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta property="og:url" content={`${site.siteUrl}${pathname}`} />
+        <meta property="og:url" content={`${data.site.siteMetadata.siteUrl}${pathname}`} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={site.title} />
-        <meta property="og:description" content={site.description} />
-        <meta property="og:image" content={site.image} />
+        <meta property="og:title" content={data.site.siteMetadata.title} />
+        <meta property="og:description" content={data.site.siteMetadata.description} />
+        <meta property="og:image" content={data.site.siteMetadata.image} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:creator" content={site.twitterUsername} />
-        <meta name="twitter:title" content={site.title} />
-        <meta name="twitter:description" content={site.description} />
-        <meta name="twitter:image" content={site.image} />
+        <meta name="twitter:creator" content={data.site.siteMetadata.twitterUsername} />
+        <meta name="twitter:title" content={data.site.siteMetadata.title} />
+        <meta name="twitter:description" content={data.site.siteMetadata.description} />
+        <meta name="twitter:image" content={data.site.siteMetadata.image} />
 
         <script type="application/ld+json">
           {`
               {
                 "@context": "http://www.schema.org",
                 "@type": "WebSite",
-                "name": "${site.title}",
-                "url": "${site.siteUrl}",
-                "description": "${site.description}",
-                "image": "${site.image}"
+                "name": "${data.site.siteMetadata.title}",
+                "url": "${data.site.siteMetadata.siteUrl}",
+                "description": "${data.site.siteMetadata.description}",
+                "image": "${data.site.siteMetadata.image}"
               }
             `}
         </script>
