@@ -3131,6 +3131,168 @@ section.loader_first {
     }
 }
 
+/*------------------------
+    RoadMap
+------------------------*/
+.RoadMapDuration{}
+.RoadMapDuration h6 {
+    font-family: Russo One;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 28px;
+    line-height: 55px;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.7);
+}
+.gamfiRoadMap   {
+    padding-bottom: 120px;
+    background: #090A1A;
+    position: relative;
+}
+.RoadMapSect{
+    background: #090A1A;
+    padding-top: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: url(../images/kycimg/roadmapScreenbg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 1584px;
+}
+.RoadMapContainer{
+    position: relative;
+    z-index: 1
+}
+.roadMapDivider{
+    position: absolute;
+    top: 0px;
+    z-index: 0;
+    background: transparent;
+}
+.RoadMapSect .roadMapDivider img{
+    height: 100%;
+}
+.RodmapLeftConetent{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-right: 30px;
+}
+.RodmapRightConetent{
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-left: 30px;
+}
+.RodmapConetentbox{
+    max-width: 470px;
+    width: 100%;
+    height: 100%;
+    padding: 35px 39px 26px 39px;
+}
+
+.RodmapConetentbox1{
+    background: url(../images/kycimg/roadMapcpntentBg1.svg);
+    min-height: 253px;
+    margin-top: 60px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+.RodmapConetentbox2{
+    background: url(../images/kycimg/roadMapcpntentBg5.svg);
+    min-height: 216px;
+    margin-top: 190px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+.RodmapConetentbox3{
+    background: url(../images/kycimg/roadMapcpntentBg2.svg);
+    min-height: 216px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+.RodmapConetentbox4{
+    background: url(../images/kycimg/roadMapcpntentBg6.svg);
+    min-height: 253px;
+    margin-top: 100px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.RodmapConetentbox5{
+    background: url(../images/kycimg/roadMapcpntentBg3.svg);
+    min-height: 290px;
+    margin-top: 123px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.RodmapConetentbox6{
+    background: url(../images/kycimg/roadMapcpntentBg7.svg);
+    min-height: 290px;
+    margin-top: 253px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding-top: 47px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.RodmapConetentbox7{
+    background: url(../images/kycimg/roadMapcpntentBg4.svg);
+    min-height: 216px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.RodmapConetentbox h3 {
+    font-family: Russo One;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 158%;
+    color: #A3FF12;
+    margin-bottom: 10px;
+}
+.RodmapConetentbox.disable  h3{
+    color: rgba(255, 255, 255, 0.7);
+}
+.RodmapConetentbox ul{
+    
+}
+.RodmapConetentbox ul li {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 158%;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.RodmapConetentbox ul li span{
+    margin-right: 20px;
+}
+
 .connectWalletBtnforMobile{
     width: 100%;
     background: #6D4AFE;
@@ -3142,4 +3304,59 @@ section.loader_first {
 .connectWalletBtnforMobile .btn-text{
     color: #ffffff;
     padding-left: 10px;
+}
+
+
+.Roadmap2021, .Roadmap2022{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.roadmap2021Divider{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    min-height: 825px;
+    top: 0px;
+    width: 50px;
+    background: url(../images/kycimg/Roadmap2021.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.roadmap2021Divider span {
+    transform: rotate(270deg);
+    font-family: Russo One;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.2);
+}
+.roadmap2022Divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    min-height: 752px;
+    bottom: -65px;
+    width: 50px;
+    background: url(../images/kycimg/Roadmap2022.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.roadmap2022Divider span {
+    transform: rotate(270deg);
+    font-family: Russo One;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.2);
 }
