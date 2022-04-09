@@ -8,7 +8,7 @@
     "gatsby"
   ],
   "scripts": {
-    "develop": "set GATSBY_ENV=production && gatsby develop",
+    "develop": "gatsby develop",
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
@@ -25,6 +25,7 @@
     "gatsby": "^4.10.3",
     "gatsby-plugin-emotion": "^7.10.0",
     "gatsby-plugin-google-fonts": "^1.0.1",
+    "gatsby-plugin-google-gtag": "^4.11.0",
     "gatsby-plugin-image": "^2.10.1",
     "gatsby-plugin-manifest": "^4.10.2",
     "gatsby-plugin-react-helmet": "^5.10.0",
