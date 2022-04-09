@@ -16,6 +16,9 @@ const tokenDistribution = {
 }
 
 const IndexPage = () => {
+
+    const GATSBY_OPENSEA_URI_TWW = process.env.GATSBY_OPENSEA_URI_TWW;
+
     return (
         <>
             <section id="sc-banner" className="sc-banner banner-bg position-relative">
@@ -28,7 +31,7 @@ const IndexPage = () => {
                         <div className="description wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             community-based blockchain experiments such as NFTs, tokens, and staking. challenge together and share together.
                         </div>
-                        <a className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href="https://opensea.io/collection/superurbancat" target="_blank" rel="noreferrer">
+                        <a className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href={GATSBY_OPENSEA_URI_TWW} target="_blank" rel="noreferrer">
                             <span className="btn-text">Explore Collections</span>
                             <span className="hover-shape1"></span>
                             <span className="hover-shape2"></span>

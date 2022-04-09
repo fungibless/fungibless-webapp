@@ -24,7 +24,7 @@ const TypicalWageWorkersPage = () => {
     const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS
     const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION
     const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL
-    const CONTRACT_GAS_PRICE_IN_GWEI = process.env.GATSBY_CONTRACT_GAS_PRICE_IN_GWEI
+    // const CONTRACT_GAS_PRICE_IN_GWEI = process.env.GATSBY_CONTRACT_GAS_PRICE_IN_GWEI
 
     const ethBalance = useSelector((state) => state.wallet.balance.eth)
     const walletInstalled = useSelector((state) => state.wallet.installed)
@@ -166,9 +166,6 @@ const TypicalWageWorkersPage = () => {
 
 
     const mint = async () => {
-        console.log("mint abi:", abi)
-        console.log("mint amount:", mintAmount)
-
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const erc721 = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, provider);
         const signer = provider.getSigner();
@@ -186,11 +183,13 @@ const TypicalWageWorkersPage = () => {
             await getContract(abi);
             await walletModule.loadBalance();
         });
-
-        console.log("GAS PRICE", CONTRACT_GAS_PRICE_IN_GWEI)
+        
         try {
             setMinting(true);
-            await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
+            const gasPrice = await (await provider.getGasPrice()).toString();
+            console.log("Gas Price:", gasPrice, " Mint Amount:", mintAmount, " Payable Amount:", payableAmount);
+            await twwWithSigner.mint(mintAmount, { gasPrice: gasPrice, value: payableAmount })
+            // await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
         } catch (err) {           
             setModalMessage(err.message);
             setShowModal(true)
@@ -226,7 +225,7 @@ const TypicalWageWorkersPage = () => {
                                     )}
                                 </select>
                                 <div className="white-shape-small approve">
-                                    <button type="button" className="btn" disabled={(abi == null) || (totalSupply >= maxSupply) || isMinting} onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif;' }}>
+                                    <button type="button" className="btn" disabled={(abi == null) || (totalSupply >= maxSupply) || isMinting} onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif' }}>
                                         {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
                                         &nbsp;MINT
                                     </button>
