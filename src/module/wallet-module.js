@@ -40,13 +40,13 @@ export default class WalletModule {
         onAccountChanged_) {
 
         if (typeof window !== "undefined") {
-            if (window.ethereum) { // Check if wallet is installed.     
-                this._onProviderDetected = onProviderDetected_;
-                this._onWalletInstalled = onWalletInstalled_;
-                this._onBalanceChanged = onBalanceChanged_;
-                this._onChainChanged = onChainChanged_;
-                this._onAccountChanged = onAccountChanged_;
+            this._onProviderDetected = onProviderDetected_;
+            this._onWalletInstalled = onWalletInstalled_;
+            this._onBalanceChanged = onBalanceChanged_;
+            this._onChainChanged = onChainChanged_;
+            this._onAccountChanged = onAccountChanged_;
 
+            if (window.ethereum) { // Check if wallet is installed.     
                 this._onProviderDetected(true)
                 console.log("Wallet Provider Exists!", window.ethereum);
                 this._provider = new ethers.providers.Web3Provider(window.ethereum);
