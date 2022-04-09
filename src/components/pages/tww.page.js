@@ -191,11 +191,11 @@ const TypicalWageWorkersPage = () => {
         try {
             setMinting(true);
             await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
-        } catch (err) {
-            console.log(err)
-            setModalMessage(err);
+        } catch (err) {           
+            setModalMessage(err.message);
             setShowModal(true)
             setMinting(false);
+            console.log(err)
         }
     }
 
