@@ -16,22 +16,6 @@ export default class WalletModule {
     _balance = 0;
     _connected = false;
 
-    // constructor() {
-    //     // this._loadProvider();
-    // }
-
-    // setEventHandlers(onProviderDetected_,
-    //     onWalletInstalled_,
-    //     onBalanceChanged_,
-    //     onChainChanged_,
-    //     onAccountChanged_) {
-    //     this._onProviderDetected = onProviderDetected_;
-    //     this._onWalletInstalled = onWalletInstalled_;
-    //     this._onBalanceChanged = onBalanceChanged_;
-    //     this._onChainChanged = onChainChanged_;
-    //     this._onAccountChanged = onAccountChanged_;
-    // }
-
     initialize(
         onProviderDetected_,
         onWalletInstalled_,
@@ -120,6 +104,36 @@ export default class WalletModule {
             return this._loadBalance(this._address)
         } else {
             console.error("Load ethers provider fisrt or connect to your wallet.");
+        }
+    }
+
+    async switchNetwork() {
+        const ethereum = this._ethereum;
+        if (ethereum) {
+            try {
+                await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: process.env.GATSBY_WALLET_NETWORK_CHAIN_ID }] })
+            } catch (switchError) {
+                try {
+                    await ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: process.env.GATSBY_WALLET_NETWORK_CHAIN_ID,
+                                chainName: process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME,
+                                nativeCurrency: {
+                                    name: process.env.GATSBY_WALLET_NETWORK_NATIVE_CURRENCY_NAME,
+                                    symbol: process.env.GATSBY_WALLET_NETWORK_NATIVE_SYMBOL,
+                                    decimals: parseInt(process.env.GATSBY_WALLET_NETWORK_NATIVE_DECIMALS)
+                                },
+                                rpcUrls: [process.env.GATSBY_WALLET_NETWORK_RPC_URL],
+                                blockExplorerUrls: [process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS]
+                            }
+                        ],
+                    });
+                } catch (addError) {
+                    console.log(addError);
+                }
+            }
         }
     }
 }
