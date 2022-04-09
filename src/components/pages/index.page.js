@@ -1,4 +1,6 @@
 import * as React from "react"
+import { OutboundLink } from "gatsby-plugin-google-gtag"
+
 import main_section_icon from '../../assets/images/icons/main_section_icon2.png'
 import steps_img from '../../assets/images/icons/steps.png'
 import steps2_img from '../../assets/images/icons/steps2.png'
@@ -31,12 +33,12 @@ const IndexPage = () => {
                         <div className="description wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             community-based blockchain experiments such as NFTs, tokens, and staking. challenge together and share together.
                         </div>
-                        <a className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href={GATSBY_OPENSEA_URI_TWW} target="_blank" rel="noreferrer">
+                        <OutboundLink className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href={GATSBY_OPENSEA_URI_TWW} target="_blank" rel="noreferrer">
                             <span className="btn-text">Explore Collections</span>
                             <span className="hover-shape1"></span>
                             <span className="hover-shape2"></span>
                             <span className="hover-shape3"></span>
-                        </a>
+                        </OutboundLink>
                     </div>
                 </div>
             </section>
