@@ -59,8 +59,7 @@ const WalletSection = () => {
                         <p className="mb-20">Please select a wallet to connect to this marketplace</p>
                         <div className="connect-section">
                             <ul className="heading-list">
-                                <li style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><a href="#!" onClick={() => { walletModule.connect() }}><span><img src={meta_mask_img} alt="MetaMask" /></span>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</a></li>
-                                {/* <li><a href="#!"><span><img src={wallet_img} alt="WalletConnect" /></span>WalletConnect</a></li> */}
+                                <li style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><a href="#!" onClick={() => { walletModule.connect() }}><span><img src={meta_mask_img} alt="MetaMask" /></span>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</a></li>                                
                             </ul>
                         </div>
                         <p>By connecting your wallet, you agree to our <a href="#!"><span className="modal-title">Terms of Service </span>
