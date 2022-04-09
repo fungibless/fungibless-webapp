@@ -4,7 +4,7 @@ module.exports = {
     titleTemplate: `%s | Fungibless`,
     siteUrl: `https://www.fungibless.xyz`,
     description: `We pursue fun community-based blockchain experiments such as NFTs, tokens, and staking. We challenge together and share profits together.`,
-    url: 'https://www.fungibless.xyz',
+    url: '/',
     image: "https://fungibless.s3.us-east-2.amazonaws.com/image/hj.png",
     twitterUsername: "@syous_seo"
   },
