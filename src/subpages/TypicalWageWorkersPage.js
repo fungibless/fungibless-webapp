@@ -1,5 +1,5 @@
 import * as React from "react"
-import PageSection from "../sections/PageSection";
+import PageSection from "../components/PageSection";
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection'
 import { walletModule } from "../sections/WalletSection";
 

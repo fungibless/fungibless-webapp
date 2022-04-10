@@ -1,5 +1,5 @@
 import * as React from "react"
-import Section from "./Section"
+import Section from "../components/Section"
 import steps2_img from '../assets/images/icons/steps2.png'
 import { OutboundLink } from "gatsby-plugin-google-gtag";
 
