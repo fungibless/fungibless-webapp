@@ -31,25 +31,35 @@ export default class WalletModule {
             this._onAccountChanged = onAccountChanged_;
 
             if (window.ethereum) { // Check if wallet is installed.     
-                this._onProviderDetected(true)
-                console.log("Wallet Provider Exists!", window.ethereum);
-                this._provider = new ethers.providers.Web3Provider(window.ethereum);
-                const { provider: ethereum } = this._provider;
-                this._ethereum = ethereum;
-
-                console.log("Ethers Provider", this._provider);
-                console.log("Ethereum Provider", this._ethereum);
-
-                if (ethereum) { // Check if we can get installed web3 provider.     
-                    this._addEventListeners(ethereum);
-                    // useDispatch(setInstalled({ installed: true, isMetaMask: ethereum.isMetaMask }))
-                    this._onWalletInstalled({ installed: true, isMetaMask: ethereum.isMetaMask })
-                    this._checkNetwork()
-                }
+                this._handleEthereum();
             }
             else {
-                this._onProviderDetected(false)
+                window.addEventListener('ethereum#initialized', this._handleEthereum(), {
+                    once: true,
+                });
+
+                // If the event is not dispatched by the end of the timeout,
+                // the user probably doesn't have MetaMask installed.
+                setTimeout(this._handleEthereum(), 3000); // 3 seconds
             }
+        }
+    }
+
+    _handleEthereum() {
+        this._onProviderDetected(true)
+        console.log("Wallet Provider Exists!", window.ethereum);
+        this._provider = new ethers.providers.Web3Provider(window.ethereum);
+        const { provider: ethereum } = this._provider;
+        this._ethereum = ethereum;
+
+        console.log("Ethers Provider", this._provider);
+        console.log("Ethereum Provider", this._ethereum);
+
+        if (ethereum) { // Check if we can get installed web3 provider.     
+            this._addEventListeners(ethereum);
+            // useDispatch(setInstalled({ installed: true, isMetaMask: ethereum.isMetaMask }))
+            this._onWalletInstalled({ installed: true, isMetaMask: ethereum.isMetaMask })
+            this._checkNetwork()
         }
     }
 
