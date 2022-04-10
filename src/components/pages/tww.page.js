@@ -4,8 +4,11 @@ import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSecti
 import VerticallyCenteredModal from '../vertically-centered-modal'
 import { useSelector } from 'react-redux'
 import numeral from 'numeral'
+
 import { ethers } from "ethers"
 import { walletModule } from "../../sections/wallet/wallet.section";
+
+import { OutboundLink } from "gatsby-plugin-google-gtag"
 
 const selectStyles = {
     border: '1px solid #313245',
@@ -24,6 +27,7 @@ const TypicalWageWorkersPage = () => {
     const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS
     const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION
     const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL
+    const POLYGON_SCAN_TOKEN = `${process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS}/address/${process.env.GATSBY_CONTRACT_TWW_ADDRESS}`
     // const CONTRACT_GAS_PRICE_IN_GWEI = process.env.GATSBY_CONTRACT_GAS_PRICE_IN_GWEI
 
     const ethBalance = useSelector((state) => state.wallet.balance.eth)
@@ -282,6 +286,10 @@ const TypicalWageWorkersPage = () => {
                                 {
                                     !rightNetwork && <TwwInformationError>Set your network to {process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME}</TwwInformationError>
                                 }
+                            </div>
+                                <hr/>
+                            <div className="project-info text-center">
+                                <div className="mb-15">Contract Address: <OutboundLink to={POLYGON_SCAN_TOKEN}>{CONTRACT_TWW_ADDRESS}</OutboundLink></div>
                             </div>
                         </div>
                     </div>
