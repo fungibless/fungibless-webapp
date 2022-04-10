@@ -3476,3 +3476,30 @@ section.loader_first {
   text-align: center;
   color: rgba(255, 255, 255, 0.2);
 }
+
+
+.footer-listing .footer-icon-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-listing .footer-icon-list li {
+  display: inline-block;
+}
+
+.footer-listing .footer-icon-list i {
+  color: #fff;
+  background-color: #1a1b30;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  display: inline-block;
+  margin: 0 12px;
+  transition: 0.4s;
+  font-size: 50px;
+}
+
+.footer-listing .footer-icon-list i:hover {
+  color: rgba(255, 255, 255, 0.7);
+}

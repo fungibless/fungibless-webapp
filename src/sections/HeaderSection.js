@@ -1,12 +1,12 @@
 import * as React from "react"
-import logo_img from '../../assets/images/logo.png'
-import connect_img from '../../assets/images/icons/connect.png'
-import connect_white_img from '../../assets/images/icons/connect_white.png'
-import logo_dark_img from '../../assets/images/logo-dark.png'
-import meta_mask_img from '../../assets/images/icons/meta-mask.png'
+import logo_img from '../assets/images/logo.png'
+import connect_img from '../assets/images/icons/connect.png'
+import connect_white_img from '../assets/images/icons/connect_white.png'
+import logo_dark_img from '../assets/images/logo-dark.png'
+import meta_mask_img from '../assets/images/icons/meta-mask.png'
 import { useSelector } from 'react-redux'
 import { Link, navigate } from 'gatsby'
-import { walletModule } from "../wallet/wallet.section"
+import { walletModule } from "./WalletSection"
 
 const HeaderSection = () => {
 
@@ -15,8 +15,6 @@ const HeaderSection = () => {
     const isMetaMask = useSelector((state) => state.wallet.isMetaMask)
     const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
     const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
-
-    
 
     return (
         <header id="gamfi-header" className="gamfi-header-section default-header">

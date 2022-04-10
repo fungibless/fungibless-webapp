@@ -33,7 +33,7 @@ const IndexPage = () => {
                         <div className="description wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             community-based blockchain experiments such as NFTs, tokens, and staking. challenge together and share together.
                         </div>
-                        <OutboundLink className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href={GATSBY_OPENSEA_URI_TWW} target="_blank" rel="noreferrer">
+                        <OutboundLink className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href={GATSBY_OPENSEA_URI_TWW}>
                             <span className="btn-text">Explore Collections</span>
                             <span className="hover-shape1"></span>
                             <span className="hover-shape2"></span>

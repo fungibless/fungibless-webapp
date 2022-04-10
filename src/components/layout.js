@@ -2,9 +2,11 @@ import * as React from "react"
 import { Helmet } from "react-helmet"
 import { useLocation } from "@reach/router"
 
-import HeaderSection from "../sections/header/header.section"
-import FooterSection from "../sections/footer/footer.section"
-import WalletSection from "../sections/wallet/wallet.section"
+import HeaderSection from "../sections/HeaderSection"
+import FooterSection from "../sections/FooterSection"
+import WalletSection from "../sections/WalletSection"
+import SocialSection from '../sections/SocialSection'
+
 import { graphql, useStaticQuery } from "gatsby"
 
 const Layout = ({ children }) => {
@@ -58,6 +60,7 @@ const Layout = ({ children }) => {
       </Helmet>      
       <HeaderSection />
       {children}
+      <SocialSection />
       <FooterSection />
       <WalletSection />
     </>

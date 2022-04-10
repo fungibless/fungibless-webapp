@@ -1,5 +1,5 @@
 import * as React from "react"
-import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSection'
+import BreadcrumbPageSection from '../../sections/BreadcrumbPageSection'
 import check_icon from '../../assets/images/kycimg/RMcheckicon.svg'
 import munies_icon from '../../assets/images/kycimg/munies.svg'
 

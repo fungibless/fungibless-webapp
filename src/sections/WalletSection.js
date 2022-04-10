@@ -1,9 +1,9 @@
 import * as React from "react"
-import meta_mask_img from '../../assets/images/icons/meta-mask.png'
+import meta_mask_img from '../assets/images/icons/meta-mask.png'
 
-import WalletModule from "../../module/wallet-module"
+import WalletModule from "../module/wallet-module"
 import { useSelector, useDispatch } from 'react-redux'
-import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork } from "../../features/wallet-slice"
+import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork } from "../features/wallet-slice"
 
 export const walletModule = new WalletModule();
 

@@ -1,14 +1,15 @@
 import * as React from "react"
 import PageSection from "../../sections/PageSection";
-import BreadcrumbPageSection from '../../sections/breadcrumb/BreadcrumbPageSection'
+import BreadcrumbPageSection from '../../sections/BreadcrumbPageSection'
+import { walletModule } from "../../sections/WalletSection";
+
 import VerticallyCenteredModal from '../vertically-centered-modal'
 import { useSelector } from 'react-redux'
 import numeral from 'numeral'
 
-import { ethers } from "ethers"
-import { walletModule } from "../../sections/wallet/wallet.section";
+import { OutboundLink } from "gatsby-plugin-google-gtag";
 
-import { OutboundLink } from "gatsby-plugin-google-gtag"
+import { ethers } from "ethers"
 
 const selectStyles = {
     border: '1px solid #313245',
@@ -187,14 +188,14 @@ const TypicalWageWorkersPage = () => {
             await getContract(abi);
             await walletModule.loadBalance();
         });
-        
+
         try {
             setMinting(true);
             const gasPrice = await (await provider.getGasPrice()).toString();
             console.log("Gas Price:", gasPrice, " Mint Amount:", mintAmount, " Payable Amount:", payableAmount);
             await twwWithSigner.mint(mintAmount, { gasPrice: gasPrice, value: payableAmount })
             // await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
-        } catch (err) {           
+        } catch (err) {
             setModalMessage(err.message);
             setShowModal(true)
             setMinting(false);
@@ -287,9 +288,9 @@ const TypicalWageWorkersPage = () => {
                                     !rightNetwork && <TwwInformationError>Set your network to {process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME}</TwwInformationError>
                                 }
                             </div>
-                                <hr/>
+                            <hr />
                             <div className="project-info text-center">
-                                <div className="mb-15">Contract Address: <OutboundLink to={POLYGON_SCAN_TOKEN}>{CONTRACT_TWW_ADDRESS}</OutboundLink></div>
+                                <div className="mb-15">Contract Address: <OutboundLink href={POLYGON_SCAN_TOKEN}>{CONTRACT_TWW_ADDRESS}</OutboundLink></div>
                             </div>
                         </div>
                     </div>
