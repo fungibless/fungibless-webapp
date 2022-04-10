@@ -1,13 +1,12 @@
 import * as React from "react"
 import { OutboundLink } from "gatsby-plugin-google-gtag"
 
-import main_section_icon from '../../assets/images/icons/main_section_icon2.png'
-import steps_img from '../../assets/images/icons/steps.png'
-import steps2_img from '../../assets/images/icons/steps2.png'
-import team_syous from '../../assets/images/team/team-syous.png'
-import veil1_png from '../../assets/images/team/veil1.png'
-import veil2_png from '../../assets/images/team/veil2.png'
-
+import main_section_icon from '../assets/images/icons/main_section_icon2.png'
+import steps_img from '../assets/images/icons/steps.png'
+import steps2_img from '../assets/images/icons/steps2.png'
+import team_syous from '../assets/images/team/team-syous.png'
+import veil1_png from '../assets/images/team/veil1.png'
+import veil2_png from '../assets/images/team/veil2.png'
 
 const tokenDistribution = {
     display: 'flex',

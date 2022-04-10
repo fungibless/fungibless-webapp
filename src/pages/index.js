@@ -1,11 +1,11 @@
 import React from "react"
 import { Router } from "@reach/router"
 import Layout from "../components/layout"
-import StakingPage from "../components/pages/staking.page"
-import IndexPage from "../components/pages/index.page"
-import TypicalWageWorkersPage from "../components/pages/tww.page"
-import TokenomicsPage from "../components/pages/tokenomics.page"
-import RoadmapPage from "../components/pages/roadmap.page"
+import StakingPage from "../subpages/StakingPage"
+import IndexPage from "../subpages/IndexPage"
+import TypicalWageWorkersPage from "../subpages/TypicalWageWorkersPage"
+import TokenomicsPage from "../subpages/TokenomicsPage"
+import RoadmapPage from "../subpages/RoadmapPage"
 
 
 const Index = () => (

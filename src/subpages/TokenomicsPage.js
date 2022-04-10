@@ -1,6 +1,6 @@
 import * as React from "react"
-import PageSection from "../../sections/PageSection";
-import BreadcrumbPageSection from '../../sections/BreadcrumbPageSection'
+import PageSection from "../sections/PageSection";
+import BreadcrumbPageSection from '../sections/BreadcrumbPageSection'
 
 const TokenomicsPage = () => {
     return (

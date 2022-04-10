@@ -1,9 +1,9 @@
 import * as React from "react"
-import PageSection from "../../sections/PageSection";
-import BreadcrumbPageSection from '../../sections/BreadcrumbPageSection'
-import { walletModule } from "../../sections/WalletSection";
+import PageSection from "../sections/PageSection";
+import BreadcrumbPageSection from '../sections/BreadcrumbPageSection'
+import { walletModule } from "../sections/WalletSection";
 
-import VerticallyCenteredModal from '../vertically-centered-modal'
+import VerticallyCenteredModal from '../components/vertically-centered-modal'
 import { useSelector } from 'react-redux'
 import numeral from 'numeral'
 
