@@ -5,6 +5,7 @@ import main_section_icon from '../assets/images/icons/main_section_icon2.png'
 import steps_img from '../assets/images/icons/steps.png'
 import steps2_img from '../assets/images/icons/steps2.png'
 import team_syous from '../assets/images/team/team-syous.png'
+import team_alice from '../assets/images/team/team-alice.png'
 import veil1_png from '../assets/images/team/veil1.png'
 import veil2_png from '../assets/images/team/veil2.png'
 
@@ -84,9 +85,9 @@ const IndexPage = () => {
                     <div className="row">
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={team_syous} alt="member1" />
+                                <img src={team_syous} alt="member1 syous" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Syous</a></h4>
-                                <div className="dsc">Director</div>
+                                <div className="dsc">Founder</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -95,9 +96,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={veil1_png} alt="member2" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>
+                                <img src={team_alice} alt="member2 alice" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Alice</a></h4>
+                                <div className="dsc">Software Engineer / NFT Artist</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
