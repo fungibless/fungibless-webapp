@@ -163,11 +163,11 @@ const TypicalWageWorkersPage = () => {
     }, [fetchABI, getContract])
 
     React.useEffect(() => {
-        if (window.ethereum) {
+        if(walletInstalled && rightNetwork) {
             console.log("Loading the contract...")
             loadContract();
         }
-    }, [loadContract])
+    }, [loadContract, walletInstalled, rightNetwork])
 
 
     const mint = async () => {
@@ -230,7 +230,7 @@ const TypicalWageWorkersPage = () => {
                                     )}
                                 </select>
                                 <div className="white-shape-small approve">
-                                    <button type="button" className="btn" disabled={(abi == null) || (totalSupply >= maxSupply) || isMinting} onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif' }}>
+                                    <button type="button" className="btn" disabled={ !walletConnected || (abi == null) || (totalSupply >= maxSupply) || isMinting} onClick={mint} style={{ background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif' }}>
                                         {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
                                         &nbsp;MINT
                                     </button>
@@ -266,7 +266,7 @@ const TypicalWageWorkersPage = () => {
                                 {/* <span>Total Stake</span> */}
                             </div>
                             {
-                                !contractLoadFinished &&
+                                walletInstalled && rightNetwork && !contractLoadFinished &&
                                 <div className="text-center">
                                     <div className="spinner-border" role="status">
                                         <span className="sr-only"></span>
@@ -279,7 +279,7 @@ const TypicalWageWorkersPage = () => {
                                     !walletInstalled && <TwwInformationError>Please install Metamask</TwwInformationError>
                                 }
                                 {
-                                    walletInstalled && walletConnected && rightNetwork && <TwwInformation />
+                                    walletInstalled && rightNetwork && <TwwInformation />
                                 }
                                 {
                                     !walletConnected && <TwwInformationError>Please connect to your wallet.</TwwInformationError>
