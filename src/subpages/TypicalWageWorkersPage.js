@@ -196,7 +196,7 @@ const TypicalWageWorkersPage = () => {
             await twwWithSigner.mint(mintAmount, { gasPrice: gasPrice, value: payableAmount })
             // await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
         } catch (err) {
-            setModalMessage(err.message);
+            setModalMessage(`[${err.data.code}] ${err.data.message}`);
             setShowModal(true)
             setMinting(false);
             console.log(err)
