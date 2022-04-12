@@ -5,6 +5,8 @@ import WalletModule from "../module/wallet-module"
 import { useSelector, useDispatch } from 'react-redux'
 import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork } from "../features/wallet-slice"
 
+import {isMobile} from 'react-device-detect';
+
 export const walletModule = new WalletModule();
 
 const WalletSection = () => {
@@ -47,23 +49,33 @@ const WalletSection = () => {
         }
     }
 
+    function connect() {        
+        if(walletConnected) return;
+
+        if(isMobile) {            
+            window.location.href = "https://metamask.app.link/dapp/www.fungibless.xyz/tww";
+        } else {
+            walletModule.connect()
+        }        
+    }
+
     return (
         <div className="modal fade " id="modal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h4 className="modals-title  mb-0" id="modalLabel">Connect Wallet</h4>
+                        <h4 className="modals-title mb-0" id="modalLabel">Connect Wallet</h4>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ref={closeButton}><i className="icon-x"></i></button>
                     </div>
                     <div className="modal-body">
                         <p className="mb-20">Please select a wallet to connect to this marketplace</p>
                         <div className="connect-section">
                             <ul className="heading-list">
-                                <li style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><a href="#!" onClick={() => { walletModule.connect() }}><span><img src={meta_mask_img} alt="MetaMask" /></span>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</a></li>                                
+                                <li onClick={connect} style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><span><img src={meta_mask_img} alt="MetaMask"/></span><span style={{fontWeight:'bold', color:'white'}}>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</span></li>                                
                             </ul>
                         </div>
-                        <p>By connecting your wallet, you agree to our <a href="#!"><span className="modal-title">Terms of Service </span>
-                        </a>and our <a href="#!"><span className="modal-title"> Privacy Policy</span></a>
+                        <p>By connecting your wallet, you agree to our <span className="modal-title">Terms of Service </span>
+                        and our <span className="modal-title"> Privacy Policy</span>
                         </p>
                     </div>
                 </div>

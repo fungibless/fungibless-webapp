@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import WalletModule from '../module/wallet-module'
 
 export const walletSlice = createSlice({
     name: 'wallet',
@@ -17,13 +18,13 @@ export const walletSlice = createSlice({
     reducers: {
         setAccount: (state, action) => {
             state.account = action.payload
-            state.shortenAccount = shortenWalletAddress(state.account)
+            state.shortenAccount = WalletModule.shortenWalletAddress(state.account)
         },
         setConnectedAndAccount: (state, action) => {
             state.connected = action.payload.connected
             if (action.payload.account) {
                 state.account = action.payload.account
-                state.shortenAccount = shortenWalletAddress(state.account)
+                state.shortenAccount = WalletModule.shortenWalletAddress(state.account)
             }
         },
         setInstalled: (state, action) => {
@@ -40,10 +41,6 @@ export const walletSlice = createSlice({
     },
 })
 
-const shortenWalletAddress = (address) => {
-    return address.substring(0, 5) + "..." + address.substr(address.length - 4)
-}
-
 // Action creators are generated for each case reducer function
 export const {
     setAccount,
@@ -52,5 +49,4 @@ export const {
     setChainIdAndRightNetwork,
     setBalance
 } = walletSlice.actions
-export { shortenWalletAddress }
 export default walletSlice.reducer

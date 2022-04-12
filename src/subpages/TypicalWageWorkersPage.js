@@ -3,6 +3,8 @@ import PageSection from "../components/PageSection";
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection'
 import { walletModule } from "../sections/WalletSection";
 
+import WalletModule from "../module/wallet-module";
+
 import VerticallyCenteredModal from '../components/vertically-centered-modal'
 import { useSelector } from 'react-redux'
 import numeral from 'numeral'
@@ -290,7 +292,7 @@ const TypicalWageWorkersPage = () => {
                             </div>
                             <hr />
                             <div className="project-info text-center">
-                                <div className="mb-15">Contract Address: <OutboundLink href={POLYGON_SCAN_TOKEN}>{CONTRACT_TWW_ADDRESS}</OutboundLink></div>
+                                <div className="mb-15">Contract Address: <OutboundLink href={POLYGON_SCAN_TOKEN}>{WalletModule.shortenWalletAddress(CONTRACT_TWW_ADDRESS)}</OutboundLink></div>
                             </div>
                         </div>
                     </div>
