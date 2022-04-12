@@ -1,5 +1,6 @@
 
 import { ethers } from "ethers";
+import detectEthereumProvider from '@metamask/detect-provider'
 export default class WalletModule {
 
     // Event Handlers
@@ -16,7 +17,7 @@ export default class WalletModule {
     _balance = 0;
     _connected = false;
 
-    initialize(
+    async initialize(
         onProviderDetected_,
         onWalletInstalled_,
         onBalanceChanged_,
@@ -30,26 +31,19 @@ export default class WalletModule {
             this._onChainChanged = onChainChanged_;
             this._onAccountChanged = onAccountChanged_;
 
-            if (window.ethereum) { // Check if wallet is installed.     
-                this._handleEthereum();
-            }
-            else {
-                window.addEventListener('ethereum#initialized', this._handleEthereum(), {
-                    once: true,
-                });
+            const provider = await detectEthereumProvider()
 
-                // If the event is not dispatched by the end of the timeout,
-                // the user probably doesn't have MetaMask installed.
-                setTimeout(this._handleEthereum(), 3000); // 3 seconds
-            }
+            if (provider) { // Check if wallet is installed.     
+                this._handleEthereum(provider);
+            }            
         }
     }
 
-    _handleEthereum() {
-        if (window.ethereum) {
+    _handleEthereum(provider) {
+        if (provider) {
             this._onProviderDetected(true)
-            console.log("Wallet Provider Exists!", window.ethereum);
-            this._provider = new ethers.providers.Web3Provider(window.ethereum);
+            console.log("Wallet Provider Exists!", provider);
+            this._provider = new ethers.providers.Web3Provider(provider);
             const { provider: ethereum } = this._provider;
             this._ethereum = ethereum;
 
