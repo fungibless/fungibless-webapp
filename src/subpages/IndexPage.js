@@ -6,6 +6,7 @@ import steps_img from '../assets/images/icons/steps.png'
 import steps2_img from '../assets/images/icons/steps2.png'
 import team_syous from '../assets/images/team/team-syous.png'
 import team_alice from '../assets/images/team/team-alice.png'
+import team_olly from '../assets/images/team/team-olly.png'
 import veil1_png from '../assets/images/team/veil1.png'
 import veil2_png from '../assets/images/team/veil2.png'
 
@@ -98,7 +99,7 @@ const IndexPage = () => {
                             <div className="team-item text-center active-shape">
                                 <img src={team_alice} alt="member2 alice" />
                                 <h4 className="team-title mb-8"><a href="teamdetails.html">Alice</a></h4>
-                                <div className="dsc">Software Engineer / NFT Artist</div>
+                                <div className="dsc">Programmer / NFT Artist</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
@@ -107,9 +108,9 @@ const IndexPage = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
-                                <img src={veil2_png} alt="member3" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
-                                <div className="dsc">waiting to participate</div>
+                                <img src={team_olly} alt="member3 olly" />
+                                <h4 className="team-title mb-8"><a href="teamdetails.html">Olly</a></h4>
+                                <div className="dsc">Programmer</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
                                 <span className="border-shadow shadow-3"></span>
