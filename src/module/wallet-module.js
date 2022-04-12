@@ -46,20 +46,24 @@ export default class WalletModule {
     }
 
     _handleEthereum() {
-        this._onProviderDetected(true)
-        console.log("Wallet Provider Exists!", window.ethereum);
-        this._provider = new ethers.providers.Web3Provider(window.ethereum);
-        const { provider: ethereum } = this._provider;
-        this._ethereum = ethereum;
+        if (window.ethereum) {
+            this._onProviderDetected(true)
+            console.log("Wallet Provider Exists!", window.ethereum);
+            this._provider = new ethers.providers.Web3Provider(window.ethereum);
+            const { provider: ethereum } = this._provider;
+            this._ethereum = ethereum;
 
-        console.log("Ethers Provider", this._provider);
-        console.log("Ethereum Provider", this._ethereum);
+            console.log("Ethers Provider", this._provider);
+            console.log("Ethereum Provider", this._ethereum);
 
-        if (ethereum) { // Check if we can get installed web3 provider.     
-            this._addEventListeners(ethereum);
-            // useDispatch(setInstalled({ installed: true, isMetaMask: ethereum.isMetaMask }))
-            this._onWalletInstalled({ installed: true, isMetaMask: ethereum.isMetaMask })
-            this._checkNetwork()
+            if (ethereum) { // Check if we can get installed web3 provider.     
+                this._addEventListeners(ethereum);
+                // useDispatch(setInstalled({ installed: true, isMetaMask: ethereum.isMetaMask }))
+                this._onWalletInstalled({ installed: true, isMetaMask: ethereum.isMetaMask })
+                this._checkNetwork()
+            }
+        } else {
+            this._onProviderDetected(false)
         }
     }
 
