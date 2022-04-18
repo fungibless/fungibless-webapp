@@ -4,10 +4,10 @@ import BreadcrumbPageSection from '../sections/BreadcrumbPageSection'
 import { walletModule } from "../sections/WalletSection";
 
 import WalletModule from "../module/wallet-module";
-import { setInterating } from "../features/wallet-slice"
+import { setInteracting } from "../features/wallet-slice"
 
 import VerticallyCenteredModal from '../components/vertically-centered-modal'
-import { useSelector } from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
 import numeral from 'numeral'
 
 import { OutboundLink } from "gatsby-plugin-google-gtag";
@@ -28,6 +28,8 @@ const strongText = {
 
 const TypicalWageWorkersPage = () => {
 
+    const dispatch = useDispatch()
+
     const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS
     const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION
     const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL
@@ -38,7 +40,7 @@ const TypicalWageWorkersPage = () => {
     const walletInstalled = useSelector((state) => state.wallet.installed)
     const walletConnected = useSelector((state) => state.wallet.connected)
     const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
-    const isMinting = useSelector((state) => state.wallet.interating.minting)
+    const isMinting = useSelector((state) => state.wallet.interacting)
 
     const [abi, setABI] = React.useState(null);
     const [maxSupply, setMaxSupply] = React.useState(0);
@@ -188,21 +190,21 @@ const TypicalWageWorkersPage = () => {
             console.log(`${from} sent ${ethers.utils.formatEther(amount)} to ${to}`);
             setModalMessage(`Minting was successful. Congratulations.`);
             setShowModal(true)
-            setInterating(false);
+            dispatch(setInteracting(false));
             await getContract(abi);
             await walletModule.loadBalance();
         });
 
         try {
-            setInterating(true);
+            dispatch(setInteracting(true));
             const gasPrice = await (await provider.getGasPrice()).toString();
             console.log("Gas Price:", gasPrice, " Mint Amount:", mintAmount, " Payable Amount:", payableAmount);
             await twwWithSigner.mint(mintAmount, { gasPrice: gasPrice, value: payableAmount })
             // await twwWithSigner.mint(mintAmount, { gasPrice: ethers.utils.parseUnits(String(CONTRACT_GAS_PRICE_IN_GWEI), 'gwei'), value: payableAmount })
         } catch (err) {
-            setModalMessage(`[${err.data.code}] ${err.data.message}`);
+            setModalMessage(`[${err.code}] ${err.message}`);
             setShowModal(true)
-            setInterating(false);
+            dispatch(setInteracting(false));
             console.log(err)
         }
     }

@@ -3,7 +3,7 @@ import meta_mask_img from '../assets/images/icons/meta-mask.png'
 
 import WalletModule from "../module/wallet-module"
 import { useSelector, useDispatch } from 'react-redux'
-import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork, setInterating } from "../features/wallet-slice"
+import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork, setInteracting } from "../features/wallet-slice"
 
 import {isMobile} from 'react-device-detect';
 
@@ -51,7 +51,7 @@ const WalletSection = () => {
     }
 
     function onConnectUserCancel() {
-        dispatch(setInterating(false))
+        dispatch(setInteracting(false))
     }
 
     function connect() {        
