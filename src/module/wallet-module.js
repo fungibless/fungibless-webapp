@@ -9,6 +9,7 @@ export default class WalletModule {
     _onBalanceChanged;
     _onChainChanged;
     _onAccountChanged;
+    _onConnectUserCancel;
 
     // Private Members
     _address;
@@ -22,7 +23,9 @@ export default class WalletModule {
         onWalletInstalled_,
         onBalanceChanged_,
         onChainChanged_,
-        onAccountChanged_) {
+        onAccountChanged_,
+        onConnectUserCancel_,
+        ) {
 
         if (typeof window !== "undefined") {
             this._onProviderDetected = onProviderDetected_;
@@ -30,12 +33,13 @@ export default class WalletModule {
             this._onBalanceChanged = onBalanceChanged_;
             this._onChainChanged = onChainChanged_;
             this._onAccountChanged = onAccountChanged_;
+            this._onConnectUserCancel = onConnectUserCancel_;
 
             const provider = await detectEthereumProvider()
 
             if (provider) { // Check if wallet is installed.     
                 this._handleEthereum(provider);
-            }            
+            }
         }
     }
 
@@ -78,15 +82,20 @@ export default class WalletModule {
     async connect() {
         let successCalback = this._onAccountChanged;
         if (this._ethereum) {
-            const accounts = await this._ethereum.request({ method: "eth_requestAccounts", params: [] });
+            try {
+                const accounts = await this._ethereum.request({ method: "eth_requestAccounts", params: [] });
 
-            if (accounts && accounts.length > 0) {
-                this._connected = true;
-                this._loadBalance(accounts[0]);
-                successCalback(accounts);
-                return true;
-            } else {
-                this._connected = false;
+                if (accounts && accounts.length > 0) {
+                    this._connected = true;
+                    this._loadBalance(accounts[0]);
+                    successCalback(accounts);
+                    return true;
+                } else {
+                    this._connected = false;
+                }
+            } catch (err) {
+                console.log("User Connect Cancel", err);
+                this._onConnectUserCancel();
             }
         } else {
             this._connected = false;

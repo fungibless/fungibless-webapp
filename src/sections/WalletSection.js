@@ -3,7 +3,7 @@ import meta_mask_img from '../assets/images/icons/meta-mask.png'
 
 import WalletModule from "../module/wallet-module"
 import { useSelector, useDispatch } from 'react-redux'
-import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork } from "../features/wallet-slice"
+import { setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork, setInterating } from "../features/wallet-slice"
 
 import {isMobile} from 'react-device-detect';
 
@@ -22,7 +22,8 @@ const WalletSection = () => {
         onWalletInstalled,
         onBalanceChanged,
         onChainChanged,
-        onAccountChanged);
+        onAccountChanged, 
+        onConnectUserCancel);
 
     function onProviderDetected(detected) {
         console.log("onProivderDetected:", detected)
@@ -49,6 +50,10 @@ const WalletSection = () => {
         }
     }
 
+    function onConnectUserCancel() {
+        dispatch(setInterating(false))
+    }
+
     function connect() {        
         if(walletConnected) return;
 
@@ -71,7 +76,7 @@ const WalletSection = () => {
                         <p className="mb-20">Please select a wallet to connect to this marketplace</p>
                         <div className="connect-section">
                             <ul className="heading-list">
-                                <li onClick={connect} onKeyDown={connect} style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><span><img src={meta_mask_img} alt="MetaMask"/></span><span style={{fontWeight:'bold', color:'white'}}>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</span></li>                                
+                                <li style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><a href onClick={connect}><span><img src={meta_mask_img} alt="MetaMask"/></span><span style={{fontWeight:'bold', color:'white'}}>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</span></a></li>                                
                             </ul>
                         </div>
                         <p>By connecting your wallet, you agree to our <span className="modal-title">Terms of Service </span>

@@ -7,6 +7,7 @@ const StakingPage = () => {
         <>
             <BreadcrumbPageSection pageTitle="Staking - Coming soon" />
             <PageSection className="project-details-conent pb-80 md-pb-50">
+                <div>Coming soon</div>
                 {/* <div class="container">
                     <div class="row pt-70">
                         <div class="col-lg-6 pr-25 md-pr-15">

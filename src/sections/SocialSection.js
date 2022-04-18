@@ -16,8 +16,8 @@ const SocialSection = () => {
                 </div>
                 <div className="footer-listing text-center mb-100 md-mb-70 xs-mb-50">
                     <ul className="footer-icon-list">
-                        <li><OutboundLink href="https://discord.gg/HymuNn97uy"><i className="icon-discord"></i></OutboundLink></li>
-                        <li><OutboundLink href="https://twitter.com/syous_seo"><i className="icon-twitter"></i></OutboundLink></li>
+                        <li><OutboundLink href="https://discord.gg/HymuNn97uy" target="_blank"><i className="icon-discord"></i></OutboundLink></li>
+                        <li><OutboundLink href="https://twitter.com/syous_seo" target="_blank"><i className="icon-twitter"></i></OutboundLink></li>
                         {/* <li><a href="#"><i className="icon-telegram"></i></a></li> */}
                         {/* <li><a href="#"><i className="icon-medium"></i></a></li> */}
 

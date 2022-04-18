@@ -11,9 +11,10 @@ export const walletSlice = createSlice({
         rightNetwork: false,
         chainId: 0,
         isMetaMask: false,
+        interating: false, // user iterating
         balance: {
             eth: 0,
-        }
+        },        
     },
     reducers: {
         setAccount: (state, action) => {
@@ -26,10 +27,14 @@ export const walletSlice = createSlice({
                 state.account = action.payload.account
                 state.shortenAccount = WalletModule.shortenWalletAddress(state.account)
             }
+            state.interating = false;
         },
         setInstalled: (state, action) => {
             state.installed = action.payload.installed
             state.isMetaMask = action.payload.isMetaMask
+        },
+        setInterating: (state, action) => {
+            state.interating = action.payload;            
         },
         setChainIdAndRightNetwork: (state, action) => {
             state.chainId = action.payload.chainId
@@ -47,6 +52,7 @@ export const {
     setConnectedAndAccount,
     setInstalled,
     setChainIdAndRightNetwork,
-    setBalance
+    setBalance,
+    setInterating,
 } = walletSlice.actions
 export default walletSlice.reducer
