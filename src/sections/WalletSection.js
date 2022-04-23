@@ -30,6 +30,7 @@ const WalletSection = () => {
     }
 
     function onWalletInstalled(msg) {
+        console.log("onWalletInstalled:", msg);
         dispatch(setInstalled(msg))
     }
 
@@ -37,8 +38,9 @@ const WalletSection = () => {
         dispatch(setBalance({ eth: to }))
     }
 
-    function onChainChanged(chainId) {
-        dispatch(setChainIdAndRightNetwork({ chainId: chainId, right: (chainId === process.env.GATSBY_WALLET_NETWORK_CHAIN_ID) }))
+    function onChainChanged({chainId, name}) {
+        console.log("onChainChanged chainId:", chainId, " name:", name, " desired:", parseInt(process.env.GATSBY_WALLET_NETWORK_CHAIN_ID,16));        
+        dispatch(setChainIdAndRightNetwork({ chainId: chainId, right: (chainId === parseInt(process.env.GATSBY_WALLET_NETWORK_CHAIN_ID,16)) }))
     }
 
     function onAccountChanged(accounts) {
@@ -76,7 +78,7 @@ const WalletSection = () => {
                         <p className="mb-20">Please select a wallet to connect to this marketplace</p>
                         <div className="connect-section">
                             <ul className="heading-list">
-                                <li style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><a href onClick={connect}><span><img src={meta_mask_img} alt="MetaMask"/></span><span style={{fontWeight:'bold', color:'white'}}>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</span></a></li>                                
+                                <li style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}><a href="#!" onClick={connect}><span><img src={meta_mask_img} alt="MetaMask"/></span><span style={{fontWeight:'bold', color:'white'}}>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</span></a></li>                                
                             </ul>
                         </div>
                         <p>By connecting your wallet, you agree to our <span className="modal-title">Terms of Service </span>
