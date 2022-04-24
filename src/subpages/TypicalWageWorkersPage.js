@@ -460,7 +460,7 @@ function TypicalWageWorkersPage() {
                       price={price.toString()}
                       progress={progress}
                       ethBalance={ethBalance}
-                      mintAmount={mintAmount}
+                      mintAmount={parseInt(mintAmount, 10)}
                       maxMintAmount={maxMintAmount}
                       isMinting={isMinting}
                       setMintAmount={setMintAmount}
