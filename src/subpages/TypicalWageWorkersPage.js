@@ -28,13 +28,13 @@ const strongText = {
 };
 
 const rarityData = {
-  ancient: { grade: 'Ancient', count: 142 },
-  legendary: { grade: 'Legendary', count: 695 },
-  epic: { grade: 'Epic', count: 1312 },
-  unique: { grade: 'Unique', count: 1988 },
-  rare: { grade: 'Rare', count: 2566 },
-  uncommon: { grade: 'Uncommon', count: 1970 },
-  common: { grade: 'Common', count: 1327 },
+  common: { grade: 'Common', count: 1327, level: 1 },
+  uncommon: { grade: 'Uncommon', count: 1970, level: 2 },
+  rare: { grade: 'Rare', count: 2566, level: 3 },
+  unique: { grade: 'Unique', count: 1988, level: 4 },
+  epic: { grade: 'Epic', count: 1312, level: 5 },
+  legendary: { grade: 'Legendary', count: 695, level: 6 },
+  ancient: { grade: 'Ancient', count: 142, level: 7 },
 };
 
 const roundMap = {
@@ -492,6 +492,7 @@ function TypicalWageWorkersPage() {
                 <table className="table text-center">
                   <thead>
                     <tr>
+                      <th scope="col">Level</th>
                       <th scope="col">Grade</th>
                       <th scope="col">Color</th>
                       <th scope="col">Count</th>
@@ -502,9 +503,8 @@ function TypicalWageWorkersPage() {
                     {
                       Object.entries(rarityData).map(([key, value]) => (
                         <tr key={key}>
-                          <td>
-                            {value.grade}
-                          </td>
+                          <td>{value.level}</td>
+                          <td>{value.grade}</td>
                           <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/grade/${key}.png`} width={24} height={24} alt={value.grade} /></td>
                           <td>{numeral(value.count).format('#,#')}</td>
                           <td>{numeral(value.count / 10000).format('0.00%')}</td>
