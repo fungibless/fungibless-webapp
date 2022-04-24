@@ -356,12 +356,6 @@ function TypicalWageWorkersPage() {
 
   React.useEffect(() => {
     loadContract();
-
-    return () => {
-      if (erc721) {
-        erc721.removeAllListeners('Transfer');
-      }
-    };
   }, [loadContract]);
 
   const mint = async () => {
@@ -375,17 +369,33 @@ function TypicalWageWorkersPage() {
       dispatch(setInteracting(true));
       const gasPrice = await (await walletModule.ethers.getGasPrice()).toString();
       console.log('Gas Price:', gasPrice, ' Mint Amount:', mintAmount, ' Payable Amount:', payableAmount);
-      await twwWithSigner.mint(mintAmount, { gasPrice, value: payableAmount });
-      erc721.on('Transfer', async (from, to, amount, event) => {
-        console.log('OnTransfer', event);
-        console.log(`${from} sent ${ethers.utils.formatEther(amount)} to ${to}`);
-        setModalMessage('Minting was successful. Congratulations.');
+      const tx = await twwWithSigner.mint(mintAmount, { gasPrice, value: payableAmount });
+      console.log('receipt', tx);
+      const result = await tx.wait();
+      console.log('Transaction Completed', result);
+
+      console.log(`${result.from} to ${result.to} with status: ${result.status}`);
+
+      if (result.status === 1) {
+        const transfers = result.events.filter((evt) => evt.event === 'Transfer');
+        const tokenIds = [];
+        Object.keys(transfers).forEach((key) => {
+          tokenIds.push(parseInt(transfers[key].args.tokenId.toString(), 10));
+        });
+
+        console.log(tokenIds);
+
+        setModalMessage(`Minting was successful. Congratulations. Token IDs: ${tokenIds.join(',')} `);
         setShowModal(true);
         dispatch(setInteracting(false));
         await loadContractDetail(erc721);
         await walletModule.loadBalance();
-        erc721.off('Transfer', this);
-      });
+      } else {
+        setModalMessage(`Transaction ${result.tansactionHash} Failed.`);
+        setShowModal(true);
+        dispatch(setInteracting(false));
+        console.warn('Transaction Failed.');
+      }
     } catch (err) {
       setModalMessage(`[${err.code}] ${err.message}`);
       setShowModal(true);
