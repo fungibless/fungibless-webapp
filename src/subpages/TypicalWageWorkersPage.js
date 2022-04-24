@@ -27,6 +27,48 @@ const strongText = {
   marginLeft: '5px',
 };
 
+const rarityData = {
+  ancient: { grade: 'Ancient', count: 142 },
+  legendary: { grade: 'Legendary', count: 695 },
+  epic: { grade: 'Epic', count: 1312 },
+  unique: { grade: 'Unique', count: 1988 },
+  rare: { grade: 'Rare', count: 2566 },
+  uncommon: { grade: 'Uncommon', count: 1970 },
+  common: { grade: 'Common', count: 1327 },
+};
+
+const roundMap = {
+  // eslint-disable-next-line max-len
+  100: 1, 200: 2, 300: 3, 400: 4, 500: 5, 1000: 6, 1500: 7, 2000: 8, 2500: 9, 3000: 10, 3500: 11, 4000: 12, 5000: 13, 6000: 14, 7000: 15, 8000: 16, 9000: 17, 10000: 18,
+};
+
+const costumeData = {
+  artist: { count: 537, name: 'Artist' },
+  astronauts: { count: 178, name: 'Astronauts' },
+  athelete: { count: 492, name: 'Athlete' },
+  ballerina: { count: 488, name: 'Ballerina' },
+  boxer: { count: 538, name: 'Boxer' },
+  chef: { count: 511, name: 'Chef' },
+  cop: { count: 578, name: 'Cop' },
+  crew: { count: 500, name: 'Crew' },
+  doctor: { count: 530, name: 'Doctor' },
+  farmer: { count: 537, name: 'Farmer' },
+  fighter: { count: 177, name: 'Fighter' },
+  firefighter: { count: 522, name: 'Firefighter' },
+  jobless: { count: 523, name: 'Jobless' },
+  king: { count: 50, name: 'King' },
+  magician: { count: 508, name: 'Magician' },
+  ninja: { count: 189, name: 'Ninja' },
+  plumber: { count: 525, name: 'Plumber' },
+  priest: { count: 524, name: 'Priest' },
+  prisoner: { count: 542, name: 'Prisoner' },
+  programmer: { count: 226, name: 'Programmer' },
+  ranger: { count: 168, name: 'Ranger' },
+  scientist: { count: 522, name: 'Scientist' },
+  teacher: { count: 528, name: 'Teacher' },
+  wizard: { count: 107, name: 'Wizard' },
+};
+
 // eslint-disable-next-line max-len
 function TwwInformation({ contractLoadFinished, maxSupply, symbol, round, totalSupply, step, price, progress, ethBalance, mintAmount, maxMintAmount, isMinting, leftQty, setMintAmount, mint, walletConnected }) {
   TwwInformation.propTypes = {
@@ -268,11 +310,6 @@ function TypicalWageWorkersPage() {
   }, [isPaused, totalSupply, maxSupply]);
 
   const loadContractDetail = React.useCallback(async (contract) => {
-    const roundMap = {
-      // eslint-disable-next-line max-len
-      100: 1, 200: 2, 300: 3, 400: 4, 500: 5, 1000: 6, 1500: 7, 2000: 8, 2500: 9, 3000: 10, 3500: 11, 4000: 12, 5000: 13, 6000: 14, 7000: 15, 8000: 16, 9000: 17, 10000: 18,
-    };
-
     try {
       const cost = await contract.cost();
 
@@ -443,6 +480,70 @@ function TypicalWageWorkersPage() {
                     {WalletModule.shortenWalletAddress(CONTRACT_TWW_ADDRESS)}
                   </OutboundLink>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-12 pr-25 md-pr-15">
+            <div className="project-item">
+              <div className="project-info border-bottom-2 text-center">
+                <h3 className="mb-15">Rarity Table</h3>
+              </div>
+              <div className="project-content mt-4">
+                <table className="table text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">Grade</th>
+                      <th scope="col">Color</th>
+                      <th scope="col">Count</th>
+                      <th scope="col">Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      Object.entries(rarityData).map(([key, value]) => (
+                        <tr key={key}>
+                          <td>
+                            {value.grade}
+                          </td>
+                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/grade/${key}.png`} width={24} height={24} alt={value.grade} /></td>
+                          <td>{numeral(value.count).format('#,#')}</td>
+                          <td>{numeral(value.count / 10000).format('0.00%')}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-12 pr-25 md-pr-15">
+            <div className="project-item">
+              <div className="project-info border-bottom-2 text-center">
+                <h3 className="mb-15">Occupation Table</h3>
+              </div>
+              <div className="project-content mt-4">
+                <table className="table text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">Job</th>
+                      <th scope="col">Count</th>
+                      <th scope="col">Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      Object.entries(costumeData).map(([key, value]) => (
+                        <tr key={key}>
+                          <td>
+                            {value.name}
+                          </td>
+                          <td>{numeral(value.count).format('#,#')}</td>
+                          <td>{numeral(value.count / 10000).format('0.00%')}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
