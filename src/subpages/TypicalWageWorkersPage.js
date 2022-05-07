@@ -407,9 +407,8 @@ function TypicalWageWorkersPage() {
   return (
     <>
       <BreadcrumbPageSection pageTitle="Typical Wage Workers" />
-
-      <PageSection className="project-details-conent pb-80 md-pb-50">
-        <div className="row pt-70">
+      <PageSection className="project-details-conent">
+        <div className="row">
           <div className="col-lg-12 pr-25 md-pr-15">
             <div className="project-item">
 
