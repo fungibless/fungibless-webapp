@@ -1,14 +1,40 @@
+/* eslint-disable max-len */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
 import * as React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import { useSelector } from 'react-redux';
 import numeral from 'numeral';
 
+import CountUp from 'react-countup';
+import moment from 'moment';
 import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
 import rakingImg from '../assets/images/project/raking.png';
 import raking2Img from '../assets/images/project/raking2.png';
 import { walletModule } from '../sections/WalletSection';
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+    return null;
+  }, [delay]);
+}
 
 function StakingPage() {
   const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS;
@@ -18,39 +44,51 @@ function StakingPage() {
   const CONTRACT_TWW_STAKING_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_STAKING_ABI_LOCATION;
 
   const account = useSelector((state) => state.wallet.account);
+  const walletInstalled = useSelector((state) => state.wallet.installed);
+  const walletConnected = useSelector((state) => state.wallet.connected);
+  const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
+
   const [twwContract, setTwwContract] = React.useState(null);
   const [fungiContract, setFungiContract] = React.useState(null);
   const [stakingContract, setStakingContract] = React.useState(null);
   const [twwContractLoadFinished, setTwwContractLoadFinished] = React.useState(false);
   const [stakingContractLoadFinished, setStakingContractLoadFinished] = React.useState(false);
   const [tokenList, setTokenList] = React.useState([]);
+  const [stakedTokenList, setStakedTokenList] = React.useState([]);
+  const [unclaimedRewards, setUnclaimedRewards] = React.useState(0);
   const [lastClaimableUpdate, setLastClaimableUpdate] = React.useState(0);
   const [stakedAmount, setStakedAmount] = React.useState(0);
   const [stakedEconomicPower, setStakedEconomicPower] = React.useState(0);
-  const [claimableRewards, setClaimableRewards] = React.useState(0);
+  const [claimableRewards, setClaimableRewards] = React.useState(ethers.BigNumber.from(0));
+  const [rewardUnit, setRewardUnit] = React.useState(ethers.BigNumber.from(0));
+  const [rewardBoost, setRewardBoost] = React.useState(0);
   const [inProgress, setInProgress] = React.useState(false);
 
   const loadStakingContractDetail = React.useCallback(async (contract) => {
     try {
       if (account == null) return;
       const userInfo = await contract.userStakeInfo(account);
-      console.log('userInfo:', userInfo);
+      const ru = await contract.rewardUnit();
+      const rb = await contract.rewardBoost();
+      setRewardUnit(ru);
+      setRewardBoost(rb);
+      console.log('userInfo:', userInfo, ' rewardUnit:', ru, ' rewardBoost:', rb);
 
-      setStakedAmount(userInfo._tokensStaked.toNumber());
-      setStakedEconomicPower(userInfo._totalEconomicPowers.toNumber());
-      setClaimableRewards(userInfo._availableRewards.toNumber());
-      setLastClaimableUpdate(userInfo._lastUpdated.toNumber());
+      setStakedAmount(userInfo.tokensStaked.toNumber());
+      setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
+      // setClaimableRewards(userInfo.claimableRewards);
+      setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
+      setUnclaimedRewards(userInfo.unclaimedRewards);
 
-      // const cost = await contract.cost();
-
-      // const maximumSupply = (await contract.maxSupply()).toNumber();
-      // const totalSold = (await contract.totalSupply()).toNumber();
-      // const paused = (await contract.paused());
-
-      // console.log('cost:', cost);
-      // console.log('maximumSupply:', maximumSupply);
-      // console.log('totalSupply:', totalSold);
-      // console.log('paused:', paused);
+      const tokens = [];
+      for (const t of userInfo.stakedTokenIds) {
+        tokens.push(
+          {
+            tokenId: t.toNumber(),
+          },
+        );
+      }
+      setStakedTokenList(tokens);
     } catch (err) {
       console.error(err);
     } finally {
@@ -83,7 +121,6 @@ function StakingPage() {
           tokens.push(
             {
               tokenId: r.toString(),
-              staked: (await stakingContract.stakerAddress(r.toString())) === account,
             },
           );
         }
@@ -112,10 +149,21 @@ function StakingPage() {
     await loadTWWContractDetail(tww);
   }, [setTwwContract, loadTWWContractDetail]);
 
+  useInterval(() => {
+    if (lastClaimableUpdate > 0 && stakedAmount > 0 && rewardUnit) {
+      const unit = ethers.BigNumber.from(rewardUnit.toString());
+      const unclaimed = ethers.BigNumber.from(unclaimedRewards.toString());
+      const updatedRewards = unit.mul((moment().utc().unix() - lastClaimableUpdate) * stakedAmount * stakedEconomicPower * rewardBoost);
+      const newClaimableReward = unclaimed.add(updatedRewards);
+      console.log(newClaimableReward.toString());
+      setClaimableRewards(newClaimableReward);
+    }
+  }, 2000);
+
   React.useEffect(() => {
     loadStakingContract();
     loadTWWContract();
-  }, [loadStakingContract]);
+  }, []);
 
   async function stake(tokenId) {
     setInProgress(true);
@@ -126,7 +174,6 @@ function StakingPage() {
       if (!approvedAll) {
         const twwWithSigner = await twwContract.connect(signer);
         const txApproveForAll = await twwWithSigner.setApprovalForAll(CONTRACT_TWW_STAKING_ADDRESS, true);
-        // TODO INDICATOR ON
         const resultApproveForAll = await txApproveForAll.wait();
         console.log(resultApproveForAll);
       }
@@ -135,7 +182,8 @@ function StakingPage() {
       const tx = await stakingWithSigner.stake([tokenId]);
       const stakingResult = await tx.wait();
       console.log(stakingResult);
-      tokenList[tokenId - 1].staked = true;
+      await loadStakingContract(stakingContract);
+      await loadTWWContract(twwContract);
     } catch (err) {
       console.error(err);
     } finally {
@@ -144,129 +192,246 @@ function StakingPage() {
   }
 
   async function unstake(tokenId) {
-
+    setInProgress(true);
+    try {
+      const signer = walletModule.ethers.getSigner();
+      const stakingWithSigner = await stakingContract.connect(signer);
+      const tx = await stakingWithSigner.withdraw([tokenId]);
+      const stakingResult = await tx.wait();
+      console.log(stakingResult);
+      await loadStakingContract(stakingContract);
+      await loadTWWContract(twwContract);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setInProgress(false);
+    }
   }
 
   async function claim() {
-    const signer = walletModule.ethers.getSigner();
-    const stakingWithSigner = await stakingContract.connect(signer);
-    const tx = await stakingWithSigner.claimRewards();
-    const claimResult = await tx.wait();
-    console.log(claimResult);
+    setInProgress(true);
+    try {
+      const signer = walletModule.ethers.getSigner();
+      const stakingWithSigner = await stakingContract.connect(signer);
+      const tx = await stakingWithSigner.claimRewards();
+      const claimResult = await tx.wait();
+      console.log(claimResult);
+      await loadStakingContract(stakingContract);
+      await loadTWWContract(twwContract);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setInProgress(false);
+    }
   }
 
   return (
     <>
       <BreadcrumbPageSection pageTitle="Staking" />
       <PageSection className="project-details-conent gamfi-about-secion">
-        <div className="row">
-          <div className="col-lg-3 col-md-5">
-            <div className="project-item project-value-inner">
-              <div className="project-value">
-                <h4 className="mb-15 counter-number">
-                  <span className="counter">{numeral(stakedAmount).format('#,#')}</span>
-                  {' '}
-                  TWW
+        {
+          !walletInstalled
+          && <div className="row"><div className="col-lg-12 col-md-12"><h4>Please install Metamask.</h4></div></div>
+        }
+        {
+          !walletConnected && (
+            <div className="row"><div className="col-lg-12 col-md-12"><h4>Please connect to your wallet.</h4></div></div>
+          )
+        }
+        {
+          !rightNetwork && (
+            <div className="row">
+              <div className="col-lg-12 col-md-12">
+                <h4>
+                  Set your network to
+                  {process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME}
                 </h4>
-                <span>Staked Amount</span>
-              </div>
-              <div className="project-value-image">
-                <div style={{ height: '38px' }}><img src={rakingImg} alt="index" /></div>
               </div>
             </div>
-          </div>
-          <div className="col-lg-3 col-md-5">
-            <div className="project-item project-value-inner">
-              <div className="project-value">
-                <h4 className="mb-15">
-                  <span className="counter">{numeral(stakedEconomicPower).format('#,#')}</span>
-                  {' '}
-                  EP
-                </h4>
-                <span>Economic Powers</span>
+          )
+        }
+        {
+          walletConnected && rightNetwork && (
+            <>
+              <div className="row">
+                <div className="col-lg-3 col-md-5">
+                  <div className="project-item project-value-inner">
+                    <div className="project-value">
+                      <h4 className="mb-15 counter-number">
+                        <CountUp end={stakedAmount} preserveValue decimal="," />
+                        <span style={{ float: 'right' }}>TWW</span>
+                      </h4>
+                      <span>Staked Amount</span>
+                    </div>
+                    <div className="project-value-image">
+                      <div style={{ height: '38px' }}><img src={rakingImg} alt="index" /></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-3 col-md-5">
+                  <div className="project-item project-value-inner">
+                    <div className="project-value">
+                      <h4 className="mb-15">
+                        <CountUp end={stakedEconomicPower} preserveValue decimal="," />
+                        <span style={{ float: 'right' }}>EP</span>
+                      </h4>
+                      <span>Economic Powers</span>
+                    </div>
+                    <div className="project-value-image">
+                      <div style={{ height: '38px' }}><img src={raking2Img} alt="index" /></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-6 col-md-8">
+                  <div className="project-item project-value-inner">
+                    <div className="project-value">
+                      <h4 className="mb-15">
+                        <CountUp
+                          end={parseFloat(ethers.utils.formatEther(claimableRewards.toString()))}
+                          preserveValue
+                          decimals={18}
+                        />
+                        <span style={{ float: 'right' }}>FUNGI</span>
+                      </h4>
+                      <span>Your Earned</span>
+                    </div>
+                    <div className="project-value-image">
+                      {/* <img src="assets/images/project/raking.png" alt="rank" /> */}
+                      <button
+                        className="btn"
+                        type="button"
+                        style={{
+                          width: '100%', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
+                        }}
+                        disabled={claimableRewards.lte(1000) || inProgress}
+                        onClick={
+                          () => {
+                            claim();
+                          }
+                        }
+                      >
+                        CLAIM
+                        {
+                          inProgress && (
+                            <div className="spinner-border" role="status" style={{ width: '1rem', height: '1rem' }}>
+                              <span className="sr-only" />
+                            </div>
+                          )
+                        }
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="project-value-image">
-                <div style={{ height: '38px' }}><img src={raking2Img} alt="index" /></div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-8">
-            <div className="project-item project-value-inner">
-              <div className="project-value">
-                <h4 className="mb-15">
-                  <span className="counter counter-claim">{ethers.utils.formatEther(claimableRewards)}</span>
-                  {' '}
-                  FUNGI
-                </h4>
-                <span>Your Earned</span>
-              </div>
-              <div className="project-value-image">
-                {/* <img src="assets/images/project/raking.png" alt="rank" /> */}
-                <button
-                  className="btn"
-                  type="button"
-                  style={{
-                    width: '100%', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
-                  }}
-                  disabled={claimableRewards === '0.0'}
-                  onClick={
-                    () => {
-                      claim();
+              <div className="row">
+                <h4>MY STAKED NFT LIST</h4>
+                <table className="table text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">TOKEN ID</th>
+                      <th scope="col">UNSTAKE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      stakedTokenList.length < 1
+                      && (
+                        <tr><td colSpan={2}>No Items</td></tr>
+                      )
                     }
-                  }
-                >
-                  CLAIM
-                </button>
+                    {
+                      Object.entries(stakedTokenList).map(([key, value]) => (
+                        <tr key={key}>
+                          <td>{value.tokenId}</td>
+                          <td>
+                            <button
+                              type="button"
+                              onClick={() => { unstake(value.tokenId); }}
+                              className="btn"
+                              disabled={inProgress}
+                              style={{
+                                padding: '0 10px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
+                              }}
+                            >
+                              UNSTAKE
+                              {
+                                inProgress && (
+                                  <div className="spinner-border" role="status" style={{ width: '1rem', height: '1rem' }}>
+                                    <span className="sr-only" />
+                                  </div>
+                                )
+                              }
+                            </button>
+
+                          </td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <table className="table text-center">
-            <thead>
-              <tr>
-                <th scope="col">TOKEN ID</th>
-                <th scope="col">STAKE</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                Object.entries(tokenList).map(([key, value]) => (
-                  <tr key={key}>
-                    <td>{value.tokenId}</td>
-                    <td>
-                      {value.staked
-                        && (
-                          <button
-                            type="button"
-                            className="btn"
-                            onClick={() => { unstake(value.tokenId); }}
-                            style={{
-                              padding: '0 10px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
-                            }}
-                          >
-                            Unstake
-                          </button>
-                        )}
-                      {!value.staked && (
-                        <button
-                          type="button"
-                          onClick={() => { stake(value.tokenId); }}
-                          className="btn"
-                          style={{
-                            padding: '0 10px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
-                          }}
-                        >
-                          Stake
-                        </button>
+              <div className="row">
+                <h4>MY NFT LIST</h4>
+                <table className="table text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">TOKEN ID</th>
+                      <th scope="col">STAKE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {walletConnected && rightNetwork && !twwContractLoadFinished
+                      && (
+                        <tr>
+                          <td colSpan={2}>
+                            <div className="text-center">
+                              <div className="spinner-border" role="status">
+                                <span className="sr-only" />
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
                       )}
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
-        </div>
+                    {
+                      tokenList.length < 1
+                      && (
+                        <tr><td colSpan={2}>No Items</td></tr>
+                      )
+                    }
+                    {
+                      Object.entries(tokenList).map(([key, value]) => (
+                        <tr key={key}>
+                          <td>{value.tokenId}</td>
+                          <td>
+                            <button
+                              type="button"
+                              onClick={() => { stake(value.tokenId); }}
+                              disabled={inProgress}
+                              className="btn"
+                              style={{
+                                padding: '0 10px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
+                              }}
+                            >
+                              STAKE
+                              {
+                                inProgress && (
+                                  <div className="spinner-border" role="status" style={{ width: '1rem', height: '1rem' }}>
+                                    <span className="sr-only" />
+                                  </div>
+                                )
+                              }
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )
+        }
+
       </PageSection>
     </>
   );
