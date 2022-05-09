@@ -10,11 +10,6 @@
                 "internalType": "contract IERC20",
                 "name": "_rewardsToken",
                 "type": "address"
-            },
-            {
-                "internalType": "uint16[100]",
-                "name": "_economicPowers",
-                "type": "uint16[100]"
             }
         ],
         "stateMutability": "nonpayable",
@@ -356,6 +351,49 @@
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint16",
+                "name": "beginIndex",
+                "type": "uint16"
+            },
+            {
+                "internalType": "uint16",
+                "name": "size",
+                "type": "uint16"
+            },
+            {
+                "internalType": "uint16[]",
+                "name": "eps",
+                "type": "uint16[]"
+            }
+        ],
+        "name": "setEconomicPowers",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint16",
+                "name": "index",
+                "type": "uint16"
+            }
+        ],
+        "name": "getEconomicPower",
+        "outputs": [
+            {
+                "internalType": "uint16",
+                "name": "",
+                "type": "uint16"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function",
+        "constant": true
     },
     {
         "inputs": [
