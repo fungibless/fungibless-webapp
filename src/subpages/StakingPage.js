@@ -162,7 +162,7 @@ function StakingPage() {
   React.useEffect(() => {
     loadStakingContract();
     loadTWWContract();
-  }, []);
+  }, [loadStakingContract, loadTWWContract]);
 
   async function stake(tokenId) {
     setInProgress(true);
