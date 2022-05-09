@@ -1,16 +1,15 @@
-import * as React from "react"
-import { Helmet } from "react-helmet"
-import { useLocation } from "@reach/router"
+import * as React from 'react';
+import { Helmet } from 'react-helmet';
+import { useLocation } from '@reach/router';
 
-import HeaderSection from "../sections/HeaderSection"
-import FooterSection from "../sections/FooterSection"
-import WalletSection from "../sections/WalletSection"
-import SocialSection from '../sections/SocialSection'
+import { graphql, useStaticQuery } from 'gatsby';
+import HeaderSection from '../sections/HeaderSection';
+import FooterSection from '../sections/FooterSection';
+import WalletSection from '../sections/WalletSection';
+import SocialSection from '../sections/SocialSection';
 
-import { graphql, useStaticQuery } from "gatsby"
-
-const Layout = ({ children }) => {
-  const { pathname } = useLocation()
+function Layout({ children }) {
+  const { pathname } = useLocation();
   const data = useStaticQuery(graphql`
     query {
       site {
@@ -24,7 +23,7 @@ const Layout = ({ children }) => {
         }
       }
     }
-  `)
+  `);
   return (
     <>
       <Helmet title={data.site.siteMetadata.title} titleTemplate={data.site.siteMetadata.titleTemplate}>
@@ -32,7 +31,7 @@ const Layout = ({ children }) => {
         <meta charSet="utf-8" />
         <meta name="description" content={data.site.siteMetadata.description} />
         <meta name="image" content={data.site.siteMetadata.image} />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta property="og:url" content={`${data.site.siteMetadata.siteUrl}${pathname}`} />
         <meta property="og:type" content="website" />
@@ -57,14 +56,14 @@ const Layout = ({ children }) => {
               }
             `}
         </script>
-      </Helmet>      
+      </Helmet>
       <HeaderSection />
       {children}
       <SocialSection />
       <FooterSection />
       <WalletSection />
     </>
-  )
+  );
 }
 
-export default Layout
+export default Layout;
