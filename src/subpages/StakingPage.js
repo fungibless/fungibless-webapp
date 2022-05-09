@@ -76,7 +76,6 @@ function StakingPage() {
 
       setStakedAmount(userInfo.tokensStaked.toNumber());
       setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
-      // setClaimableRewards(userInfo.claimableRewards);
       setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
       setUnclaimedRewards(userInfo.unclaimedRewards);
 
@@ -116,7 +115,7 @@ function StakingPage() {
       if (account == null) return;
       const walletOfOwner = await tww.walletOfOwner(account);
       const tokens = [];
-      if (walletOfOwner && stakingContract) {
+      if (walletOfOwner !== null) {
         for (const r of walletOfOwner) {
           tokens.push(
             {
@@ -133,7 +132,7 @@ function StakingPage() {
     } finally {
       setTwwContractLoadFinished(true);
     }
-  }, [setTwwContractLoadFinished, account, setTokenList, stakingContract]);
+  }, [setTwwContractLoadFinished, account, setTokenList]);
 
   const loadTWWContract = React.useCallback(async () => {
     const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
