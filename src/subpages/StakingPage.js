@@ -243,7 +243,7 @@ function StakingPage() {
             <div className="row">
               <div className="col-lg-12 col-md-12">
                 <h4>
-                  Set your network to
+                  Set your network to&nbsp;
                   {process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME}
                 </h4>
               </div>
