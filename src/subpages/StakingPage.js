@@ -84,6 +84,7 @@ function StakingPage() {
         tokens.push(
           {
             tokenId: t.toNumber(),
+            checked: false,
           },
         );
       }
@@ -120,6 +121,7 @@ function StakingPage() {
           tokens.push(
             {
               tokenId: r.toString(),
+              checked: false,
             },
           );
         }
@@ -224,6 +226,52 @@ function StakingPage() {
     }
   }
 
+  const onCheckedStakedTokenListAll = React.useCallback(
+    (checked) => {
+      const checkedListArray = [];
+      if (checked) {
+        stakedTokenList.forEach((r) => {
+          checkedListArray.push({
+            tokenId: r.tokenId,
+            checked: true,
+          });
+        });
+      } else {
+        stakedTokenList.forEach((r) => {
+          checkedListArray.push({
+            tokenId: r.tokenId,
+            checked: false,
+          });
+        });
+      }
+      setStakedTokenList(checkedListArray);
+    },
+    [stakedTokenList],
+  );
+
+  const onCheckedTokenListAll = React.useCallback(
+    (checked) => {
+      const checkedListArray = [];
+      if (checked) {
+        tokenList.forEach((r) => {
+          checkedListArray.push({
+            tokenId: r.tokenId,
+            checked: true,
+          });
+        });
+      } else {
+        tokenList.forEach((r) => {
+          checkedListArray.push({
+            tokenId: r.tokenId,
+            checked: false,
+          });
+        });
+      }
+      setTokenList(checkedListArray);
+    },
+    [tokenList],
+  );
+
   return (
     <>
       <BreadcrumbPageSection pageTitle="Staking" />
@@ -327,20 +375,35 @@ function StakingPage() {
                 <table className="table text-center">
                   <thead>
                     <tr>
+                      <th><input type="checkbox" onChange={(e) => onCheckedStakedTokenListAll(e.target.checked)} /></th>
                       <th scope="col">TOKEN ID</th>
                       <th scope="col">UNSTAKE</th>
                     </tr>
                   </thead>
                   <tbody>
+                    {walletConnected && rightNetwork && !twwContractLoadFinished
+                      && (
+                        <tr>
+                          <td colSpan={3}>
+                            <div className="text-center">
+                              <div className="spinner-border" role="status">
+                                <span className="sr-only" />
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    }
                     {
                       stakedTokenList.length < 1
                       && (
-                        <tr><td colSpan={2}>No Items</td></tr>
+                        <tr><td colSpan={3}>No Items</td></tr>
                       )
                     }
                     {
                       Object.entries(stakedTokenList).map(([key, value]) => (
                         <tr key={key}>
+                          <td><input type="checkbox" checked={value.checked} /></td>
                           <td>{value.tokenId}</td>
                           <td>
                             <button
@@ -374,6 +437,7 @@ function StakingPage() {
                 <table className="table text-center">
                   <thead>
                     <tr>
+                      <th><input type="checkbox" onChange={(e) => onCheckedTokenListAll(e.target.checked)} /></th>
                       <th scope="col">TOKEN ID</th>
                       <th scope="col">STAKE</th>
                     </tr>
@@ -382,7 +446,7 @@ function StakingPage() {
                     {walletConnected && rightNetwork && !twwContractLoadFinished
                       && (
                         <tr>
-                          <td colSpan={2}>
+                          <td colSpan={3}>
                             <div className="text-center">
                               <div className="spinner-border" role="status">
                                 <span className="sr-only" />
@@ -390,16 +454,18 @@ function StakingPage() {
                             </div>
                           </td>
                         </tr>
-                      )}
+                      )
+                    }
                     {
                       tokenList.length < 1
                       && (
-                        <tr><td colSpan={2}>No Items</td></tr>
+                        <tr><td colSpan={3}>No Items</td></tr>
                       )
                     }
                     {
                       Object.entries(tokenList).map(([key, value]) => (
                         <tr key={key}>
+                          <td><input type="checkbox" checked={value.checked} /></td>
                           <td>{value.tokenId}</td>
                           <td>
                             <button
