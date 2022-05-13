@@ -11,6 +11,8 @@ export default class WalletModule {
 
     _onBalanceChanged;
 
+    _onNetwork;
+
     _onChainChanged;
 
     _onAccountChanged;
@@ -32,6 +34,7 @@ export default class WalletModule {
       onProviderDetected_,
       onWalletInstalled_,
       onBalanceChanged_,
+      onNetwork_,
       onChainChanged_,
       onAccountChanged_,
       onConnectUserCancel_,
@@ -40,6 +43,7 @@ export default class WalletModule {
         this._onProviderDetected = onProviderDetected_;
         this._onWalletInstalled = onWalletInstalled_;
         this._onBalanceChanged = onBalanceChanged_;
+        this._onNetwork = onNetwork_;
         this._onChainChanged = onChainChanged_;
         this._onAccountChanged = onAccountChanged_;
         this._onConnectUserCancel = onConnectUserCancel_;
@@ -62,7 +66,7 @@ export default class WalletModule {
         console.log('Ethers Provider', this._ethers);
 
         if (this._ethers) { // Check if we can get installed web3 provider.
-          this._addDefaultEventListeners();
+          this._addEventListeners(this._ethereumProvider);
           this._onWalletInstalled({ installed: true, isMetaMask: ethereumProvider.isMetaMask });
           this._checkNetwork();
         }
@@ -71,13 +75,13 @@ export default class WalletModule {
       }
     }
 
-    _addDefaultEventListeners() {
-      this._ethers.on('chainChanged', this._onChainChanged);
-      this._ethers.on('accountsChanged', this._onAccountChanged);
+    _addEventListeners(ethereum) {
+      ethereum.on('chainChanged', this._onChainChanged);
+      ethereum.on('accountsChanged', this._onAccountChanged);
     }
 
     _checkNetwork() {
-      this._ethers.getNetwork().then(this._onChainChanged);
+      this._ethers.getNetwork().then(this._onNetwork);
     }
 
     get ethers() {
