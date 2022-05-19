@@ -225,24 +225,6 @@ function StakingPage() {
     }
   }
 
-  // const unstakeAll = React.useCallback(async () => {
-  //   const unstakingTokenList = [];
-  //   stakedTokenList.forEach((row) => {
-  //     unstakingTokenList.push(row.tokenId);
-  //   });
-  //   console.log('Token List for Unstaking:', unstakingTokenList);
-  //   stake(unstakingTokenList);
-  // }, [stakedTokenList]);
-
-  // const stakeAll = React.useCallback(async () => {
-  //   const stakingTokenList = [];
-  //   tokenList.forEach((row) => {
-  //     stakingTokenList.push(row.tokenId);
-  //   });
-  //   console.log('Token List for Staking:', stakingTokenList);
-  //   stake(stakingTokenList);
-  // }, [tokenList]);
-
   return (
     <>
       <BreadcrumbPageSection pageTitle="Staking" />
@@ -313,7 +295,7 @@ function StakingPage() {
                       </h4>
                       <span>Your Earned</span>
                     </div>
-                    <div className="project-value-image">                      
+                    <div className="project-value-image">
                       <button
                         className="btn"
                         type="button"
@@ -342,19 +324,6 @@ function StakingPage() {
               </div>
               <div className="row">
                 <div className="col"><h4>MY STAKED NFT LIST</h4></div>
-                {/* <div className="col" style={{ textAlign: 'end', paddingRight: '0' }}>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={unstakeAll}
-                    disabled={stakedTokenList.length < 1}
-                    style={{
-                      padding: '10px 60px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
-                    }}
-                  >
-                    Unstake All
-                  </button>
-                </div> */}
                 <table className="table text-center">
                   <thead>
                     <tr>
@@ -414,19 +383,6 @@ function StakingPage() {
               </div>
               <div className="row">
                 <div className="col"><h4>MY NFT LIST</h4></div>
-                {/* <div className="col" style={{ textAlign: 'end', paddingRight: '0' }}>
-                  <button
-                    type="button"
-                    className="btn"
-                    disabled={tokenList.length < 1}
-                    onClick={stakeAll}
-                    style={{
-                      padding: '10px 60px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
-                    }}
-                  >
-                    Stake All
-                  </button>
-                </div> */}
 
                 <table className="table text-center">
                   <thead>
