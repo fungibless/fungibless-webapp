@@ -81,10 +81,10 @@ function StakingPage() {
 
       const tokens = [];
       for (const t of userInfo.stakedTokenIds) {
+        console.log(t);
         tokens.push(
           {
             tokenId: t.toNumber(),
-            checked: false,
           },
         );
       }
@@ -121,7 +121,6 @@ function StakingPage() {
           tokens.push(
             {
               tokenId: r.toString(),
-              checked: false,
             },
           );
         }
@@ -180,7 +179,7 @@ function StakingPage() {
       }
 
       const stakingWithSigner = await stakingContract.connect(signer);
-      const tx = await stakingWithSigner.stake([tokenId]);
+      const tx = await stakingWithSigner.stake(tokenId);
       const stakingResult = await tx.wait();
       console.log(stakingResult);
       await loadStakingContract(stakingContract);
@@ -226,51 +225,23 @@ function StakingPage() {
     }
   }
 
-  const onCheckedStakedTokenListAll = React.useCallback(
-    (checked) => {
-      const checkedListArray = [];
-      if (checked) {
-        stakedTokenList.forEach((r) => {
-          checkedListArray.push({
-            tokenId: r.tokenId,
-            checked: true,
-          });
-        });
-      } else {
-        stakedTokenList.forEach((r) => {
-          checkedListArray.push({
-            tokenId: r.tokenId,
-            checked: false,
-          });
-        });
-      }
-      setStakedTokenList(checkedListArray);
-    },
-    [stakedTokenList],
-  );
+  // const unstakeAll = React.useCallback(async () => {
+  //   const unstakingTokenList = [];
+  //   stakedTokenList.forEach((row) => {
+  //     unstakingTokenList.push(row.tokenId);
+  //   });
+  //   console.log('Token List for Unstaking:', unstakingTokenList);
+  //   stake(unstakingTokenList);
+  // }, [stakedTokenList]);
 
-  const onCheckedTokenListAll = React.useCallback(
-    (checked) => {
-      const checkedListArray = [];
-      if (checked) {
-        tokenList.forEach((r) => {
-          checkedListArray.push({
-            tokenId: r.tokenId,
-            checked: true,
-          });
-        });
-      } else {
-        tokenList.forEach((r) => {
-          checkedListArray.push({
-            tokenId: r.tokenId,
-            checked: false,
-          });
-        });
-      }
-      setTokenList(checkedListArray);
-    },
-    [tokenList],
-  );
+  // const stakeAll = React.useCallback(async () => {
+  //   const stakingTokenList = [];
+  //   tokenList.forEach((row) => {
+  //     stakingTokenList.push(row.tokenId);
+  //   });
+  //   console.log('Token List for Staking:', stakingTokenList);
+  //   stake(stakingTokenList);
+  // }, [tokenList]);
 
   return (
     <>
@@ -342,8 +313,7 @@ function StakingPage() {
                       </h4>
                       <span>Your Earned</span>
                     </div>
-                    <div className="project-value-image">
-                      {/* <img src="assets/images/project/raking.png" alt="rank" /> */}
+                    <div className="project-value-image">                      
                       <button
                         className="btn"
                         type="button"
@@ -371,11 +341,23 @@ function StakingPage() {
                 </div>
               </div>
               <div className="row">
-                <h4>MY STAKED NFT LIST</h4>
+                <div className="col"><h4>MY STAKED NFT LIST</h4></div>
+                {/* <div className="col" style={{ textAlign: 'end', paddingRight: '0' }}>
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={unstakeAll}
+                    disabled={stakedTokenList.length < 1}
+                    style={{
+                      padding: '10px 60px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
+                    }}
+                  >
+                    Unstake All
+                  </button>
+                </div> */}
                 <table className="table text-center">
                   <thead>
                     <tr>
-                      <th><input type="checkbox" onChange={(e) => onCheckedStakedTokenListAll(e.target.checked)} /></th>
                       <th scope="col">TOKEN ID</th>
                       <th scope="col">UNSTAKE</th>
                     </tr>
@@ -384,7 +366,7 @@ function StakingPage() {
                     {walletConnected && rightNetwork && !twwContractLoadFinished
                       && (
                         <tr>
-                          <td colSpan={3}>
+                          <td colSpan={2}>
                             <div className="text-center">
                               <div className="spinner-border" role="status">
                                 <span className="sr-only" />
@@ -392,23 +374,21 @@ function StakingPage() {
                             </div>
                           </td>
                         </tr>
-                      )
-                    }
+                      )}
                     {
                       stakedTokenList.length < 1
                       && (
-                        <tr><td colSpan={3}>No Items</td></tr>
+                        <tr><td colSpan={2}>No Items</td></tr>
                       )
                     }
                     {
                       Object.entries(stakedTokenList).map(([key, value]) => (
                         <tr key={key}>
-                          <td><input type="checkbox" checked={value.checked} /></td>
                           <td>{value.tokenId}</td>
                           <td>
                             <button
                               type="button"
-                              onClick={() => { unstake(value.tokenId); }}
+                              onClick={() => { unstake([value.tokenId]); }}
                               className="btn"
                               disabled={inProgress}
                               style={{
@@ -433,11 +413,24 @@ function StakingPage() {
                 </table>
               </div>
               <div className="row">
-                <h4>MY NFT LIST</h4>
+                <div className="col"><h4>MY NFT LIST</h4></div>
+                {/* <div className="col" style={{ textAlign: 'end', paddingRight: '0' }}>
+                  <button
+                    type="button"
+                    className="btn"
+                    disabled={tokenList.length < 1}
+                    onClick={stakeAll}
+                    style={{
+                      padding: '10px 60px', background: '#6D4AFE', color: 'white', fontFamily: '"Russo One", sans-serif',
+                    }}
+                  >
+                    Stake All
+                  </button>
+                </div> */}
+
                 <table className="table text-center">
                   <thead>
                     <tr>
-                      <th><input type="checkbox" onChange={(e) => onCheckedTokenListAll(e.target.checked)} /></th>
                       <th scope="col">TOKEN ID</th>
                       <th scope="col">STAKE</th>
                     </tr>
@@ -446,7 +439,7 @@ function StakingPage() {
                     {walletConnected && rightNetwork && !twwContractLoadFinished
                       && (
                         <tr>
-                          <td colSpan={3}>
+                          <td colSpan={2}>
                             <div className="text-center">
                               <div className="spinner-border" role="status">
                                 <span className="sr-only" />
@@ -454,23 +447,21 @@ function StakingPage() {
                             </div>
                           </td>
                         </tr>
-                      )
-                    }
+                      )}
                     {
                       tokenList.length < 1
                       && (
-                        <tr><td colSpan={3}>No Items</td></tr>
+                        <tr><td colSpan={2}>No Items</td></tr>
                       )
                     }
                     {
                       Object.entries(tokenList).map(([key, value]) => (
                         <tr key={key}>
-                          <td><input type="checkbox" checked={value.checked} /></td>
                           <td>{value.tokenId}</td>
                           <td>
                             <button
                               type="button"
-                              onClick={() => { stake(value.tokenId); }}
+                              onClick={() => { stake([value.tokenId]); }}
                               disabled={inProgress}
                               className="btn"
                               style={{
