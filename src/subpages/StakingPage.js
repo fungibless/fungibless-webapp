@@ -100,30 +100,6 @@ function StakingPage() {
     await loadStakingContractDetail(staking);
   }, [setStakingContract, loadStakingContractDetail]);
 
-  const loadTWWContractDetail = React.useCallback(async (tww) => {
-    try {
-      if (account == null) return;
-      const walletOfOwner = await tww.walletOfOwner(account);
-      const tokens = [];
-      if (walletOfOwner !== null) {
-        for (const r of walletOfOwner) {
-          tokens.push(
-            {
-              tokenId: r.toString(),
-            },
-          );
-        }
-      }
-
-      setTokenList(tokens);
-      console.log('walletOfOwner:', tokens);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setTwwContractLoadFinished(true);
-    }
-  }, [setTwwContractLoadFinished, account, setTokenList]);
-
   const loadTWWContract = React.useCallback(async () => {
     const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
       headers: {
@@ -135,8 +111,7 @@ function StakingPage() {
     const abi = await abiResponse.json();
     const tww = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, walletModule.ethers);
     setTwwContract(tww);
-    // await loadTWWContractDetail(tww);
-  }, [setTwwContract, loadTWWContractDetail]);
+  }, [setTwwContract]);
 
   useInterval(() => {
     if (lastClaimableUpdate > 0 && stakedAmount > 0 && rewardUnit) {
@@ -150,7 +125,7 @@ function StakingPage() {
   }, 2000);
 
   const loadStakedTww = React.useCallback(async () => {
-    const staked = await fetch(`https://api.fungibless.xyz/account/${account}/tww/staked`);
+    const staked = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/staked`);
     const stakedTokens = await staked.json();
 
     const tokens = [];
@@ -172,7 +147,7 @@ function StakingPage() {
   });
 
   const loadOwnedTww = React.useCallback(async () => {
-    const owned = await fetch(`https://api.fungibless.xyz/account/${account}/tww/owned`);
+    const owned = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/owned`);
     const ownedTokenList = await owned.json();
     console.log(ownedTokenList);
 
@@ -432,7 +407,7 @@ function StakingPage() {
                 </table>
               </div>
               <div className="row">
-                <div className="col"><h4>MY NFT LIST</h4></div>
+                <div className="col"><h4>MY TWW COLLECTION</h4></div>
 
                 <table className="table text-center">
                   <thead>

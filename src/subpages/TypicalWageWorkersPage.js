@@ -219,6 +219,7 @@ function TypicalWageWorkersPage() {
   const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL;
   const POLYGON_SCAN_TOKEN = `${process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS}/address/${process.env.GATSBY_CONTRACT_TWW_ADDRESS}`;
 
+  const account = useSelector((state) => state.wallet.account);
   const ethBalance = useSelector((state) => state.wallet.balance.eth);
   const walletInstalled = useSelector((state) => state.wallet.installed);
   const walletConnected = useSelector((state) => state.wallet.connected);
@@ -237,6 +238,8 @@ function TypicalWageWorkersPage() {
 
   const [showModal, setShowModal] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState('-');
+  
+  const [tokenList, setTokenList] = React.useState([]);
 
   const roundData = {
     100: {
@@ -338,6 +341,32 @@ function TypicalWageWorkersPage() {
     }
   }, []);
 
+
+  const loadOwnedTww = React.useCallback(async () => {
+    const owned = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/owned`);
+    const ownedTokenList = await owned.json();
+    console.log(ownedTokenList);
+
+    const tokens = [];
+    if (ownedTokenList !== null) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const r of ownedTokenList) {
+        tokens.push(
+          {
+            tokenId: r.TOKEN_ID,
+            name: r.NAME,
+            job: r.COSTUME,
+            grade: r.GRADE,
+            ep: r.EP,
+            image: r.IMAGE,
+            value: r.CONSTITUTION + r.EP + r.HP + r.INTELLIGENCE + r.LUCK + r.MP + r.SPEED + r.STRENGTH + r.WISDOM,
+          },
+        );
+      }
+    }
+    setTokenList(tokens);
+  }, [account]);
+
   const loadContract = React.useCallback(async () => {
     const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
       headers: {
@@ -356,6 +385,7 @@ function TypicalWageWorkersPage() {
 
   React.useEffect(() => {
     loadContract();
+    loadOwnedTww();
   }, [loadContract]);
 
   const mint = async () => {
@@ -490,6 +520,46 @@ function TypicalWageWorkersPage() {
                     {WalletModule.shortenWalletAddress(CONTRACT_TWW_ADDRESS)}
                   </OutboundLink>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-12 pr-25 md-pr-15">
+            <div className="project-item">
+              <div className="project-info border-bottom-2 text-center">
+                <h3 className="mb-15">MY TWW COLLECTION</h3>
+              </div>
+              <div className="project-content mt-4">
+                <table className="table text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">NAME</th>
+                      <th scope="col">EP</th>
+                      <th scope="col">IMAGE</th>
+                      <th scope="col">GRADE</th>
+                      <th scope="col">VALUE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      tokenList.length < 1 && (
+                        <tr><td colSpan={6}>No Items</td></tr>
+                      )
+                    }
+                    {
+                      Object.entries(tokenList).map(([key, value]) => (
+                        <tr key={key}>
+                          <td>{value.tokenId}</td>
+                          <td>{value.name}</td>
+                          <td>{value.ep}</td>
+                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/${value.image}.png`} width={24} height={24} alt={value.tokenId} /></td>
+                          <td>{value.grade}</td>
+                          <td>{numeral(value.value).format('#,#')}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
