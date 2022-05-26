@@ -420,6 +420,7 @@ function TypicalWageWorkersPage() {
         dispatch(setInteracting(false));
         await loadContractDetail(erc721);
         await walletModule.loadBalance();
+        await loadOwnedTww();
       } else {
         setModalMessage(`Transaction ${result.tansactionHash} Failed.`);
         setShowModal(true);
