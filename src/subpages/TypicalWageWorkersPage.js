@@ -240,10 +240,10 @@ function TypicalWageWorkersPage() {
 
   const roundData = {
     100: {
-      no: 1, saleAmount: 100, maxSupply: 100, price: '1 MATIC',
+      no: 1, saleAmount: 100, maxSupply: 100, price: '1.0 MATIC',
     },
     200: {
-      no: 2, saleAmount: 100, maxSupply: 200, price: 'Based on voting',
+      no: 2, saleAmount: 100, maxSupply: 200, price: '1.5 MATIC',
     },
     300: {
       no: 3, saleAmount: 100, maxSupply: 300, price: 'Based on voting',
@@ -415,6 +415,7 @@ function TypicalWageWorkersPage() {
               <div className="project-info border-bottom-2 text-center">
                 <h3 className="mb-15">
                   BUY
+                  {' '}
                   {CONTRACT_TWW_SYMBOL}
                   {' '}
                   (Typical Wage Workers)
