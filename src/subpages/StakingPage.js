@@ -78,17 +78,6 @@ function StakingPage() {
       setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
       setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
       setUnclaimedRewards(userInfo.unclaimedRewards);
-
-      const tokens = [];
-      for (const t of userInfo.stakedTokenIds) {
-        console.log(t);
-        tokens.push(
-          {
-            tokenId: t.toNumber(),
-          },
-        );
-      }
-      setStakedTokenList(tokens);
     } catch (err) {
       console.error(err);
     } finally {
@@ -146,7 +135,7 @@ function StakingPage() {
     const abi = await abiResponse.json();
     const tww = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, walletModule.ethers);
     setTwwContract(tww);
-    await loadTWWContractDetail(tww);
+    // await loadTWWContractDetail(tww);
   }, [setTwwContract, loadTWWContractDetail]);
 
   useInterval(() => {
@@ -155,14 +144,63 @@ function StakingPage() {
       const unclaimed = ethers.BigNumber.from(unclaimedRewards.toString());
       const updatedRewards = unit.mul((moment().utc().unix() - lastClaimableUpdate) * stakedAmount * stakedEconomicPower * rewardBoost);
       const newClaimableReward = unclaimed.add(updatedRewards);
-      console.log(newClaimableReward.toString());
+
       setClaimableRewards(newClaimableReward);
     }
   }, 2000);
 
+  const loadStakedTww = React.useCallback(async () => {
+    const staked = await fetch(`https://api.fungibless.xyz/account/${account}/tww/staked`);
+    const stakedTokens = await staked.json();
+
+    const tokens = [];
+    if (stakedTokens !== null) {
+      for (const r of stakedTokens) {
+        tokens.push(
+          {
+            tokenId: r.TOKEN_ID,
+            name: r.NAME,
+            job: r.COSTUME,
+            grade: r.GRADE,
+            ep: r.EP,
+            image: r.IMAGE,
+          },
+        );
+      }
+    }
+    setStakedTokenList(tokens);
+  });
+
+  const loadOwnedTww = React.useCallback(async () => {
+    const owned = await fetch(`https://api.fungibless.xyz/account/${account}/tww/owned`);
+    const ownedTokenList = await owned.json();
+    console.log(ownedTokenList);
+
+    const tokens = [];
+    if (ownedTokenList !== null) {
+      for (const r of ownedTokenList) {
+        tokens.push(
+          {
+            tokenId: r.TOKEN_ID,
+            name: r.NAME,
+            job: r.COSTUME,
+            grade: r.GRADE,
+            ep: r.EP,
+            image: r.IMAGE,
+          },
+        );
+      }
+    }
+
+    setTwwContractLoadFinished(true);
+    setTokenList(tokens);
+  });
+
   React.useEffect(() => {
     loadStakingContract();
     loadTWWContract();
+    loadOwnedTww();
+    loadStakedTww();
   }, [loadStakingContract, loadTWWContract]);
 
   async function stake(tokenId) {
@@ -184,6 +222,8 @@ function StakingPage() {
       console.log(stakingResult);
       await loadStakingContract(stakingContract);
       await loadTWWContract(twwContract);
+      await loadStakedTww();
+      await loadOwnedTww();
     } catch (err) {
       console.error(err);
     } finally {
@@ -201,6 +241,8 @@ function StakingPage() {
       console.log(stakingResult);
       await loadStakingContract(stakingContract);
       await loadTWWContract(twwContract);
+      await loadStakedTww();
+      await loadOwnedTww();
     } catch (err) {
       console.error(err);
     } finally {
@@ -327,15 +369,19 @@ function StakingPage() {
                 <table className="table text-center">
                   <thead>
                     <tr>
-                      <th scope="col">TOKEN ID</th>
-                      <th scope="col">UNSTAKE</th>
+                      <th scope="col">#</th>
+                      <th scope="col">NAME</th>
+                      <th scope="col">EP</th>
+                      <th scope="col">IMAGE</th>
+                      <th scope="col">GRADE</th>
+                      <th scope="col">STAKE</th>
                     </tr>
                   </thead>
                   <tbody>
                     {walletConnected && rightNetwork && !twwContractLoadFinished
                       && (
                         <tr>
-                          <td colSpan={2}>
+                          <td colSpan={6}>
                             <div className="text-center">
                               <div className="spinner-border" role="status">
                                 <span className="sr-only" />
@@ -347,13 +393,17 @@ function StakingPage() {
                     {
                       stakedTokenList.length < 1
                       && (
-                        <tr><td colSpan={2}>No Items</td></tr>
+                        <tr><td colSpan={6}>No Items</td></tr>
                       )
                     }
                     {
                       Object.entries(stakedTokenList).map(([key, value]) => (
                         <tr key={key}>
                           <td>{value.tokenId}</td>
+                          <td>{value.name}</td>
+                          <td>{value.ep}</td>
+                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/${value.image}.png`} width={24} height={24} alt={value.name} /></td>
+                          <td>{value.grade}</td>
                           <td>
                             <button
                               type="button"
@@ -387,7 +437,11 @@ function StakingPage() {
                 <table className="table text-center">
                   <thead>
                     <tr>
-                      <th scope="col">TOKEN ID</th>
+                      <th scope="col">#</th>
+                      <th scope="col">NAME</th>
+                      <th scope="col">EP</th>
+                      <th scope="col">IMAGE</th>
+                      <th scope="col">GRADE</th>
                       <th scope="col">STAKE</th>
                     </tr>
                   </thead>
@@ -395,7 +449,7 @@ function StakingPage() {
                     {walletConnected && rightNetwork && !twwContractLoadFinished
                       && (
                         <tr>
-                          <td colSpan={2}>
+                          <td colSpan={6}>
                             <div className="text-center">
                               <div className="spinner-border" role="status">
                                 <span className="sr-only" />
@@ -407,13 +461,17 @@ function StakingPage() {
                     {
                       tokenList.length < 1
                       && (
-                        <tr><td colSpan={2}>No Items</td></tr>
+                        <tr><td colSpan={6}>No Items</td></tr>
                       )
                     }
                     {
                       Object.entries(tokenList).map(([key, value]) => (
                         <tr key={key}>
                           <td>{value.tokenId}</td>
+                          <td>{value.name}</td>
+                          <td>{value.ep}</td>
+                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/${value.image}.png`} width={24} height={24} alt={value.name} /></td>
+                          <td>{value.grade}</td>
                           <td>
                             <button
                               type="button"
