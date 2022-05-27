@@ -195,8 +195,8 @@ function StakingPage() {
       const tx = await stakingWithSigner.stake(tokenId);
       const stakingResult = await tx.wait();
       console.log(stakingResult);
-      await loadStakingContract(stakingContract);
-      await loadTWWContract(twwContract);
+      await loadStakingContract();
+      // await loadTWWContract();
       await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
@@ -214,8 +214,8 @@ function StakingPage() {
       const tx = await stakingWithSigner.withdraw([tokenId]);
       const stakingResult = await tx.wait();
       console.log(stakingResult);
-      await loadStakingContract(stakingContract);
-      await loadTWWContract(twwContract);
+      await loadStakingContract();
+      // await loadTWWContract();
       await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
@@ -233,8 +233,8 @@ function StakingPage() {
       const tx = await stakingWithSigner.claimRewards();
       const claimResult = await tx.wait();
       console.log(claimResult);
-      await loadStakingContract(stakingContract);
-      await loadTWWContract(twwContract);
+      await loadStakingContract();
+      // await loadTWWContract();
     } catch (err) {
       console.error(err);
     } finally {
