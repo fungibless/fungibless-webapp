@@ -1,5 +1,12 @@
 /* eslint-disable no-console */
 import * as React from 'react';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import Dialog from '@mui/material/Dialog';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { isMobile } from 'react-device-detect';
 import metaMaskImg from '../assets/images/icons/meta-mask.png';
@@ -18,10 +25,6 @@ function WalletSection() {
   const isMetaMask = useSelector((state) => state.wallet.isMetaMask);
   const shortenAccount = useSelector((state) => state.wallet.shortenAccount);
   const closeButton = React.useRef();
-
-  function onProviderDetected(detected) {
-    console.log('onProivderDetected:', detected);
-  }
 
   function onWalletInstalled(msg) {
     console.log('onWalletInstalled:', msg);
@@ -67,21 +70,29 @@ function WalletSection() {
     dispatch(setInteracting(false));
   }
 
+  function onDisconnect() {
+    dispatch(setConnectedAndAccount({ connected: false, account: null }));
+    closeButton.current.click();
+  }
+
   walletModule.initialize(
-    onProviderDetected,
     onWalletInstalled,
     onBalanceChanged,
     onNetwork,
     onChainChanged,
     onAccountChanged,
     onConnectUserCancel,
+    onDisconnect,
   );
 
   function connect() {
-    if (walletConnected) return;
-
     if (isMobile) {
       window.location.href = 'https://metamask.app.link/dapp/www.fungibless.xyz/tww';
+      return;
+    }
+
+    if (walletConnected) {
+      walletModule.disconnect();
     } else {
       walletModule.connect();
     }
@@ -103,24 +114,30 @@ function WalletSection() {
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ref={closeButton}><i className="icon-x" /></button>
           </div>
           <div className="modal-body">
-            <p className="mb-20">Please select a wallet to connect to this marketplace</p>
+            <p className="mb-20">Please click MetaMask to connect to Fungibless.</p>
             <div className="connect-section">
               <ul className="heading-list">
                 <li style={(walletConnected && isMetaMask) ? { background: 'green' } : {}}>
-                  <a href="#!" onClick={connect}>
+                  <a
+                    href="#!"
+                    onClick={connect}
+                    style={{
+                      textDecoration: 'none', display: 'block', width: '100%', height: '100%',
+                    }}
+                  >
                     <span><img src={metaMaskImg} alt="MetaMask" /></span>
-                    <span style={{ fontWeight: 'bold', color: 'white' }}>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</span>
+                    <span style={{ color: 'white' }}>{(walletConnected && isMetaMask) ? shortenAccount : 'MetaMask'}</span>
+
                   </a>
                 </li>
               </ul>
             </div>
-            <p>
-              By connecting your wallet, you agree to our
-              <span className="modal-title">Terms of Service </span>
-              and our
-              {' '}
-              <span className="modal-title"> Privacy Policy</span>
-            </p>
+            {/* <p>
+              By connecting your wallet, you agree to our&nbsp;
+              <span className="modal-title">Terms of Service</span>
+              &nbsp;and our&nbsp;
+              <span className="modal-title">Privacy Policy</span>
+            </p> */}
           </div>
         </div>
       </div>

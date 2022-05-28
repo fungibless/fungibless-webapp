@@ -1,144 +1,165 @@
-import * as React from "react"
-import logo_img from '../assets/images/logo.png'
-import connect_img from '../assets/images/icons/connect.png'
-import connect_white_img from '../assets/images/icons/connect_white.png'
-import logo_dark_img from '../assets/images/logo-dark.png'
-import meta_mask_img from '../assets/images/icons/meta-mask.png'
-import { useSelector } from 'react-redux'
-import { Link, navigate } from 'gatsby'
-import { walletModule } from "./WalletSection"
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { Link, navigate } from 'gatsby';
+import imgLogo from '../assets/images/logo.png';
+import imgConnect from '../assets/images/icons/connect.png';
+import imgConnectWhite from '../assets/images/icons/connect_white.png';
+import imgLogoDark from '../assets/images/logo-dark.png';
+import imgMetaMask from '../assets/images/icons/meta-mask.png';
+import { walletModule } from './WalletSection';
 
-const HeaderSection = () => {
+function HeaderSection() {
+  const walletConnected = useSelector((state) => state.wallet.connected);
+  const walletInstalled = useSelector((state) => state.wallet.installed);
+  const isMetaMask = useSelector((state) => state.wallet.isMetaMask);
+  const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
+  const shortenAccount = useSelector((state) => state.wallet.shortenAccount);
 
-    const walletConnected = useSelector((state) => state.wallet.connected)
-    const walletInstalled = useSelector((state) => state.wallet.installed)
-    const isMetaMask = useSelector((state) => state.wallet.isMetaMask)
-    const rightNetwork = useSelector((state) => state.wallet.rightNetwork)
-    const shortenAccount = useSelector((state) => state.wallet.shortenAccount)
-
-    return (
-        <header id="gamfi-header" className="gamfi-header-section default-header">
-            <div className="menu-area menu-sticky">
-                <div className="container">
-                    <div className="heaader-inner-area d-flex justify-content-between align-items-center">
-                        <div className="gamfi-logo-area d-flex justify-content-between align-items-center">
-                            <div className="logo">
-                                <Link to="/"><img src={logo_img} alt="logo" />&nbsp;</Link>
-                            </div>
-                            <div className="header-menu">
-                                <ul className="nav-menu">
-                                    <li><Link to="/">Home</Link>
-                                    </li>
-                                    <li><Link to="/tww">NFT</Link>
-                                        <ul className="sub-menu">
-                                            <li><Link to="/tww">Typical Wage Workers</Link></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <Link to="/staking">Staking</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/roadmap">Roadmap</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/tokenomics">Tokenomics</Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="gamfi-btn-area">
-                            <ul>
-                                <li>
-                                    <a href="#!" id="nav-expander" className="nav-expander bar">
-                                        <div className="bar">
-                                            <span className="dot1"></span>
-                                            <span className="dot2"></span>
-                                            <span className="dot3"></span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    {
-                                        !walletInstalled &&
-                                        <button type="button" className="readon white-btn hover-shape" onClick={() => { navigate("https://metamask.io/") }}><img src={connect_img} alt="Icon" />
-                                            <span className="btn-text">Install Wallet</span>
-                                            <span className="hover-shape1"></span>
-                                            <span className="hover-shape2"></span>
-                                            <span className="hover-shape3"></span>
-                                        </button>
-                                    }
-                                    {
-                                        walletInstalled && !rightNetwork &&
-                                        <button type="button" className="readon white-btn hover-shape" onClick={() => { walletModule.switchNetwork()}}><img src={connect_img} alt="Icon" />
-                                            <span className="btn-text">Wrong Network</span>
-                                            <span className="hover-shape1"></span>
-                                            <span className="hover-shape2"></span>
-                                            <span className="hover-shape3"></span>
-                                        </button>
-                                    }
-                                    {
-                                        walletInstalled && rightNetwork && !walletConnected &&
-                                        <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal"><img src={connect_img} alt="Icon" />
-                                            <span className="btn-text">Connect</span>
-                                            <span className="hover-shape1"></span>
-                                            <span className="hover-shape2"></span>
-                                            <span className="hover-shape3"></span>
-                                        </button>
-                                    }
-                                    {
-                                        walletInstalled && walletConnected && rightNetwork &&
-                                        <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal"><img src={isMetaMask ? meta_mask_img : connect_img} alt="Icon" />
-                                            <span className="btn-text">{shortenAccount}</span>
-                                            <span className="hover-shape1"></span>
-                                            <span className="hover-shape2"></span>
-                                            <span className="hover-shape3"></span>
-                                        </button>
-                                    }
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <nav className="right_menu_togle mobile-navbar-menu" id="mobile-navbar-menu">
-                <div className="close-btn">
-                    <a href="#!" id="nav-close2" className="nav-close">
-                        <div className="line">
-                            <span className="line1"></span>
-                            <span className="line2"></span>
-                        </div>
-                    </a>
-                </div>
-                <div className="sidebar-logo mb-30">
-                    <Link to="/"><img src={logo_dark_img} alt="logo" /></Link>
-                </div>
+  return (
+    <header id="gamfi-header" className="gamfi-header-section default-header">
+      <div className="menu-area menu-sticky">
+        <div className="container">
+          <div className="heaader-inner-area d-flex justify-content-between align-items-center">
+            <div className="gamfi-logo-area d-flex justify-content-between align-items-center">
+              <div className="logo">
+                <Link to="/">
+                  <img src={imgLogo} alt="logo" />
+                </Link>
+              </div>
+              <div className="header-menu">
                 <ul className="nav-menu">
-                    <li className="current-menu-item"><Link to="/">Home</Link>
-                    </li>
-                    <li><Link to="/tww">NFT</Link>
-                        <ul className="sub-menu">
-                            <li><Link to="/tww">Typical Wage Workers</Link></li>                            
-                        </ul>
-                    </li>
-                    <li><Link to="/staking">Staking</Link>
-                    </li>
-                    <li><Link to="/roadmap">Roadmap</Link>
-                    </li>
-                    <li><Link to="/tokenomics">Tokenomics</Link>
-                    </li>
-                    <li>
-                        <button type="button" className="readon black-shape-big connectWalletBtnforMobile" data-bs-toggle="modal" data-bs-target="#modal"><img src={connect_white_img} alt="connect" />
-                            <span className="btn-text">Connect </span>
-                            <span className="hover-shape1"></span>
-                            <span className="hover-shape2"></span>
-                            <span className="hover-shape3"></span>
-                        </button>
-                    </li>
+                  <li>
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li>
+                    <Link to="/tww">NFT</Link>
+                    <ul className="sub-menu">
+                      <li><Link to="/tww">Typical Wage Workers</Link></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link to="/staking">Staking</Link>
+                  </li>
+                  <li>
+                    <Link to="/roadmap">Roadmap</Link>
+                  </li>
+                  <li>
+                    <Link to="/tokenomics">Tokenomics</Link>
+                  </li>
                 </ul>
-            </nav>
-        </header>
-    );
-};
+              </div>
+            </div>
+            <div className="gamfi-btn-area">
+              <ul>
+                <li>
+                  <a href="#!" id="nav-expander" className="nav-expander bar">
+                    <div className="bar">
+                      <span className="dot1" />
+                      <span className="dot2" />
+                      <span className="dot3" />
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  {
+                    !walletInstalled
+                    && (
+                      <button type="button" className="readon white-btn hover-shape" onClick={() => { navigate('https://metamask.io/'); }}>
+                        <img src={imgConnect} alt="Icon" />
+                        <span className="btn-text">Install Wallet</span>
+                        <span className="hover-shape1" />
+                        <span className="hover-shape2" />
+                        <span className="hover-shape3" />
+                      </button>
+                    )
+                  }
+                  {
+                    walletInstalled && !rightNetwork
+                    && (
+                      <button type="button" className="readon white-btn hover-shape" onClick={() => { walletModule.switchNetwork(); }}>
+                        <img src={imgConnect} alt="Icon" />
+                        <span className="btn-text">Wrong Network</span>
+                        <span className="hover-shape1" />
+                        <span className="hover-shape2" />
+                        <span className="hover-shape3" />
+                      </button>
+                    )
+                  }
+                  {
+                    walletInstalled && rightNetwork && !walletConnected
+                    && (
+                      <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal">
+                        <img src={imgConnect} alt="Icon" />
+                        <span className="btn-text">Connect</span>
+                        <span className="hover-shape1" />
+                        <span className="hover-shape2" />
+                        <span className="hover-shape3" />
+                      </button>
+                    )
+                  }
+                  {
+                    walletInstalled && walletConnected && rightNetwork
+                    && (
+                      <button type="button" className="readon white-btn hover-shape" data-bs-toggle="modal" data-bs-target="#modal">
+                        <img src={isMetaMask ? imgMetaMask : imgConnect} alt="Icon" />
+                        <span className="btn-text">{shortenAccount}</span>
+                        <span className="hover-shape1" />
+                        <span className="hover-shape2" />
+                        <span className="hover-shape3" />
+                      </button>
+                    )
+                  }
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav className="right_menu_togle mobile-navbar-menu" id="mobile-navbar-menu">
+        <div className="close-btn">
+          <a href="#!" id="nav-close2" className="nav-close">
+            <div className="line">
+              <span className="line1" />
+              <span className="line2" />
+            </div>
+          </a>
+        </div>
+        <div className="sidebar-logo mb-30">
+          <Link to="/"><img src={imgLogoDark} alt="logo" /></Link>
+        </div>
+        <ul className="nav-menu">
+          <li className="current-menu-item">
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/tww">NFT</Link>
+            <ul className="sub-menu">
+              <li><Link to="/tww">Typical Wage Workers</Link></li>
+            </ul>
+          </li>
+          <li>
+            <Link to="/staking">Staking</Link>
+          </li>
+          <li>
+            <Link to="/roadmap">Roadmap</Link>
+          </li>
+          <li>
+            <Link to="/tokenomics">Tokenomics</Link>
+          </li>
+          <li>
+            <button type="button" className="readon black-shape-big connectWalletBtnforMobile" data-bs-toggle="modal" data-bs-target="#modal">
+              <img src={imgConnectWhite} alt="connect" />
+              <span className="btn-text">Connect </span>
+              <span className="hover-shape1" />
+              <span className="hover-shape2" />
+              <span className="hover-shape3" />
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+}
 
 export default HeaderSection;

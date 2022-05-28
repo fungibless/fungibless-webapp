@@ -19,6 +19,8 @@ export default class WalletModule {
 
     _onConnectUserCancel;
 
+    _onDisconnected;
+
     // Private Members
     _address;
 
@@ -31,22 +33,22 @@ export default class WalletModule {
     _connected = false;
 
     async initialize(
-      onProviderDetected_,
       onWalletInstalled_,
       onBalanceChanged_,
       onNetwork_,
       onChainChanged_,
       onAccountChanged_,
       onConnectUserCancel_,
+      onDisconnected_,
     ) {
       if (typeof window !== 'undefined') {
-        this._onProviderDetected = onProviderDetected_;
         this._onWalletInstalled = onWalletInstalled_;
         this._onBalanceChanged = onBalanceChanged_;
         this._onNetwork = onNetwork_;
         this._onChainChanged = onChainChanged_;
         this._onAccountChanged = onAccountChanged_;
         this._onConnectUserCancel = onConnectUserCancel_;
+        this._onDisconnected = onDisconnected_;
 
         const ethereumProvider = await detectEthereumProvider();
 
@@ -58,7 +60,7 @@ export default class WalletModule {
 
     _handleEthereum(ethereumProvider) {
       if (ethereumProvider) {
-        this._onProviderDetected(true);
+        // this._onProviderDetected(true);
         this._ethereumProvider = ethereumProvider;
         this._ethers = new ethers.providers.Web3Provider(ethereumProvider);
 
@@ -71,7 +73,7 @@ export default class WalletModule {
           this._checkNetwork();
         }
       } else {
-        this._onProviderDetected(false);
+        // this._onProviderDetected(false);
       }
     }
 
@@ -115,6 +117,13 @@ export default class WalletModule {
       }
 
       return false;
+    }
+
+    async disconnect() {
+      this._connected = false;
+      this._balance = 0;
+      this._address = '0x0';
+      this._onDisconnected();
     }
 
     async _loadBalance(account) {
