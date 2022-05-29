@@ -66,7 +66,8 @@ function StakingPage() {
 
   const loadStakingContractDetail = React.useCallback(async (contract) => {
     try {
-      if (account == null) return;
+      if (account == null || stakingContract == null) return;
+      console.log(contract);
       const userInfo = await contract.userStakeInfo(account);
       const ru = await contract.rewardUnit();
       const rb = await contract.rewardBoost();
@@ -83,34 +84,37 @@ function StakingPage() {
     } finally {
       setStakingContractLoadFinished(true);
     }
-  }, [account]);
+  }, [account, stakingContract]);
 
   const loadStakingContract = React.useCallback(async () => {
-    const abiResponse = await fetch(CONTRACT_TWW_STAKING_ABI_LOCATION, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
+    if (stakingContract == null) {
+      const abiResponse = await fetch(CONTRACT_TWW_STAKING_ABI_LOCATION, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
 
-    const abi = await abiResponse.json();
-    const staking = new ethers.Contract(CONTRACT_TWW_STAKING_ADDRESS, abi, walletModule.ethers);
-    setStakingContract(staking);
-
-    await loadStakingContractDetail(staking);
+      const abi = await abiResponse.json();
+      const staking = new ethers.Contract(CONTRACT_TWW_STAKING_ADDRESS, abi, walletModule.ethers);
+      setStakingContract(staking);
+    }
+    await loadStakingContractDetail(stakingContract);
   }, [setStakingContract, loadStakingContractDetail]);
 
   const loadTWWContract = React.useCallback(async () => {
-    const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
+    if (twwContract == null) {
+      const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
 
-    const abi = await abiResponse.json();
-    const tww = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, walletModule.ethers);
-    setTwwContract(tww);
+      const abi = await abiResponse.json();
+      const tww = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, walletModule.ethers);
+      setTwwContract(tww);
+    }
   }, [setTwwContract]);
 
   useInterval(() => {
@@ -176,7 +180,7 @@ function StakingPage() {
     loadTWWContract();
     loadOwnedTww();
     loadStakedTww();
-  }, [loadStakingContract, loadTWWContract]);
+  }, [loadStakingContract, loadTWWContract, account]);
 
   async function stake(tokenId) {
     setInProgress(true);
