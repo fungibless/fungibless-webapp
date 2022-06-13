@@ -2,6 +2,9 @@ import * as React from 'react';
 import { OutboundLink } from 'gatsby-plugin-google-gtag';
 import Section from '../components/Section';
 import imgSteps2 from '../assets/images/icons/steps2.png';
+import imgDiscordLogo from '../assets/images/icons/discord-logo.png';
+import imgTwitterLogo from '../assets/images/icons/twitter-logo.png';
+import imgOpenseaLogo from '../assets/images/icons/opensea-logo.png';
 
 function SocialSection() {
   return (
@@ -16,8 +19,9 @@ function SocialSection() {
         </div>
         <div className="footer-listing text-center mb-100 md-mb-70 xs-mb-50">
           <ul className="footer-icon-list">
-            <li><OutboundLink href="https://discord.gg/HymuNn97uy" target="_blank"><i className="icon-discord" /></OutboundLink></li>
-            <li><OutboundLink href="https://twitter.com/syous_seo" target="_blank"><i className="icon-twitter" /></OutboundLink></li>
+            <li><OutboundLink href="https://discord.gg/CmbNCjprBA" target="_blank"><img width="100px" height="100px" src={imgDiscordLogo} alt="discord" style={{ paddingRight: '5px' }} /></OutboundLink></li>
+            <li><OutboundLink href="https://twitter.com/teamfungibless" target="_blank"><img width="100px" height="100px" src={imgTwitterLogo} alt="twitter" style={{ paddingRight: '5px' }} /></OutboundLink></li>
+            <li><OutboundLink href="https://opensea.io/collection/tww" target="_blank"><img width="100px" height="100px" src={imgOpenseaLogo} alt="opensea" /></OutboundLink></li>
           </ul>
         </div>
       </div>
