@@ -237,8 +237,7 @@ function StakingPage() {
       const tx = await stakingWithSigner.claimRewards();
       const claimResult = await tx.wait();
       console.log(claimResult);
-      await loadStakingContract();
-      // await loadTWWContract();
+      await loadStakingContractDetail(stakingContract);
     } catch (err) {
       console.error(err);
     } finally {
