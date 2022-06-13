@@ -238,7 +238,6 @@ function TypicalWageWorkersPage() {
 
   const [showModal, setShowModal] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState('-');
-  
   const [tokenList, setTokenList] = React.useState([]);
 
   const roundData = {
