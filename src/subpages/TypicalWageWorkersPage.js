@@ -5,11 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import numeral from 'numeral';
 import { OutboundLink } from 'gatsby-plugin-google-gtag';
 import { ethers } from 'ethers';
+import { shortenAddress } from '@fungibless/wallet-module';
 import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
 import { walletModule } from '../sections/WalletSection';
 
-import WalletModule from '../module/wallet-module';
 import { setInteracting } from '../features/wallet-slice';
 
 import VerticallyCenteredModal from '../components/vertically-centered-modal';
@@ -70,7 +70,9 @@ const costumeData = {
 };
 
 // eslint-disable-next-line max-len
-function TwwInformation({ contractLoadFinished, maxSupply, symbol, round, totalSupply, step, price, progress, ethBalance, mintAmount, maxMintAmount, isMinting, leftQty, setMintAmount, mint, walletConnected }) {
+function TwwInformation({
+  contractLoadFinished, maxSupply, symbol, round, totalSupply, step, price, progress, ethBalance, mintAmount, maxMintAmount, isMinting, leftQty, setMintAmount, mint, walletConnected,
+}) {
   TwwInformation.propTypes = {
     contractLoadFinished: PropTypes.bool.isRequired,
     maxSupply: PropTypes.number.isRequired,
@@ -340,7 +342,6 @@ function TypicalWageWorkersPage() {
     }
   }, []);
 
-
   const loadOwnedTww = React.useCallback(async () => {
     const owned = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/owned`);
     const ownedTokenList = await owned.json();
@@ -517,7 +518,7 @@ function TypicalWageWorkersPage() {
                 <div className="mb-15">
                   Contract Address:
                   <OutboundLink href={POLYGON_SCAN_TOKEN} target="_blank">
-                    {WalletModule.shortenWalletAddress(CONTRACT_TWW_ADDRESS)}
+                    {shortenAddress(CONTRACT_TWW_ADDRESS, 4)}
                   </OutboundLink>
                 </div>
               </div>

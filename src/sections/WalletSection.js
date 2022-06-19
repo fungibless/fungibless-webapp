@@ -7,11 +7,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
 
+import { WalletModule, WalletKind, ethers } from '@fungibless/wallet-module';
 import { useSelector, useDispatch } from 'react-redux';
 import { isMobile } from 'react-device-detect';
 import metaMaskImg from '../assets/images/icons/meta-mask.png';
 
-import WalletModule from '../module/wallet-module';
 import {
   setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork, setInteracting,
 } from '../features/wallet-slice';
@@ -26,64 +26,46 @@ function WalletSection() {
   const shortenAccount = useSelector((state) => state.wallet.shortenAccount);
   const closeButton = React.useRef();
 
-  function onWalletInstalled(msg) {
-    console.log('onWalletInstalled:', msg);
-    dispatch(setInstalled(msg));
-  }
-
-  function onBalanceChanged(from, to) {
-    dispatch(setBalance({ eth: to }));
-  }
-
-  function onNetwork({ chainId, name }) {
-    console.log(
-      'onNetwork chainId:',
-      chainId,
-      ' name:',
-      name,
-      ' desired:',
-      parseInt(process.env.GATSBY_WALLET_NETWORK_CHAIN_ID, 16),
-    );
-    dispatch(
-      setChainIdAndRightNetwork({
-        chainId,
-        right: chainId === parseInt(process.env.GATSBY_WALLET_NETWORK_CHAIN_ID, 16),
-      }),
-    );
-  }
-
-  function onChainChanged({ chainId, name }) {
-    console.log('onChainChanged chainId:', chainId, ' name:', name);
-    window.location.reload();
-  }
-
-  function onAccountChanged(accounts) {
-    if (accounts && accounts.length > 0) {
-      dispatch(setConnectedAndAccount({ connected: true, account: accounts[0] }));
-      closeButton.current.click();
-    } else {
-      dispatch(setConnectedAndAccount({ connected: false, account: null }));
-    }
-  }
-
-  function onConnectUserCancel() {
-    dispatch(setInteracting(false));
-  }
-
-  function onDisconnect() {
-    dispatch(setConnectedAndAccount({ connected: false, account: null }));
-    closeButton.current.click();
-  }
-
-  walletModule.initialize(
-    onWalletInstalled,
-    onBalanceChanged,
-    onNetwork,
-    onChainChanged,
-    onAccountChanged,
-    onConnectUserCancel,
-    onDisconnect,
-  );
+  const initializeWallet = React.useCallback((walletKind) => {
+    walletModule
+      .bindOnWalletInstalledListeners(({ installed, kind }) => {
+        console.log(`wallet installed: ${installed} kind: ${WalletKind[kind]}`);
+        dispatch(setInstalled({ installed, isMetaMask: kind === WalletKind.MetaMask }));
+      })
+      .bindOnChainConnectedListeners(({ chainId, name }) => {
+        console.log('chain connected chainId:', chainId, ' name:', name);
+        dispatch(
+          setChainIdAndRightNetwork({
+            chainId,
+            right: chainId === parseInt(process.env.GATSBY_WALLET_NETWORK_CHAIN_ID, 16),
+          }),
+        );
+      })
+      .bindOnChainChangedListeners(({ chainId }) => {
+        console.log('chain changed chainId:', chainId);
+        window.location.reload();
+      })
+      .bindOnAccountChangedListeners(({ account }) => {
+        console.log('connected', account);
+        const s = walletModule.shortenAddress;
+        dispatch(setConnectedAndAccount({ connected: true, account, shortenAccount: s }));
+        closeButton.current.click();
+      })
+      .bindOnAccountConnectCanceledListeners(() => {
+        console.log('user canceled');
+        dispatch(setInteracting(false));
+      })
+      .bindOnBalanceChangedListeners((amount) => {
+        console.log(`this is amount : ${amount}`);
+        dispatch(setBalance({ eth: amount.toString() }));
+      })
+      .bindOnDisconnectedListeners(() => {
+        console.log('disconnected');
+        dispatch(setConnectedAndAccount({ connected: false, account: null }));
+        closeButton.current.click();
+      })
+      .initialize(walletKind);
+  }, [walletModule]);
 
   function connect() {
     if (isMobile) {
@@ -99,11 +81,15 @@ function WalletSection() {
   }
 
   React.useEffect(() => {
-    console.log(rightNetwork);
+    try {
+      initializeWallet(WalletKind.MetaMask);
+    } catch (err) {
+      console.error(err);
+    }
     if (rightNetwork) {
       connect();
     }
-  }, [rightNetwork]);
+  }, [initializeWallet, rightNetwork]);
 
   return (
     <div className="modal fade " id="modal" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">

@@ -17,6 +17,7 @@
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
+    "@fungibless/wallet-module": "^0.0.4",
     "@metamask/detect-provider": "^1.2.0",
     "@mui/material": "^5.5.2",
     "@reduxjs/toolkit": "^1.8.0",

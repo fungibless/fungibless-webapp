@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import WalletModule from '../module/wallet-module';
+import { shortenAddress } from '@fungibless/wallet-module';
 
 export const walletSlice = createSlice({
   name: 'wallet',
@@ -20,13 +20,13 @@ export const walletSlice = createSlice({
   reducers: {
     setAccount: (state, action) => {
       state.account = action.payload;
-      state.shortenAccount = WalletModule.shortenWalletAddress(state.account);
+      state.shortenAccount = shortenAddress(action.payload, 4);
     },
     setConnectedAndAccount: (state, action) => {
       state.connected = action.payload.connected;
       if (action.payload.account) {
         state.account = action.payload.account;
-        state.shortenAccount = WalletModule.shortenWalletAddress(state.account);
+        state.shortenAccount = shortenAddress(action.payload.account, 4);
       }
       state.interacting = false;
     },
