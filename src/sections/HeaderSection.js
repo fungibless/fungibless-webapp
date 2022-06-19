@@ -15,6 +15,23 @@ function HeaderSection() {
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
   const shortenAccount = useSelector((state) => state.wallet.shortenAccount);
 
+  function switchNetwork() {
+    walletModule.switchNetwork(
+      parseInt(process.env.GATSBY_WALLET_NETWORK_CHAIN_ID, 16),
+      {
+        chainId: process.env.GATSBY_WALLET_NETWORK_CHAIN_ID,
+        chainName: process.env.GATSBY_WALLET_NETWORK_CHAIN_NAME,
+        nativeCurrency: {
+          name: process.env.GATSBY_WALLET_NETWORK_NATIVE_CURRENCY_NAME,
+          symbol: process.env.GATSBY_WALLET_NETWORK_NATIVE_SYMBOL,
+          decimals: process.env.GATSBY_WALLET_NETWORK_NATIVE_DECIMALS,
+        },
+        rpcUrls: [process.env.GATSBY_WALLET_NETWORK_RPC_URL],
+        blockExplorerUrls: [process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS],
+      },
+    );
+  }
+
   return (
     <header id="gamfi-header" className="gamfi-header-section default-header">
       <div className="menu-area menu-sticky">
@@ -76,7 +93,7 @@ function HeaderSection() {
                   {
                     walletInstalled && !rightNetwork
                     && (
-                      <button type="button" className="readon white-btn hover-shape" onClick={() => { walletModule.switchNetwork(); }}>
+                      <button type="button" className="readon white-btn hover-shape" onClick={switchNetwork}>
                         <img src={imgConnect} alt="Icon" />
                         <span className="btn-text">Wrong Network</span>
                         <span className="hover-shape1" />
