@@ -49,10 +49,8 @@ function StakingPage() {
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
 
   const [twwContract, setTwwContract] = React.useState(null);
-  const [fungiContract, setFungiContract] = React.useState(null);
   const [stakingContract, setStakingContract] = React.useState(null);
   const [twwContractLoadFinished, setTwwContractLoadFinished] = React.useState(false);
-  const [stakingContractLoadFinished, setStakingContractLoadFinished] = React.useState(false);
   const [tokenList, setTokenList] = React.useState([]);
   const [stakedTokenList, setStakedTokenList] = React.useState([]);
   const [unclaimedRewards, setUnclaimedRewards] = React.useState(0);
@@ -81,8 +79,6 @@ function StakingPage() {
       setUnclaimedRewards(userInfo.unclaimedRewards);
     } catch (err) {
       console.error(err);
-    } finally {
-      setStakingContractLoadFinished(true);
     }
   }, [account, stakingContract]);
 
@@ -125,6 +121,8 @@ function StakingPage() {
       const newClaimableReward = unclaimed.add(updatedRewards);
 
       setClaimableRewards(newClaimableReward);
+    } else {
+      setClaimableRewards(ethers.BigNumber.from(0));
     }
   }, 2000);
 
