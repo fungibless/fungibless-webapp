@@ -316,7 +316,6 @@ function TypicalWageWorkersPage() {
   const loadContractDetail = React.useCallback(async (contract) => {
     try {
       const cost = await contract.cost();
-
       const maximumSupply = (await contract.maxSupply()).toNumber();
       const totalSold = (await contract.totalSupply()).toNumber();
       const paused = (await contract.paused());
@@ -377,7 +376,7 @@ function TypicalWageWorkersPage() {
 
     const json = await abiResponse.json();
 
-    const contract = new ethers.Contract(CONTRACT_TWW_ADDRESS, json, walletModule.ethers);
+    const contract = new ethers.Contract(CONTRACT_TWW_ADDRESS, json, walletModule.provider);
     setERC721(contract);
 
     await loadContractDetail(contract);

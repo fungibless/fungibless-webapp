@@ -96,7 +96,7 @@ function StakingPage() {
       });
 
       const abi = await abiResponse.json();
-      const staking = new ethers.Contract(CONTRACT_TWW_STAKING_ADDRESS, abi, walletModule.ethers);
+      const staking = new ethers.Contract(CONTRACT_TWW_STAKING_ADDRESS, abi, walletModule.provider);
       setStakingContract(staking);
     }
     await loadStakingContractDetail(stakingContract);
