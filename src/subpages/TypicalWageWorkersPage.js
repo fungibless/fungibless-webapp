@@ -400,7 +400,7 @@ function TypicalWageWorkersPage() {
 
     try {
       dispatch(setInteracting(true));
-      const gasPrice = await (await walletModule.ethers.getGasPrice()).toString();
+      const gasPrice = await (await walletModule.provider.getGasPrice()).toString();
       console.log('Gas Price:', gasPrice, ' Mint Amount:', mintAmount, ' Payable Amount:', payableAmount);
       const tx = await twwWithSigner.mint(mintAmount, { gasPrice, value: payableAmount });
       console.log('receipt', tx);
