@@ -2,10 +2,9 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import { useSelector } from 'react-redux';
-import numeral from 'numeral';
 
 import CountUp from 'react-countup';
 import moment from 'moment';
@@ -183,7 +182,7 @@ function StakingPage() {
   async function stake(tokenId) {
     setInProgress(true);
     try {
-      const signer = walletModule.ethers.getSigner();
+      const signer = walletModule.provider.getSigner();
       const approvedAll = await twwContract.isApprovedForAll(account, CONTRACT_TWW_STAKING_ADDRESS);
       console.log(approvedAll);
       if (!approvedAll) {
@@ -198,7 +197,6 @@ function StakingPage() {
       const stakingResult = await tx.wait();
       console.log(stakingResult);
       await loadStakingContract();
-      // await loadTWWContract();
       await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
@@ -211,13 +209,12 @@ function StakingPage() {
   async function unstake(tokenId) {
     setInProgress(true);
     try {
-      const signer = walletModule.ethers.getSigner();
+      const signer = walletModule.provider.getSigner();
       const stakingWithSigner = await stakingContract.connect(signer);
       const tx = await stakingWithSigner.withdraw([tokenId]);
       const stakingResult = await tx.wait();
       console.log(stakingResult);
       await loadStakingContract();
-      // await loadTWWContract();
       await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
@@ -230,7 +227,7 @@ function StakingPage() {
   async function claim() {
     setInProgress(true);
     try {
-      const signer = walletModule.ethers.getSigner();
+      const signer = walletModule.provider.getSigner();
       const stakingWithSigner = await stakingContract.connect(signer);
       const tx = await stakingWithSigner.claimRewards();
       const claimResult = await tx.wait();

@@ -71,7 +71,10 @@ const costumeData = {
 
 // eslint-disable-next-line max-len
 function TwwInformation({
-  contractLoadFinished, maxSupply, symbol, round, totalSupply, step, price, progress, ethBalance, mintAmount, maxMintAmount, isMinting, leftQty, setMintAmount, mint, walletConnected,
+  contractLoadFinished, maxSupply, symbol, round, totalSupply,
+  step, price, progress, ethBalance, mintAmount,
+  maxMintAmount, isMinting, leftQty, setMintAmount, mint,
+  walletConnected,
 }) {
   TwwInformation.propTypes = {
     contractLoadFinished: PropTypes.bool.isRequired,
@@ -358,6 +361,7 @@ function TypicalWageWorkersPage() {
             grade: r.GRADE,
             ep: r.EP,
             image: r.IMAGE,
+            // eslint-disable-next-line max-len
             value: r.CONSTITUTION + r.EP + r.HP + r.INTELLIGENCE + r.LUCK + r.MP + r.SPEED + r.STRENGTH + r.WISDOM,
           },
         );
@@ -388,7 +392,7 @@ function TypicalWageWorkersPage() {
   }, [loadContract]);
 
   const mint = async () => {
-    const signer = walletModule.ethers.getSigner();
+    const signer = walletModule.provider.getSigner();
     const twwWithSigner = erc721.connect(signer);
 
     const payableAmount = price.mul(mintAmount).toString();
