@@ -1,22 +1,16 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import Dialog from '@mui/material/Dialog';
 
-import { WalletModule, WalletKind, ethers } from '@fungibless/wallet-module';
+import { WalletKind } from '@fungibless/wallet-module';
 import { useSelector, useDispatch } from 'react-redux';
 import { isMobile } from 'react-device-detect';
+import { walletModule } from '../features/wallet';
 import metaMaskImg from '../assets/images/icons/meta-mask.png';
 
 import {
   setConnectedAndAccount, setBalance, setInstalled, setChainIdAndRightNetwork, setInteracting,
 } from '../features/wallet-slice';
-
-export const walletModule = new WalletModule();
 
 function WalletSection() {
   const dispatch = useDispatch();
@@ -50,6 +44,7 @@ function WalletSection() {
         const s = walletModule.shortenAddress;
         dispatch(setConnectedAndAccount({ connected: true, account, shortenAccount: s }));
         closeButton.current.click();
+        walletModule.loadBalance();
       })
       .bindOnAccountConnectCanceledListeners(() => {
         console.log('user canceled');

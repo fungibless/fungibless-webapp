@@ -12,7 +12,7 @@ import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
 import rakingImg from '../assets/images/project/raking.png';
 import raking2Img from '../assets/images/project/raking2.png';
-import { walletModule } from '../sections/WalletSection';
+import { walletModule } from '../features/wallet';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();

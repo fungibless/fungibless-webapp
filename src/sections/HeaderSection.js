@@ -6,7 +6,7 @@ import imgConnect from '../assets/images/icons/connect.png';
 import imgConnectWhite from '../assets/images/icons/connect_white.png';
 import imgLogoDark from '../assets/images/logo-dark.png';
 import imgMetaMask from '../assets/images/icons/meta-mask.png';
-import { walletModule } from './WalletSection';
+import { walletModule } from '../features/wallet';
 
 function HeaderSection() {
   const walletConnected = useSelector((state) => state.wallet.connected);

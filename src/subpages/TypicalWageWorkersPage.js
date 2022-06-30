@@ -1,16 +1,17 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import numeral from 'numeral';
 import { OutboundLink } from 'gatsby-plugin-google-gtag';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { shortenAddress } from '@fungibless/wallet-module';
 import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
-import { walletModule } from '../sections/WalletSection';
+import { walletModule, fungiContract } from '../features/wallet';
 
-import { setInteracting } from '../features/wallet-slice';
+import { setInteracting, setFungiBalance } from '../features/wallet-slice';
 
 import VerticallyCenteredModal from '../components/vertically-centered-modal';
 
@@ -19,12 +20,28 @@ const selectStyles = {
   background: 'transparent',
   padding: '16px 20px',
   color: 'rgba(255, 255, 255, 0.7)',
-  width: '60%',
+  width: '100%',
 };
 
 const strongText = {
   color: '#a3ff12',
   marginLeft: '5px',
+};
+
+const mintButtonStyle = {
+  background: '#6D4AFE',
+  // marginLeft: '1px',
+  color: 'white',
+  padding: '16px 20px',
+  width: '50%',
+  fontFamily: '"Russo One", sans-serif',
+  borderRadius: '0',
+  display: 'inline-block',
+  fontWeight: '400',
+  lineHeight: '1.5',
+  textAlign: 'center',
+  verticalAlign: 'middle',
+  border: '1px solid white',
 };
 
 const rarityData = {
@@ -72,9 +89,9 @@ const costumeData = {
 // eslint-disable-next-line max-len
 function TwwInformation({
   contractLoadFinished, maxSupply, symbol, round, totalSupply,
-  step, price, progress, ethBalance, mintAmount,
+  step, price, progress, ethBalance, fungiBalance, mintAmount,
   maxMintAmount, isMinting, leftQty, setMintAmount, mint,
-  walletConnected,
+  walletConnected, mintWithERC20, isApprovedFungi, approveFungi,
 }) {
   TwwInformation.propTypes = {
     contractLoadFinished: PropTypes.bool.isRequired,
@@ -86,13 +103,17 @@ function TwwInformation({
     price: PropTypes.string.isRequired,
     progress: PropTypes.number.isRequired,
     ethBalance: PropTypes.string.isRequired,
+    fungiBalance: PropTypes.string.isRequired,
     mintAmount: PropTypes.number.isRequired,
     maxMintAmount: PropTypes.number.isRequired,
     isMinting: PropTypes.bool.isRequired,
     leftQty: PropTypes.number.isRequired,
     setMintAmount: PropTypes.func.isRequired,
     mint: PropTypes.func.isRequired,
+    mintWithERC20: PropTypes.func.isRequired,
     walletConnected: PropTypes.bool.isRequired,
+    isApprovedFungi: PropTypes.bool.isRequired,
+    approveFungi: PropTypes.func.isRequired,
   };
 
   const disableMinting = !walletConnected || !contractLoadFinished
@@ -165,9 +186,14 @@ function TwwInformation({
             <div className="project-form-list">
               <h5 className="mb-18">
                 Balance:
-                {numeral(ethBalance).format('0.000')}
+                {' '}
+                {numeral(ethers.utils.formatEther(ethBalance)).format('0.000')}
                 {' '}
                 MATIC
+                {' / '}
+                {numeral(ethers.utils.formatEther(fungiBalance)).format('0.000')}
+                {' '}
+                FUNGI
               </h5>
               <div className="input-group balance-form-area mb-27 ">
                 <select
@@ -183,20 +209,48 @@ function TwwInformation({
                     </option>
                   ))}
                 </select>
-                <div className="white-shape-small approve">
-                  <button
-                    type="button"
-                    className="btn"
-                    disabled={disableMinting}
-                    onClick={mint}
-                    style={{
-                      background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif',
-                    }}
-                  >
-                    {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
-                    &nbsp;MINT
-                  </button>
-                </div>
+              </div>
+
+              <div className="project-form-list mb-27">
+                <h5 className="mb-18">
+                  Mint with MATIC
+                </h5>
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={disableMinting}
+                  onClick={mint}
+                  style={mintButtonStyle}
+                >
+                  {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
+                  MINT (MATIC)
+                </button>
+              </div>
+
+              <div className="project-form-list mb-27">
+                <h5 className="mb-18">
+                  Mint with FUNGI
+                </h5>
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={isApprovedFungi}
+                  onClick={approveFungi}
+                  style={mintButtonStyle}
+                >
+                  {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
+                  APPROVE (FUNGI)
+                </button>
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={(!isApprovedFungi || disableMinting)}
+                  onClick={mintWithERC20}
+                  style={mintButtonStyle}
+                >
+                  {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
+                  MINT (FUNGI)
+                </button>
               </div>
             </div>
           </>
@@ -218,14 +272,15 @@ function TwwInformationError({ children }) {
 
 function TypicalWageWorkersPage() {
   const dispatch = useDispatch();
-
   const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS;
   const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION;
   const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL;
+
   const POLYGON_SCAN_TOKEN = `${process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS}/address/${process.env.GATSBY_CONTRACT_TWW_ADDRESS}`;
 
   const account = useSelector((state) => state.wallet.account);
   const ethBalance = useSelector((state) => state.wallet.balance.eth);
+  const fungiBalance = useSelector((state) => state.wallet.balance.fungi);
   const walletInstalled = useSelector((state) => state.wallet.installed);
   const walletConnected = useSelector((state) => state.wallet.connected);
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
@@ -235,11 +290,14 @@ function TypicalWageWorkersPage() {
   const [maxSupply, setMaxSupply] = React.useState(0);
   const [totalSupply, setTotalSupply] = React.useState(0);
   const [price, setPrice] = React.useState(0);
+  const [fungiPrice, setFungiPrice] = React.useState(BigNumber.from(0));
   const [isPaused, setPaused] = React.useState(false);
   const [round, setRound] = React.useState(0);
   const [maxMintAmount, setMaxMintAmount] = React.useState(0);
   const [mintAmount, setMintAmount] = React.useState(1);
   const [contractLoadFinished, setContractLoadFinished] = React.useState(false);
+  const [fungiAllowance, setFungiAllowance] = React.useState(BigNumber.from(0));
+  // const [isApprovedFungi, setIsApprovedFungi] = React.useState(false);
 
   const [showModal, setShowModal] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState('-');
@@ -316,22 +374,44 @@ function TypicalWageWorkersPage() {
     return 'Round End';
   }, [isPaused, totalSupply, maxSupply]);
 
+  const isApprovedFungi = React.useMemo(() => {
+    const requiredFungi = fungiPrice.mul(mintAmount);
+    return requiredFungi.lte(fungiAllowance);
+  }, [mintAmount, fungiPrice, fungiAllowance]);
+
+  const checkFungiAllowance = React.useCallback(async () => {
+    const signer = walletModule.provider.getSigner();
+    const fungiWithSigner = (await fungiContract).connect(signer);
+    const allowance = await fungiWithSigner.allowance(account, CONTRACT_TWW_ADDRESS);
+    console.log('Fungi Allownace:', allowance.toString());
+    setFungiAllowance(allowance);
+  });
+
+  const loadFungiBalance = React.useCallback(async () => {
+    console.log((await fungiContract), account);
+    const fungiBal = await (await fungiContract).balanceOf(account);
+    dispatch(setFungiBalance({ fungi: fungiBal.toString() }));
+  });
+
   const loadContractDetail = React.useCallback(async (contract) => {
     try {
       const cost = await contract.cost();
+      const fungiCost = await contract.priceOfERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS);
       const maximumSupply = (await contract.maxSupply()).toNumber();
       const totalSold = (await contract.totalSupply()).toNumber();
       const paused = (await contract.paused());
       const roundNumber = roundMap[maximumSupply];
       const maxMintAmountForMint = (await contract.maxMintAmount()).toNumber();
 
-      console.log('cost:', cost);
+      console.log('cost:', cost.toString());
+      console.log('fungi cost:', fungiCost.toString());
       console.log('maximumSupply:', maximumSupply);
       console.log('totalSupply:', totalSold);
       console.log('paused:', paused);
       console.log('max mint amount:', maxMintAmountForMint);
 
       setPrice(cost);
+      setFungiPrice(fungiCost);
       setMaxSupply(maximumSupply);
       setTotalSupply(totalSold);
       setPaused(paused);
@@ -342,12 +422,11 @@ function TypicalWageWorkersPage() {
     } finally {
       setContractLoadFinished(true);
     }
-  }, []);
+  });
 
   const loadOwnedTww = React.useCallback(async () => {
     const owned = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/owned`);
     const ownedTokenList = await owned.json();
-    console.log(ownedTokenList);
 
     const tokens = [];
     if (ownedTokenList !== null) {
@@ -368,7 +447,7 @@ function TypicalWageWorkersPage() {
       }
     }
     setTokenList(tokens);
-  }, [account]);
+  });
 
   const loadContract = React.useCallback(async () => {
     const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
@@ -384,12 +463,78 @@ function TypicalWageWorkersPage() {
     setERC721(contract);
 
     await loadContractDetail(contract);
-  }, [setERC721, loadContractDetail]);
+  });
 
-  React.useEffect(() => {
-    loadContract();
-    loadOwnedTww();
-  }, [loadContract]);
+  React.useEffect(async () => {
+    if (account) {
+      await loadFungiBalance();
+      await checkFungiAllowance();
+      await loadContract();
+      await loadOwnedTww();
+    }
+  }, [account]);
+
+  const approveFungi = async () => {
+    try {
+      dispatch(setInteracting(true));
+      const signer = walletModule.provider.getSigner();
+      const fungiWithSigner = (await fungiContract).connect(signer);
+      const tx = await fungiWithSigner.increaseAllowance(CONTRACT_TWW_ADDRESS, ethers.constants.MaxInt256.toString());
+      console.log('receipt', tx);
+      const result = await tx.wait();
+      console.log('Transaction Completed', result);
+      await checkFungiAllowance();
+    } finally {
+      dispatch(setInteracting(false));
+    }
+  };
+
+  const mintWithERC20 = async () => {
+    const signer = walletModule.provider.getSigner();
+    const twwWithSigner = erc721.connect(signer);
+    const payableAmount = fungiPrice.mul(mintAmount).toString();
+    console.log('payable amount:', payableAmount);
+
+    try {
+      dispatch(setInteracting(true));
+      const gasPrice = await (await walletModule.provider.getGasPrice()).toString();
+      console.log('Gas Price:', gasPrice, ' Mint Amount:', mintAmount, ' Payable Amount:', payableAmount);
+      // eslint-disable-next-line max-len
+      const tx = await twwWithSigner.mintWithERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS, mintAmount);
+      console.log('receipt', tx);
+      const result = await tx.wait();
+      console.log('Transaction Completed', result);
+
+      console.log(`${result.from} to ${result.to} with status: ${result.status}`);
+
+      if (result.status === 1) {
+        const transfers = result.events.filter((evt) => evt.event === 'Transfer');
+        const tokenIds = [];
+        Object.keys(transfers).forEach((key) => {
+          tokenIds.push(parseInt(transfers[key].args.tokenId.toString(), 10));
+        });
+
+        console.log(tokenIds);
+
+        setModalMessage(`Minting was successful. Congratulations. Token IDs: ${tokenIds.join(',')} `);
+        setShowModal(true);
+        dispatch(setInteracting(false));
+        await loadContractDetail(erc721);
+        await walletModule.loadBalance();
+        await loadOwnedTww();
+      } else {
+        setModalMessage(`Transaction ${result.tansactionHash} Failed.`);
+        setShowModal(true);
+        dispatch(setInteracting(false));
+        console.warn('Transaction Failed.');
+      }
+    } catch (err) {
+      setModalMessage(`[${err.code}] ${err.message}`);
+      setShowModal(true);
+      dispatch(setInteracting(false));
+      console.log(err);
+    }
+  };
 
   const mint = async () => {
     const signer = walletModule.provider.getSigner();
@@ -494,12 +639,16 @@ function TypicalWageWorkersPage() {
                       price={price.toString()}
                       progress={progress}
                       ethBalance={ethBalance}
+                      fungiBalance={fungiBalance}
                       mintAmount={parseInt(mintAmount, 10)}
                       maxMintAmount={maxMintAmount}
                       isMinting={isMinting}
                       setMintAmount={setMintAmount}
                       mint={mint}
                       walletConnected={walletConnected}
+                      mintWithERC20={mintWithERC20}
+                      isApprovedFungi={isApprovedFungi}
+                      approveFungi={approveFungi}
                     />
                   )
                 }

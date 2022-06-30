@@ -15,6 +15,7 @@ export const walletSlice = createSlice({
     interacting: false, // user interacting
     balance: {
       eth: '0',
+      fungi: '0',
     },
   },
   reducers: {
@@ -44,6 +45,9 @@ export const walletSlice = createSlice({
     setBalance: (state, action) => {
       state.balance.eth = action.payload.eth;
     },
+    setFungiBalance: (state, action) => {
+      state.balance.fungi = action.payload.fungi;
+    },
   },
 });
 
@@ -55,6 +59,7 @@ export const {
   setChainIdAndRightNetwork,
   setBalance,
   setInteracting,
+  setFungiBalance,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;
