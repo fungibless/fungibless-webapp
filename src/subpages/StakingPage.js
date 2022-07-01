@@ -14,6 +14,9 @@ import rakingImg from '../assets/images/project/raking.png';
 import raking2Img from '../assets/images/project/raking2.png';
 import { walletModule } from '../features/wallet';
 
+const stakingABI = require('../../static/config/abi/staking_tww.json');
+const twwABI = require('../../static/config/abi/tww.json');
+
 function useInterval(callback, delay) {
   const savedCallback = useRef();
 
@@ -37,19 +40,16 @@ function useInterval(callback, delay) {
 
 function StakingPage() {
   const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS;
-  const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION;
 
   const CONTRACT_TWW_STAKING_ADDRESS = process.env.GATSBY_CONTRACT_TWW_STAKING_ADDRESS;
-  const CONTRACT_TWW_STAKING_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_STAKING_ABI_LOCATION;
 
   const account = useSelector((state) => state.wallet.account);
   const walletInstalled = useSelector((state) => state.wallet.installed);
   const walletConnected = useSelector((state) => state.wallet.connected);
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
 
-  const [twwContract, setTwwContract] = React.useState(null);
-  const [stakingContract, setStakingContract] = React.useState(null);
-  const [twwContractLoadFinished, setTwwContractLoadFinished] = React.useState(false);
+  const [twwContract, setTwwContract] = React.useState();
+  const [stakingContract, setStakingContract] = React.useState();
   const [tokenList, setTokenList] = React.useState([]);
   const [stakedTokenList, setStakedTokenList] = React.useState([]);
   const [unclaimedRewards, setUnclaimedRewards] = React.useState(0);
@@ -61,56 +61,26 @@ function StakingPage() {
   const [rewardBoost, setRewardBoost] = React.useState(0);
   const [inProgress, setInProgress] = React.useState(false);
 
-  const loadStakingContractDetail = React.useCallback(async (contract) => {
-    try {
-      if (account == null || stakingContract == null) return;
-      console.log(contract);
-      const userInfo = await contract.userStakeInfo(account);
-      const ru = await contract.rewardUnit();
-      const rb = await contract.rewardBoost();
-      setRewardUnit(ru);
-      setRewardBoost(rb);
-      console.log('userInfo:', userInfo, ' rewardUnit:', ru, ' rewardBoost:', rb);
+  const loadStakingContractDetail = React.useCallback(async () => {
+    if (stakingContract) {
+      try {
+        if (account == null || stakingContract == null) return;
+        const userInfo = await stakingContract.userStakeInfo(account);
+        const ru = await stakingContract.rewardUnit();
+        const rb = await stakingContract.rewardBoost();
+        setRewardUnit(ru);
+        setRewardBoost(rb);
+        console.log('userInfo:', userInfo, ' rewardUnit:', ru, ' rewardBoost:', rb);
 
-      setStakedAmount(userInfo.tokensStaked.toNumber());
-      setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
-      setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
-      setUnclaimedRewards(userInfo.unclaimedRewards);
-    } catch (err) {
-      console.error(err);
+        setStakedAmount(userInfo.tokensStaked.toNumber());
+        setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
+        setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
+        setUnclaimedRewards(userInfo.unclaimedRewards);
+      } catch (err) {
+        console.error(err);
+      }
     }
-  }, [account, stakingContract]);
-
-  const loadStakingContract = React.useCallback(async () => {
-    if (stakingContract == null) {
-      const abiResponse = await fetch(CONTRACT_TWW_STAKING_ABI_LOCATION, {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      });
-
-      const abi = await abiResponse.json();
-      const staking = new ethers.Contract(CONTRACT_TWW_STAKING_ADDRESS, abi, walletModule.provider);
-      setStakingContract(staking);
-    }
-    await loadStakingContractDetail(stakingContract);
-  }, [setStakingContract, loadStakingContractDetail]);
-
-  const loadTWWContract = React.useCallback(async () => {
-    if (twwContract == null) {
-      const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      });
-
-      const abi = await abiResponse.json();
-      const tww = new ethers.Contract(CONTRACT_TWW_ADDRESS, abi, walletModule.provider);
-      setTwwContract(tww);
-    }
-  }, [setTwwContract]);
+  });
 
   useInterval(() => {
     if (lastClaimableUpdate > 0 && stakedAmount > 0 && rewardUnit) {
@@ -166,18 +136,26 @@ function StakingPage() {
           },
         );
       }
-    }
-
-    setTwwContractLoadFinished(true);
+    }    
     setTokenList(tokens);
   });
 
   React.useEffect(() => {
-    loadStakingContract();
-    loadTWWContract();
-    loadOwnedTww();
-    loadStakedTww();
-  }, [loadStakingContract, loadTWWContract, account]);
+    console.log(stakingContract, twwContract, walletConnected);
+    if (typeof stakingContract === 'undefined' && typeof twwContract === 'undefined' && walletConnected) {
+      console.log('Set up contracts.');
+      setStakingContract(new ethers.Contract(CONTRACT_TWW_STAKING_ADDRESS, stakingABI, walletModule.provider));
+      setTwwContract(new ethers.Contract(CONTRACT_TWW_ADDRESS, twwABI, walletModule.provider));
+    }
+  }, [walletConnected]);
+
+  React.useEffect(async () => {
+    if (account) {
+      await loadStakingContractDetail();
+      loadOwnedTww();
+      loadStakedTww();
+    }
+  }, [account, stakingContract, twwContract]);
 
   async function stake(tokenId) {
     setInProgress(true);
@@ -196,7 +174,7 @@ function StakingPage() {
       const tx = await stakingWithSigner.stake(tokenId);
       const stakingResult = await tx.wait();
       console.log(stakingResult);
-      await loadStakingContract();
+      await loadStakingContractDetail();
       await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
@@ -214,7 +192,7 @@ function StakingPage() {
       const tx = await stakingWithSigner.withdraw([tokenId]);
       const stakingResult = await tx.wait();
       console.log(stakingResult);
-      await loadStakingContract();
+      await loadStakingContractDetail();
       await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
@@ -232,7 +210,7 @@ function StakingPage() {
       const tx = await stakingWithSigner.claimRewards();
       const claimResult = await tx.wait();
       console.log(claimResult);
-      await loadStakingContractDetail(stakingContract);
+      await loadStakingContractDetail();
     } catch (err) {
       console.error(err);
     } finally {
@@ -351,7 +329,7 @@ function StakingPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {walletConnected && rightNetwork && !twwContractLoadFinished
+                    {walletConnected && rightNetwork
                       && (
                         <tr>
                           <td colSpan={6}>
@@ -419,7 +397,7 @@ function StakingPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {walletConnected && rightNetwork && !twwContractLoadFinished
+                    {walletConnected && rightNetwork
                       && (
                         <tr>
                           <td colSpan={6}>
