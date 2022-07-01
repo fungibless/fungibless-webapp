@@ -33,18 +33,17 @@ const strongText = {
 
 const mintButtonStyle = {
   background: '#6D4AFE',
-  // marginLeft: '1px',
+  borderRadius: '12px',
   color: 'white',
   padding: '16px 20px',
   width: '50%',
   fontFamily: '"Russo One", sans-serif',
-  borderRadius: '0',
   display: 'inline-block',
   fontWeight: '400',
   lineHeight: '1.5',
   textAlign: 'center',
   verticalAlign: 'middle',
-  border: '1px solid white',
+  border: '2px solid white',
 };
 
 const rarityData = {
