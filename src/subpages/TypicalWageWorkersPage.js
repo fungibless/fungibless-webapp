@@ -240,7 +240,7 @@ function TwwInformation({
                 <button
                   type="button"
                   className="btn"
-                  disabled={isApprovedFungi}
+                  disabled={isApprovedFungi || disableMinting}
                   onClick={approveFungi}
                   style={mintButtonStyle}
                 >
@@ -502,7 +502,7 @@ function TypicalWageWorkersPage() {
 
     try {
       dispatch(setInteracting(true));
-      const gasPrice = await (await walletModule.provider.getGasPrice()).toString();
+      const gasPrice = (await walletModule.provider.getGasPrice()).toString();
       console.log('Gas Price:', gasPrice, ' Mint Amount:', mintAmount, ' Required FUNGI:', requiredFungi);
       // eslint-disable-next-line max-len
       const tx = await twwWithSigner.mintWithERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS, mintAmount);
