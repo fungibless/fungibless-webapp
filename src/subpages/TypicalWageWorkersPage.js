@@ -334,7 +334,7 @@ function TypicalWageWorkersPage() {
       no: 2, saleAmount: 100, maxSupply: 200, price: '1.5 MATIC',
     },
     300: {
-      no: 3, saleAmount: 100, maxSupply: 300, price: 'Based on voting',
+      no: 3, saleAmount: 100, maxSupply: 300, price: '2 MATIC, 100 FUNGI',
     },
     400: {
       no: 4, saleAmount: 100, maxSupply: 400, price: 'Based on voting',
