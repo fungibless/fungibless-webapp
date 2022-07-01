@@ -72,15 +72,11 @@ function RoadmapPage() {
                         </li>
                         <li>
                           <span><img src={imgMuniesIcon} alt="icon" className="img-fluid" /></span>
-                          Full-scale platform launch
+                          TWW Minting with FUNGI Token
                         </li>
                         <li>
                           <span><img src={imgMuniesIcon} alt="icon" className="img-fluid" /></span>
                           Launch new NFT: TBD
-                        </li>
-                        <li>
-                          <span><img src={imgMuniesIcon} alt="icon" className="img-fluid" /></span>
-                          Imporve Staking Features
                         </li>
                       </ul>
                     </div>
