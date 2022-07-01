@@ -9,11 +9,14 @@ import { BigNumber, ethers } from 'ethers';
 import { shortenAddress } from '@fungibless/wallet-module';
 import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
-import { walletModule, fungiContract } from '../features/wallet';
+import { walletModule } from '../features/wallet';
 
 import { setInteracting, setFungiBalance } from '../features/wallet-slice';
 
 import VerticallyCenteredModal from '../components/vertically-centered-modal';
+
+const fungiABI = require('../../static/config/abi/fungi.json');
+const twwABI = require('../../static/config/abi/tww.json');
 
 const selectStyles = {
   border: '1px solid #313245',
@@ -92,6 +95,7 @@ function TwwInformation({
   step, price, progress, ethBalance, fungiBalance, mintAmount,
   maxMintAmount, isMinting, leftQty, setMintAmount, mint,
   walletConnected, mintWithERC20, isApprovedFungi, approveFungi,
+  fungiAllowance, requiredFungi,
 }) {
   TwwInformation.propTypes = {
     contractLoadFinished: PropTypes.bool.isRequired,
@@ -114,6 +118,8 @@ function TwwInformation({
     walletConnected: PropTypes.bool.isRequired,
     isApprovedFungi: PropTypes.bool.isRequired,
     approveFungi: PropTypes.func.isRequired,
+    fungiAllowance: PropTypes.string.isRequired,
+    requiredFungi: PropTypes.string.isRequired,
   };
 
   const disableMinting = !walletConnected || !contractLoadFinished
@@ -223,7 +229,7 @@ function TwwInformation({
                   style={mintButtonStyle}
                 >
                   {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
-                  MINT (MATIC)
+                  MINT
                 </button>
               </div>
 
@@ -239,7 +245,11 @@ function TwwInformation({
                   style={mintButtonStyle}
                 >
                   {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
-                  APPROVE (FUNGI)
+                  APPROVE
+                  {' '}
+                  {ethers.utils.formatEther(requiredFungi)}
+                  {' '}
+                  FUNGI
                 </button>
                 <button
                   type="button"
@@ -249,8 +259,22 @@ function TwwInformation({
                   style={mintButtonStyle}
                 >
                   {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
-                  MINT (FUNGI)
+                  MINT
                 </button>
+                <div style={{ width: '50%', display: 'inline-block' }}>
+                  Current Allownace:
+                  {' '}
+                  <b>{ethers.utils.formatEther(fungiAllowance)}</b>
+                  {' '}
+                  FUNGI
+                </div>
+                <div style={{ width: '50%', display: 'inline-block' }}>
+                  Required FUNGI:
+                  {' '}
+                  <b>{ethers.utils.formatEther(requiredFungi)}</b>
+                  {' '}
+                  FUNGI
+                </div>
               </div>
             </div>
           </>
@@ -272,8 +296,8 @@ function TwwInformationError({ children }) {
 
 function TypicalWageWorkersPage() {
   const dispatch = useDispatch();
+  const CONTRACT_FUNGI_ADDRESS = process.env.GATSBY_CONTRACT_FUNGI_ADDRESS;
   const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS;
-  const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION;
   const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL;
 
   const POLYGON_SCAN_TOKEN = `${process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS}/address/${process.env.GATSBY_CONTRACT_TWW_ADDRESS}`;
@@ -286,7 +310,8 @@ function TypicalWageWorkersPage() {
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
   const isMinting = useSelector((state) => state.wallet.interacting);
 
-  const [erc721, setERC721] = React.useState(null);
+  const [fungiContract] = React.useState(new ethers.Contract(CONTRACT_FUNGI_ADDRESS, fungiABI, walletModule.provider));
+  const [twwContract] = React.useState(new ethers.Contract(CONTRACT_TWW_ADDRESS, twwABI, walletModule.provider));
   const [maxSupply, setMaxSupply] = React.useState(0);
   const [totalSupply, setTotalSupply] = React.useState(0);
   const [price, setPrice] = React.useState(0);
@@ -297,7 +322,6 @@ function TypicalWageWorkersPage() {
   const [mintAmount, setMintAmount] = React.useState(1);
   const [contractLoadFinished, setContractLoadFinished] = React.useState(false);
   const [fungiAllowance, setFungiAllowance] = React.useState(BigNumber.from(0));
-  // const [isApprovedFungi, setIsApprovedFungi] = React.useState(false);
 
   const [showModal, setShowModal] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState('-');
@@ -374,10 +398,9 @@ function TypicalWageWorkersPage() {
     return 'Round End';
   }, [isPaused, totalSupply, maxSupply]);
 
-  const isApprovedFungi = React.useMemo(() => {
-    const requiredFungi = fungiPrice.mul(mintAmount);
-    return requiredFungi.lte(fungiAllowance);
-  }, [mintAmount, fungiPrice, fungiAllowance]);
+  const requiredFungi = React.useMemo(() => fungiPrice.mul(mintAmount), [fungiPrice, mintAmount]);
+
+  const isApprovedFungi = React.useMemo(() => requiredFungi.lte(fungiAllowance), [requiredFungi, fungiAllowance]);
 
   const checkFungiAllowance = React.useCallback(async () => {
     const signer = walletModule.provider.getSigner();
@@ -393,15 +416,15 @@ function TypicalWageWorkersPage() {
     dispatch(setFungiBalance({ fungi: fungiBal.toString() }));
   });
 
-  const loadContractDetail = React.useCallback(async (contract) => {
+  const loadTWWInfo = React.useCallback(async () => {
     try {
-      const cost = await contract.cost();
-      const fungiCost = await contract.priceOfERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS);
-      const maximumSupply = (await contract.maxSupply()).toNumber();
-      const totalSold = (await contract.totalSupply()).toNumber();
-      const paused = (await contract.paused());
+      const cost = await twwContract.cost();
+      const fungiCost = await twwContract.priceOfERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS);
+      const maximumSupply = (await twwContract.maxSupply()).toNumber();
+      const totalSold = (await twwContract.totalSupply()).toNumber();
+      const paused = (await twwContract.paused());
       const roundNumber = roundMap[maximumSupply];
-      const maxMintAmountForMint = (await contract.maxMintAmount()).toNumber();
+      const maxMintAmountForMint = (await twwContract.maxMintAmount()).toNumber();
 
       console.log('cost:', cost.toString());
       console.log('fungi cost:', fungiCost.toString());
@@ -449,27 +472,11 @@ function TypicalWageWorkersPage() {
     setTokenList(tokens);
   });
 
-  const loadContract = React.useCallback(async () => {
-    const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
-
-    const json = await abiResponse.json();
-
-    const contract = new ethers.Contract(CONTRACT_TWW_ADDRESS, json, walletModule.provider);
-    setERC721(contract);
-
-    await loadContractDetail(contract);
-  });
-
   React.useEffect(async () => {
     if (account) {
       await loadFungiBalance();
       await checkFungiAllowance();
-      await loadContract();
+      await loadTWWInfo();
       await loadOwnedTww();
     }
   }, [account]);
@@ -478,8 +485,8 @@ function TypicalWageWorkersPage() {
     try {
       dispatch(setInteracting(true));
       const signer = walletModule.provider.getSigner();
-      const fungiWithSigner = (await fungiContract).connect(signer);
-      const tx = await fungiWithSigner.increaseAllowance(CONTRACT_TWW_ADDRESS, ethers.constants.MaxInt256.toString());
+      const fungiWithSigner = fungiContract.connect(signer);
+      const tx = await fungiWithSigner.increaseAllowance(CONTRACT_TWW_ADDRESS, requiredFungi.toString());
       console.log('receipt', tx);
       const result = await tx.wait();
       console.log('Transaction Completed', result);
@@ -491,14 +498,12 @@ function TypicalWageWorkersPage() {
 
   const mintWithERC20 = async () => {
     const signer = walletModule.provider.getSigner();
-    const twwWithSigner = erc721.connect(signer);
-    const payableAmount = fungiPrice.mul(mintAmount).toString();
-    console.log('payable amount:', payableAmount);
+    const twwWithSigner = twwContract.connect(signer);
 
     try {
       dispatch(setInteracting(true));
       const gasPrice = await (await walletModule.provider.getGasPrice()).toString();
-      console.log('Gas Price:', gasPrice, ' Mint Amount:', mintAmount, ' Payable Amount:', payableAmount);
+      console.log('Gas Price:', gasPrice, ' Mint Amount:', mintAmount, ' Required FUNGI:', requiredFungi);
       // eslint-disable-next-line max-len
       const tx = await twwWithSigner.mintWithERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS, mintAmount);
       console.log('receipt', tx);
@@ -519,7 +524,8 @@ function TypicalWageWorkersPage() {
         setModalMessage(`Minting was successful. Congratulations. Token IDs: ${tokenIds.join(',')} `);
         setShowModal(true);
         dispatch(setInteracting(false));
-        await loadContractDetail(erc721);
+        await checkFungiAllowance();
+        await loadTWWInfo();
         await walletModule.loadBalance();
         await loadOwnedTww();
       } else {
@@ -538,7 +544,7 @@ function TypicalWageWorkersPage() {
 
   const mint = async () => {
     const signer = walletModule.provider.getSigner();
-    const twwWithSigner = erc721.connect(signer);
+    const twwWithSigner = twwContract.connect(signer);
 
     const payableAmount = price.mul(mintAmount).toString();
     console.log('payable amount:', payableAmount);
@@ -566,7 +572,7 @@ function TypicalWageWorkersPage() {
         setModalMessage(`Minting was successful. Congratulations. Token IDs: ${tokenIds.join(',')} `);
         setShowModal(true);
         dispatch(setInteracting(false));
-        await loadContractDetail(erc721);
+        await loadTWWInfo();
         await walletModule.loadBalance();
         await loadOwnedTww();
       } else {
@@ -607,6 +613,11 @@ function TypicalWageWorkersPage() {
                   {ethers.utils.formatEther(price, 'ether')}
                   {' '}
                   <span className="buse">MATIC</span>
+                  {' '}
+                  =&nbsp;
+                  {ethers.utils.formatEther(fungiPrice, 'ether')}
+                  {' '}
+                  <span className="buse">FUNGI</span>
                 </h4>
                 {/* <span>Total Stake</span> */}
               </div>
@@ -649,6 +660,8 @@ function TypicalWageWorkersPage() {
                       mintWithERC20={mintWithERC20}
                       isApprovedFungi={isApprovedFungi}
                       approveFungi={approveFungi}
+                      fungiAllowance={fungiAllowance.toString()}
+                      requiredFungi={requiredFungi.toString()}
                     />
                   )
                 }

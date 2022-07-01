@@ -14,6 +14,7 @@ import {
 
 function WalletSection() {
   const dispatch = useDispatch();
+
   const walletConnected = useSelector((state) => state.wallet.connected);
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
   const isMetaMask = useSelector((state) => state.wallet.isMetaMask);

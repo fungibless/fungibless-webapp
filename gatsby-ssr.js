@@ -6,7 +6,7 @@ import wrapWithProvider from './wrap-with-provider';
 export const wrapRootElement = wrapWithProvider;
 
 export function onRenderBody(
-  { setHeadComponents, setPreBodyComponents, setPostBodyComponents },
+  { setHeadComponents, setPostBodyComponents },
 ) {
   setHeadComponents([
     <script key="modernizr" src={withPrefix('js/modernizr-2.8.3.min.js')} />,
