@@ -310,8 +310,8 @@ function TypicalWageWorkersPage() {
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
   const isMinting = useSelector((state) => state.wallet.interacting);
 
-  const [fungiContract] = React.useState(new ethers.Contract(CONTRACT_FUNGI_ADDRESS, fungiABI, walletModule.provider));
-  const [twwContract] = React.useState(new ethers.Contract(CONTRACT_TWW_ADDRESS, twwABI, walletModule.provider));
+  const [fungiContract, setFungiContract] = React.useState();
+  const [twwContract, setTWWContract] = React.useState();
   const [maxSupply, setMaxSupply] = React.useState(0);
   const [totalSupply, setTotalSupply] = React.useState(0);
   const [price, setPrice] = React.useState(0);
@@ -403,47 +403,52 @@ function TypicalWageWorkersPage() {
   const isApprovedFungi = React.useMemo(() => requiredFungi.lte(fungiAllowance), [requiredFungi, fungiAllowance]);
 
   const checkFungiAllowance = React.useCallback(async () => {
-    const signer = walletModule.provider.getSigner();
-    const fungiWithSigner = (await fungiContract).connect(signer);
-    const allowance = await fungiWithSigner.allowance(account, CONTRACT_TWW_ADDRESS);
-    console.log('Fungi Allownace:', allowance.toString());
-    setFungiAllowance(allowance);
+    if (fungiContract) {
+      const signer = walletModule.provider.getSigner();
+      const fungiWithSigner = fungiContract.connect(signer);
+      const allowance = await fungiWithSigner.allowance(account, CONTRACT_TWW_ADDRESS);
+      console.log('Fungi Allownace:', allowance.toString());
+      setFungiAllowance(allowance);
+    }
   });
 
   const loadFungiBalance = React.useCallback(async () => {
-    console.log((await fungiContract), account);
-    const fungiBal = await (await fungiContract).balanceOf(account);
-    dispatch(setFungiBalance({ fungi: fungiBal.toString() }));
+    if (fungiContract) {
+      const fungiBal = await fungiContract.balanceOf(account);
+      dispatch(setFungiBalance({ fungi: fungiBal.toString() }));
+    }
   });
 
   const loadTWWInfo = React.useCallback(async () => {
-    try {
-      const cost = await twwContract.cost();
-      const fungiCost = await twwContract.priceOfERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS);
-      const maximumSupply = (await twwContract.maxSupply()).toNumber();
-      const totalSold = (await twwContract.totalSupply()).toNumber();
-      const paused = (await twwContract.paused());
-      const roundNumber = roundMap[maximumSupply];
-      const maxMintAmountForMint = (await twwContract.maxMintAmount()).toNumber();
+    if (twwContract) {
+      try {
+        const cost = await twwContract.cost();
+        const fungiCost = await twwContract.priceOfERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS);
+        const maximumSupply = (await twwContract.maxSupply()).toNumber();
+        const totalSold = (await twwContract.totalSupply()).toNumber();
+        const paused = (await twwContract.paused());
+        const roundNumber = roundMap[maximumSupply];
+        const maxMintAmountForMint = (await twwContract.maxMintAmount()).toNumber();
 
-      console.log('cost:', cost.toString());
-      console.log('fungi cost:', fungiCost.toString());
-      console.log('maximumSupply:', maximumSupply);
-      console.log('totalSupply:', totalSold);
-      console.log('paused:', paused);
-      console.log('max mint amount:', maxMintAmountForMint);
+        console.log('cost:', cost.toString());
+        console.log('fungi cost:', fungiCost.toString());
+        console.log('maximumSupply:', maximumSupply);
+        console.log('totalSupply:', totalSold);
+        console.log('paused:', paused);
+        console.log('max mint amount:', maxMintAmountForMint);
 
-      setPrice(cost);
-      setFungiPrice(fungiCost);
-      setMaxSupply(maximumSupply);
-      setTotalSupply(totalSold);
-      setPaused(paused);
-      setRound(roundNumber);
-      setMaxMintAmount(maxMintAmountForMint);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setContractLoadFinished(true);
+        setPrice(cost);
+        setFungiPrice(fungiCost);
+        setMaxSupply(maximumSupply);
+        setTotalSupply(totalSold);
+        setPaused(paused);
+        setRound(roundNumber);
+        setMaxMintAmount(maxMintAmountForMint);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setContractLoadFinished(true);
+      }
     }
   });
 
@@ -472,6 +477,14 @@ function TypicalWageWorkersPage() {
     setTokenList(tokens);
   });
 
+  React.useEffect(() => {
+    if (typeof fungiContract === 'undefined' && typeof twwContract === 'undefined' && walletConnected) {
+      console.log('Set up contracts.');
+      setFungiContract(new ethers.Contract(CONTRACT_FUNGI_ADDRESS, fungiABI, walletModule.provider));
+      setTWWContract(new ethers.Contract(CONTRACT_TWW_ADDRESS, twwABI, walletModule.provider));
+    }
+  }, [walletConnected]);
+
   React.useEffect(async () => {
     if (account) {
       await loadFungiBalance();
@@ -479,7 +492,7 @@ function TypicalWageWorkersPage() {
       await loadTWWInfo();
       await loadOwnedTww();
     }
-  }, [account]);
+  }, [account, fungiContract, twwContract]);
 
   const approveFungi = async () => {
     try {
