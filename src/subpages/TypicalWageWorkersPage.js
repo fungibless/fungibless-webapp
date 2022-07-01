@@ -1,30 +1,49 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import numeral from 'numeral';
 import { OutboundLink } from 'gatsby-plugin-google-gtag';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { shortenAddress } from '@fungibless/wallet-module';
 import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
-import { walletModule } from '../sections/WalletSection';
+import { walletModule } from '../features/wallet';
 
-import { setInteracting } from '../features/wallet-slice';
+import { setInteracting, setFungiBalance } from '../features/wallet-slice';
 
 import VerticallyCenteredModal from '../components/vertically-centered-modal';
+
+const fungiABI = require('../../static/config/abi/fungi.json');
+const twwABI = require('../../static/config/abi/tww.json');
 
 const selectStyles = {
   border: '1px solid #313245',
   background: 'transparent',
   padding: '16px 20px',
   color: 'rgba(255, 255, 255, 0.7)',
-  width: '60%',
+  width: '100%',
 };
 
 const strongText = {
   color: '#a3ff12',
   marginLeft: '5px',
+};
+
+const mintButtonStyle = {
+  background: '#6D4AFE',
+  borderRadius: '12px',
+  color: 'white',
+  padding: '16px 20px',
+  width: '50%',
+  fontFamily: '"Russo One", sans-serif',
+  display: 'inline-block',
+  fontWeight: '400',
+  lineHeight: '1.5',
+  textAlign: 'center',
+  verticalAlign: 'middle',
+  border: '2px solid white',
 };
 
 const rarityData = {
@@ -72,9 +91,10 @@ const costumeData = {
 // eslint-disable-next-line max-len
 function TwwInformation({
   contractLoadFinished, maxSupply, symbol, round, totalSupply,
-  step, price, progress, ethBalance, mintAmount,
+  step, price, progress, ethBalance, fungiBalance, mintAmount,
   maxMintAmount, isMinting, leftQty, setMintAmount, mint,
-  walletConnected,
+  walletConnected, mintWithERC20, isApprovedFungi, approveFungi,
+  fungiAllowance, requiredFungi,
 }) {
   TwwInformation.propTypes = {
     contractLoadFinished: PropTypes.bool.isRequired,
@@ -86,13 +106,19 @@ function TwwInformation({
     price: PropTypes.string.isRequired,
     progress: PropTypes.number.isRequired,
     ethBalance: PropTypes.string.isRequired,
+    fungiBalance: PropTypes.string.isRequired,
     mintAmount: PropTypes.number.isRequired,
     maxMintAmount: PropTypes.number.isRequired,
     isMinting: PropTypes.bool.isRequired,
     leftQty: PropTypes.number.isRequired,
     setMintAmount: PropTypes.func.isRequired,
     mint: PropTypes.func.isRequired,
+    mintWithERC20: PropTypes.func.isRequired,
     walletConnected: PropTypes.bool.isRequired,
+    isApprovedFungi: PropTypes.bool.isRequired,
+    approveFungi: PropTypes.func.isRequired,
+    fungiAllowance: PropTypes.string.isRequired,
+    requiredFungi: PropTypes.string.isRequired,
   };
 
   const disableMinting = !walletConnected || !contractLoadFinished
@@ -165,9 +191,14 @@ function TwwInformation({
             <div className="project-form-list">
               <h5 className="mb-18">
                 Balance:
-                {numeral(ethBalance).format('0.000')}
+                {' '}
+                {numeral(ethers.utils.formatEther(ethBalance)).format('0.000')}
                 {' '}
                 MATIC
+                {' / '}
+                {numeral(ethers.utils.formatEther(fungiBalance)).format('0.000')}
+                {' '}
+                FUNGI
               </h5>
               <div className="input-group balance-form-area mb-27 ">
                 <select
@@ -183,19 +214,65 @@ function TwwInformation({
                     </option>
                   ))}
                 </select>
-                <div className="white-shape-small approve">
-                  <button
-                    type="button"
-                    className="btn"
-                    disabled={disableMinting}
-                    onClick={mint}
-                    style={{
-                      background: '#6D4AFE', color: 'white', padding: '16px 20px', width: '170px', fontWeight: 'bolder', fontFamily: '"Russo One", sans-serif',
-                    }}
-                  >
-                    {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
-                    &nbsp;MINT
-                  </button>
+              </div>
+
+              <div className="project-form-list mb-27">
+                <h5 className="mb-18">
+                  Mint with MATIC
+                </h5>
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={disableMinting}
+                  onClick={mint}
+                  style={mintButtonStyle}
+                >
+                  {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
+                  MINT
+                </button>
+              </div>
+
+              <div className="project-form-list mb-27">
+                <h5 className="mb-18">
+                  Mint with FUNGI
+                </h5>
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={isApprovedFungi || disableMinting}
+                  onClick={approveFungi}
+                  style={mintButtonStyle}
+                >
+                  {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
+                  APPROVE
+                  {' '}
+                  {ethers.utils.formatEther(requiredFungi)}
+                  {' '}
+                  FUNGI
+                </button>
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={(!isApprovedFungi || disableMinting)}
+                  onClick={mintWithERC20}
+                  style={mintButtonStyle}
+                >
+                  {isMinting && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />}
+                  MINT
+                </button>
+                <div style={{ width: '50%', display: 'inline-block' }}>
+                  Current Allownace:
+                  {' '}
+                  <b>{ethers.utils.formatEther(fungiAllowance)}</b>
+                  {' '}
+                  FUNGI
+                </div>
+                <div style={{ width: '50%', display: 'inline-block' }}>
+                  Required FUNGI:
+                  {' '}
+                  <b>{ethers.utils.formatEther(requiredFungi)}</b>
+                  {' '}
+                  FUNGI
                 </div>
               </div>
             </div>
@@ -218,28 +295,32 @@ function TwwInformationError({ children }) {
 
 function TypicalWageWorkersPage() {
   const dispatch = useDispatch();
-
+  const CONTRACT_FUNGI_ADDRESS = process.env.GATSBY_CONTRACT_FUNGI_ADDRESS;
   const CONTRACT_TWW_ADDRESS = process.env.GATSBY_CONTRACT_TWW_ADDRESS;
-  const CONTRACT_TWW_ABI_LOCATION = process.env.GATSBY_CONTRACT_TWW_ABI_LOCATION;
   const CONTRACT_TWW_SYMBOL = process.env.GATSBY_CONTRACT_TWW_SYMBOL;
+
   const POLYGON_SCAN_TOKEN = `${process.env.GATSBY_WALLET_NETWORK_BLOCK_EXPLORER_URLS}/address/${process.env.GATSBY_CONTRACT_TWW_ADDRESS}`;
 
   const account = useSelector((state) => state.wallet.account);
   const ethBalance = useSelector((state) => state.wallet.balance.eth);
+  const fungiBalance = useSelector((state) => state.wallet.balance.fungi);
   const walletInstalled = useSelector((state) => state.wallet.installed);
   const walletConnected = useSelector((state) => state.wallet.connected);
   const rightNetwork = useSelector((state) => state.wallet.rightNetwork);
   const isMinting = useSelector((state) => state.wallet.interacting);
 
-  const [erc721, setERC721] = React.useState(null);
+  const [fungiContract, setFungiContract] = React.useState();
+  const [twwContract, setTWWContract] = React.useState();
   const [maxSupply, setMaxSupply] = React.useState(0);
   const [totalSupply, setTotalSupply] = React.useState(0);
   const [price, setPrice] = React.useState(0);
+  const [fungiPrice, setFungiPrice] = React.useState(BigNumber.from(0));
   const [isPaused, setPaused] = React.useState(false);
   const [round, setRound] = React.useState(0);
   const [maxMintAmount, setMaxMintAmount] = React.useState(0);
   const [mintAmount, setMintAmount] = React.useState(1);
   const [contractLoadFinished, setContractLoadFinished] = React.useState(false);
+  const [fungiAllowance, setFungiAllowance] = React.useState(BigNumber.from(0));
 
   const [showModal, setShowModal] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState('-');
@@ -253,7 +334,7 @@ function TypicalWageWorkersPage() {
       no: 2, saleAmount: 100, maxSupply: 200, price: '1.5 MATIC',
     },
     300: {
-      no: 3, saleAmount: 100, maxSupply: 300, price: 'Based on voting',
+      no: 3, saleAmount: 100, maxSupply: 300, price: '2 MATIC, 100 FUNGI',
     },
     400: {
       no: 4, saleAmount: 100, maxSupply: 400, price: 'Based on voting',
@@ -316,38 +397,63 @@ function TypicalWageWorkersPage() {
     return 'Round End';
   }, [isPaused, totalSupply, maxSupply]);
 
-  const loadContractDetail = React.useCallback(async (contract) => {
-    try {
-      const cost = await contract.cost();
-      const maximumSupply = (await contract.maxSupply()).toNumber();
-      const totalSold = (await contract.totalSupply()).toNumber();
-      const paused = (await contract.paused());
-      const roundNumber = roundMap[maximumSupply];
-      const maxMintAmountForMint = (await contract.maxMintAmount()).toNumber();
+  const requiredFungi = React.useMemo(() => fungiPrice.mul(mintAmount), [fungiPrice, mintAmount]);
 
-      console.log('cost:', cost);
-      console.log('maximumSupply:', maximumSupply);
-      console.log('totalSupply:', totalSold);
-      console.log('paused:', paused);
-      console.log('max mint amount:', maxMintAmountForMint);
+  const isApprovedFungi = React.useMemo(() => requiredFungi.lte(fungiAllowance), [requiredFungi, fungiAllowance]);
 
-      setPrice(cost);
-      setMaxSupply(maximumSupply);
-      setTotalSupply(totalSold);
-      setPaused(paused);
-      setRound(roundNumber);
-      setMaxMintAmount(maxMintAmountForMint);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setContractLoadFinished(true);
+  const checkFungiAllowance = React.useCallback(async () => {
+    if (fungiContract) {
+      const signer = walletModule.provider.getSigner();
+      const fungiWithSigner = fungiContract.connect(signer);
+      const allowance = await fungiWithSigner.allowance(account, CONTRACT_TWW_ADDRESS);
+      console.log('Fungi Allownace:', allowance.toString());
+      setFungiAllowance(allowance);
     }
-  }, []);
+  });
+
+  const loadFungiBalance = React.useCallback(async () => {
+    if (fungiContract) {
+      const fungiBal = await fungiContract.balanceOf(account);
+      dispatch(setFungiBalance({ fungi: fungiBal.toString() }));
+    }
+  });
+
+  const loadTWWInfo = React.useCallback(async () => {
+    if (twwContract) {
+      try {
+        const cost = await twwContract.cost();
+        const fungiCost = await twwContract.priceOfERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS);
+        const maximumSupply = (await twwContract.maxSupply()).toNumber();
+        const totalSold = (await twwContract.totalSupply()).toNumber();
+        const paused = (await twwContract.paused());
+        const roundNumber = roundMap[maximumSupply];
+        const maxMintAmountForMint = (await twwContract.maxMintAmount()).toNumber();
+
+        console.log('cost:', cost.toString());
+        console.log('fungi cost:', fungiCost.toString());
+        console.log('maximumSupply:', maximumSupply);
+        console.log('totalSupply:', totalSold);
+        console.log('paused:', paused);
+        console.log('max mint amount:', maxMintAmountForMint);
+
+        setPrice(cost);
+        setFungiPrice(fungiCost);
+        setMaxSupply(maximumSupply);
+        setTotalSupply(totalSold);
+        setPaused(paused);
+        setRound(roundNumber);
+        setMaxMintAmount(maxMintAmountForMint);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setContractLoadFinished(true);
+      }
+    }
+  });
 
   const loadOwnedTww = React.useCallback(async () => {
     const owned = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/owned`);
     const ownedTokenList = await owned.json();
-    console.log(ownedTokenList);
 
     const tokens = [];
     if (ownedTokenList !== null) {
@@ -368,32 +474,89 @@ function TypicalWageWorkersPage() {
       }
     }
     setTokenList(tokens);
-  }, [account]);
-
-  const loadContract = React.useCallback(async () => {
-    const abiResponse = await fetch(CONTRACT_TWW_ABI_LOCATION, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
-
-    const json = await abiResponse.json();
-
-    const contract = new ethers.Contract(CONTRACT_TWW_ADDRESS, json, walletModule.provider);
-    setERC721(contract);
-
-    await loadContractDetail(contract);
-  }, [setERC721, loadContractDetail]);
+  });
 
   React.useEffect(() => {
-    loadContract();
-    loadOwnedTww();
-  }, [loadContract]);
+    if (typeof fungiContract === 'undefined' && typeof twwContract === 'undefined' && walletConnected) {
+      console.log('Set up contracts.');
+      setFungiContract(new ethers.Contract(CONTRACT_FUNGI_ADDRESS, fungiABI, walletModule.provider));
+      setTWWContract(new ethers.Contract(CONTRACT_TWW_ADDRESS, twwABI, walletModule.provider));
+    }
+  }, [walletConnected]);
+
+  React.useEffect(async () => {
+    if (account) {
+      await loadFungiBalance();
+      await checkFungiAllowance();
+      await loadTWWInfo();
+      await loadOwnedTww();
+    }
+  }, [account, fungiContract, twwContract]);
+
+  const approveFungi = async () => {
+    try {
+      dispatch(setInteracting(true));
+      const signer = walletModule.provider.getSigner();
+      const fungiWithSigner = fungiContract.connect(signer);
+      const tx = await fungiWithSigner.increaseAllowance(CONTRACT_TWW_ADDRESS, requiredFungi.toString());
+      console.log('receipt', tx);
+      const result = await tx.wait();
+      console.log('Transaction Completed', result);
+      await checkFungiAllowance();
+    } finally {
+      dispatch(setInteracting(false));
+    }
+  };
+
+  const mintWithERC20 = async () => {
+    const signer = walletModule.provider.getSigner();
+    const twwWithSigner = twwContract.connect(signer);
+
+    try {
+      dispatch(setInteracting(true));
+      const gasPrice = (await walletModule.provider.getGasPrice()).toString();
+      console.log('Gas Price:', gasPrice, ' Mint Amount:', mintAmount, ' Required FUNGI:', requiredFungi);
+      // eslint-disable-next-line max-len
+      const tx = await twwWithSigner.mintWithERC20Token(process.env.GATSBY_CONTRACT_FUNGI_ADDRESS, mintAmount);
+      console.log('receipt', tx);
+      const result = await tx.wait();
+      console.log('Transaction Completed', result);
+
+      console.log(`${result.from} to ${result.to} with status: ${result.status}`);
+
+      if (result.status === 1) {
+        const transfers = result.events.filter((evt) => evt.event === 'Transfer');
+        const tokenIds = [];
+        Object.keys(transfers).forEach((key) => {
+          tokenIds.push(parseInt(transfers[key].args.tokenId.toString(), 10));
+        });
+
+        console.log(tokenIds);
+
+        setModalMessage(`Minting was successful. Congratulations. Token IDs: ${tokenIds.join(',')} `);
+        setShowModal(true);
+        dispatch(setInteracting(false));
+        await checkFungiAllowance();
+        await loadTWWInfo();
+        await walletModule.loadBalance();
+        await loadOwnedTww();
+      } else {
+        setModalMessage(`Transaction ${result.tansactionHash} Failed.`);
+        setShowModal(true);
+        dispatch(setInteracting(false));
+        console.warn('Transaction Failed.');
+      }
+    } catch (err) {
+      setModalMessage(`[${err.code}] ${err.message}`);
+      setShowModal(true);
+      dispatch(setInteracting(false));
+      console.log(err);
+    }
+  };
 
   const mint = async () => {
     const signer = walletModule.provider.getSigner();
-    const twwWithSigner = erc721.connect(signer);
+    const twwWithSigner = twwContract.connect(signer);
 
     const payableAmount = price.mul(mintAmount).toString();
     console.log('payable amount:', payableAmount);
@@ -421,7 +584,7 @@ function TypicalWageWorkersPage() {
         setModalMessage(`Minting was successful. Congratulations. Token IDs: ${tokenIds.join(',')} `);
         setShowModal(true);
         dispatch(setInteracting(false));
-        await loadContractDetail(erc721);
+        await loadTWWInfo();
         await walletModule.loadBalance();
         await loadOwnedTww();
       } else {
@@ -462,6 +625,11 @@ function TypicalWageWorkersPage() {
                   {ethers.utils.formatEther(price, 'ether')}
                   {' '}
                   <span className="buse">MATIC</span>
+                  {' '}
+                  =&nbsp;
+                  {ethers.utils.formatEther(fungiPrice, 'ether')}
+                  {' '}
+                  <span className="buse">FUNGI</span>
                 </h4>
                 {/* <span>Total Stake</span> */}
               </div>
@@ -494,12 +662,18 @@ function TypicalWageWorkersPage() {
                       price={price.toString()}
                       progress={progress}
                       ethBalance={ethBalance}
+                      fungiBalance={fungiBalance}
                       mintAmount={parseInt(mintAmount, 10)}
                       maxMintAmount={maxMintAmount}
                       isMinting={isMinting}
                       setMintAmount={setMintAmount}
                       mint={mint}
                       walletConnected={walletConnected}
+                      mintWithERC20={mintWithERC20}
+                      isApprovedFungi={isApprovedFungi}
+                      approveFungi={approveFungi}
+                      fungiAllowance={fungiAllowance.toString()}
+                      requiredFungi={requiredFungi.toString()}
                     />
                   )
                 }

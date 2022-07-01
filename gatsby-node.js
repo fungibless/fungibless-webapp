@@ -1,34 +1,34 @@
 exports.onCreateWebpackConfig = ({
-    actions,
+  actions,
 }) => {
-    const { setWebpackConfig } = actions;
-    setWebpackConfig({
-        resolve: {
-            fallback: {
-                "crypto": false,
-                "path": require.resolve("path-browserify"),
-                "stream": require.resolve("stream-browserify"),
-                "zlib": false,
-                "assert": false,
-                "util": false,
-                "http": false,
-                "https": false,
-                "os": false,
-                "url": false,
-                "fs": false
-            },
-        },
-        externals: {
-            jquery: 'jQuery',
-            WOW: 'WOW'
-        }
-    })
-}
+  const { setWebpackConfig } = actions;
+  setWebpackConfig({
+    resolve: {
+      fallback: {
+        crypto: false,
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('stream-browserify'),
+        zlib: false,
+        assert: false,
+        util: false,
+        http: false,
+        https: false,
+        os: false,
+        url: false,
+        fs: false,
+      },
+    },
+    externals: {
+      jquery: 'jQuery',
+      WOW: 'WOW',
+    },
+  });
+};
 
 exports.onCreatePage = ({ page, actions }) => {
-    const { createPage } = actions;
-    if (page.path === `/`) {
-        page.matchPath = `/*`;
-        createPage(page);
-    }
+  const { createPage } = actions;
+  if (page.path === '/') {
+    page.matchPath = '/*';
+    createPage(page);
+  }
 };
