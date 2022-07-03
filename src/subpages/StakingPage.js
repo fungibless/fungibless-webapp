@@ -329,18 +329,6 @@ function StakingPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {walletConnected && rightNetwork
-                      && (
-                        <tr>
-                          <td colSpan={6}>
-                            <div className="text-center">
-                              <div className="spinner-border" role="status">
-                                <span className="sr-only" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
                     {
                       stakedTokenList.length < 1
                       && (
@@ -397,18 +385,6 @@ function StakingPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {walletConnected && rightNetwork
-                      && (
-                        <tr>
-                          <td colSpan={6}>
-                            <div className="text-center">
-                              <div className="spinner-border" role="status">
-                                <span className="sr-only" />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
                     {
                       tokenList.length < 1
                       && (
