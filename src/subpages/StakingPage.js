@@ -5,6 +5,8 @@ import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import { useSelector } from 'react-redux';
+import { Button } from 'react-bootstrap';
+import { IoRefresh } from 'react-icons/io5';
 
 import CountUp from 'react-countup';
 import moment from 'moment';
@@ -136,7 +138,7 @@ function StakingPage() {
           },
         );
       }
-    }    
+    }
     setTokenList(tokens);
   });
 
@@ -316,7 +318,11 @@ function StakingPage() {
                 </div>
               </div>
               <div className="row">
-                <div className="col"><h4>MY STAKED NFT LIST</h4></div>
+                <div className="col" style={{ display: '-webkit-box' }}>
+                  <h3>MY STAKED NFT LIST</h3>
+                  &nbsp;
+                  <Button variant="outline-light" onClick={loadStakedTww}><IoRefresh /></Button>
+                </div>
                 <table className="table text-center">
                   <thead>
                     <tr>
@@ -371,7 +377,11 @@ function StakingPage() {
                 </table>
               </div>
               <div className="row">
-                <div className="col"><h4>MY TWW COLLECTION</h4></div>
+                <div className="col" style={{ display: '-webkit-box' }}>
+                  <h3>MY TWW COLLECTION</h3>
+                  &nbsp;
+                  <Button variant="outline-light" onClick={loadOwnedTww}><IoRefresh /></Button>
+                </div>
 
                 <table className="table text-center">
                   <thead>

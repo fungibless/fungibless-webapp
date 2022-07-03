@@ -7,6 +7,8 @@ import numeral from 'numeral';
 import { OutboundLink } from 'gatsby-plugin-google-gtag';
 import { BigNumber, ethers } from 'ethers';
 import { shortenAddress } from '@fungibless/wallet-module';
+import { Button } from 'react-bootstrap';
+import { IoRefresh } from 'react-icons/io5';
 import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
 import { walletModule } from '../features/wallet';
@@ -703,8 +705,10 @@ function TypicalWageWorkersPage() {
           </div>
           <div className="col-lg-12 pr-25 md-pr-15">
             <div className="project-item">
-              <div className="project-info border-bottom-2 text-center">
+              <div className="project-info border-bottom-2 text-center" style={{ display: '-webkit-box' }}>
                 <h3 className="mb-15">MY TWW COLLECTION</h3>
+&nbsp;
+                <Button variant="outline-light" onClick={loadOwnedTww}><IoRefresh /></Button>
               </div>
               <div className="project-content mt-4">
                 <table className="table text-center">
