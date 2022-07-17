@@ -64,23 +64,24 @@ function StakingPage() {
   const [inProgress, setInProgress] = React.useState(false);
 
   const loadStakingContractDetail = React.useCallback(async () => {
-    if (stakingContract) {
-      try {
-        if (account == null || stakingContract == null) return;
-        const userInfo = await stakingContract.userStakeInfo(account);
-        const ru = await stakingContract.rewardUnit();
-        const rb = await stakingContract.rewardBoost();
-        setRewardUnit(ru);
-        setRewardBoost(rb);
-        console.log('userInfo:', userInfo, ' rewardUnit:', ru, ' rewardBoost:', rb);
-
-        setStakedAmount(userInfo.tokensStaked.toNumber());
-        setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
-        setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
-        setUnclaimedRewards(userInfo.unclaimedRewards);
-      } catch (err) {
-        console.error(err);
+    try {
+      if (account == null || stakingContract == null) {
+        console.warn('tried to load StakingContractDetail but failed.', account, stakingContract);
+        return;
       }
+      const userInfo = await stakingContract.userStakeInfo(account);
+      const ru = await stakingContract.rewardUnit();
+      const rb = await stakingContract.rewardBoost();
+      setRewardUnit(ru);
+      setRewardBoost(rb);
+      console.log('userInfo:', userInfo, ' rewardUnit:', ru, ' rewardBoost:', rb);
+
+      setStakedAmount(userInfo.tokensStaked.toNumber());
+      setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
+      setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
+      setUnclaimedRewards(userInfo.unclaimedRewards);
+    } catch (err) {
+      console.error(err);
     }
   });
 

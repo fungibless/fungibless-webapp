@@ -9,12 +9,12 @@ module.exports = {
     twitterUsername: '@syous_seo',
   },
   plugins: [
-    {
-      resolve: 'gatsby-plugin-remove-console',
-      options: {
-        exclude: ['error', 'warn'],
-      },
-    },
+    // {
+    //   resolve: 'gatsby-plugin-remove-console',
+    //   options: {
+    //     exclude: ['error', 'warn'],
+    //   },
+    // },
     'gatsby-plugin-emotion',
     'gatsby-plugin-image',
     {
