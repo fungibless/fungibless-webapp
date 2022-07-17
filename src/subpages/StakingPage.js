@@ -213,6 +213,7 @@ function StakingPage() {
       const tx = await stakingWithSigner.claimRewards();
       const claimResult = await tx.wait();
       console.log(claimResult);
+      setClaimableRewards(ethers.BigNumber.from(0));
       await loadStakingContractDetail();
     } catch (err) {
       console.error(err);
