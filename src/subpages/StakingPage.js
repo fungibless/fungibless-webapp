@@ -75,11 +75,10 @@ function StakingPage() {
       setRewardUnit(ru);
       setRewardBoost(rb);
       console.log('userInfo:', userInfo, ' rewardUnit:', ru, ' rewardBoost:', rb);
-
-      setStakedAmount(userInfo.tokensStaked.toNumber());
-      setStakedEconomicPower(userInfo.totalEconomicPowers.toNumber());
-      setLastClaimableUpdate(userInfo.lastUpdated.toNumber());
       setUnclaimedRewards(userInfo.unclaimedRewards);
+      setStakedAmount(userInfo.tokensStaked);
+      setStakedEconomicPower(userInfo.totalEconomicPowers);
+      setLastClaimableUpdate(userInfo.lastUpdated);
     } catch (err) {
       console.error(err);
     }
@@ -87,10 +86,8 @@ function StakingPage() {
 
   useInterval(() => {
     if (lastClaimableUpdate > 0 && stakedAmount > 0 && rewardUnit) {
-      const unit = ethers.BigNumber.from(rewardUnit.toString());
-      const unclaimed = ethers.BigNumber.from(unclaimedRewards.toString());
-      const updatedRewards = unit.mul((moment().utc().unix() - lastClaimableUpdate) * stakedAmount * stakedEconomicPower * rewardBoost);
-      const newClaimableReward = unclaimed.add(updatedRewards);
+      const updatedRewards = (moment().utc().unix() - lastClaimableUpdate.toNumber()) * stakedAmount.toNumber() * stakedEconomicPower.toNumber() * rewardBoost * rewardUnit.toNumber();
+      const newClaimableReward = unclaimedRewards.add(ethers.BigNumber.from(`${updatedRewards}`));
 
       setClaimableRewards(newClaimableReward);
     } else {
