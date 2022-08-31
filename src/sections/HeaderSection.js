@@ -60,9 +60,9 @@ function HeaderSection() {
                   <li>
                     <Link to="/roadmap">Roadmap</Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link to="/tokenomics">Tokenomics</Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>

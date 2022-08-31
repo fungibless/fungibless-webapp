@@ -208,9 +208,10 @@ function StakingPage() {
       const signer = walletModule.provider.getSigner();
       const stakingWithSigner = await stakingContract.connect(signer);
       const tx = await stakingWithSigner.claimRewards();
-      const claimResult = await tx.wait();
-      console.log(claimResult);
-      setClaimableRewards(ethers.BigNumber.from(0));
+      console.log('Transaction', tx);
+      const transactionReceipt = await tx.wait();
+      console.log(transactionReceipt);
+      // setClaimableRewards(ethers.BigNumber.from(0));
       await loadStakingContractDetail();
     } catch (err) {
       console.error(err);
