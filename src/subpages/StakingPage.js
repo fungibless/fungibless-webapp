@@ -92,7 +92,7 @@ function StakingPage() {
         .mul(stakedEconomicPower)
         .mul(rewardBoost)
         .mul(rewardUnit);
-      
+
       const newClaimableReward = unclaimedRewards.add(updatedRewards);
 
       setClaimableRewards(newClaimableReward);
@@ -358,7 +358,7 @@ function StakingPage() {
                           <td>
                             <button
                               type="button"
-                              onClick={() => { unstake([value.tokenId]); }}
+                              onClick={() => { unstake(value.tokenId); }}
                               className="btn"
                               disabled={inProgress}
                               style={{
