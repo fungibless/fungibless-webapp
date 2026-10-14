@@ -57,9 +57,6 @@ function HeaderSection() {
                   <li>
                     <Link to="/staking">Staking</Link>
                   </li>
-                  <li>
-                    <Link to="/roadmap">Roadmap</Link>
-                  </li>
                   {/* <li>
                     <Link to="/tokenomics">Tokenomics</Link>
                   </li> */}
@@ -157,9 +154,6 @@ function HeaderSection() {
           </li>
           <li>
             <Link to="/staking">Staking</Link>
-          </li>
-          <li>
-            <Link to="/roadmap">Roadmap</Link>
           </li>
           <li>
             <Link to="/tokenomics">Tokenomics</Link>
