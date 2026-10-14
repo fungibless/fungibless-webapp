@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from '@reach/router';
 
-import { graphql, useStaticQuery } from 'gatsby';
+import { graphql, useStaticQuery, withPrefix } from 'gatsby';
 import HeaderSection from '../sections/HeaderSection';
 import FooterSection from '../sections/FooterSection';
 import WalletSection from '../sections/WalletSection';
@@ -50,7 +50,7 @@ function Layout({ children }) {
                 "@context": "http://www.schema.org",
                 "@type": "WebSite",
                 "name": "${data.site.siteMetadata.title}",
-                "url": "${data.site.siteMetadata.siteUrl}",
+                "url": "${data.site.siteMetadata.siteUrl}${withPrefix('/')}",
                 "description": "${data.site.siteMetadata.description}",
                 "image": "${data.site.siteMetadata.image}"
               }

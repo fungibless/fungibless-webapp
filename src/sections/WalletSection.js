@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 import * as React from 'react';
+import { withPrefix } from 'gatsby';
 
 import { WalletKind } from '@fungibless/wallet-module';
 import { useSelector, useDispatch } from 'react-redux';
@@ -65,7 +66,7 @@ function WalletSection() {
 
   function connect() {
     if (isMobile) {
-      window.location.href = 'https://metamask.app.link/dapp/www.fungibless.xyz/tww';
+      window.location.href = `https://metamask.app.link/dapp/${window.location.host}${withPrefix('/tww/')}`;
       return;
     }
 

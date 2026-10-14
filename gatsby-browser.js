@@ -11,8 +11,10 @@ import './src/assets/css/responsive.css';
 import $ from 'jquery';
 import WOW from 'WOW';
 import wrapWithProvider from './wrap-with-provider';
+import wrapWithLayout from './wrap-with-layout';
 
 export const wrapRootElement = wrapWithProvider;
+export const wrapPageElement = wrapWithLayout;
 
 export function onRouteUpdate({ locatoin, prevLocation }) {
   const counter = $('.counter');
