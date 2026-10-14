@@ -10,12 +10,39 @@ import team_olly from '../assets/images/team/team-olly.png'
 import veil1_png from '../assets/images/team/veil1.png'
 import veil2_png from '../assets/images/team/veil2.png'
 
-const tokenDistribution = {
+// Colors: categorical dark-mode palette validated against the section background (#090a1a)
+const tokenAllocations = [
+    { label: 'Team', percent: 30, color: '#3987e5' },
+    { label: 'Community', percent: 40, color: '#d95926' },
+    { label: 'Future', percent: 20, color: '#199e70' },
+    { label: 'Bounty', percent: 7, color: '#c98500' },
+    { label: 'LP', percent: 3, color: '#d55181' },
+]
+
+const allocationBarStyle = {
     display: 'flex',
-    flexDirection:'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontFamily: `"Russo One"`
+    gap: '2px',
+    height: '24px',
+    borderRadius: '4px',
+    overflow: 'hidden',
+}
+
+const allocationLegendStyle = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px 24px',
+    listStyle: 'none',
+    padding: 0,
+    margin: '16px 0 0',
+}
+
+const allocationSwatchStyle = {
+    display: 'inline-block',
+    width: '12px',
+    height: '12px',
+    borderRadius: '2px',
+    marginRight: '8px',
+    verticalAlign: 'middle',
 }
 
 const IndexPage = () => {
@@ -53,23 +80,20 @@ const IndexPage = () => {
                         </div>
                         <h2 className="title">Tokenomics</h2>
                     </div>
-                    <div style={{ display: 'flex', height: '50px' }}>
-                        <div style={{ ...tokenDistribution, backgroundColor: '#3f0081', width: '20%', }}>
-                            <div className="dsc">Team</div><div>30%</div>
-                        </div>
-                        <div style={{ ...tokenDistribution, backgroundColor: '#440087', width: '30%' }}>
-                            <div className="dsc">Community</div>40%
-                        </div>
-                        <div style={{ ...tokenDistribution, backgroundColor: '#4b3987', width: '20%' }}>
-                            <div className="dsc">Future</div><div>20%</div>
-                        </div>
-                        <div style={{ ...tokenDistribution, backgroundColor: '#6e61ab', width: '25%' }}>
-                            <div className="dsc">Bounty</div> 7%
-                        </div>
-                        <div style={{ ...tokenDistribution, backgroundColor: '#928fce', width: '15%' }}>
-                            <div className="dsc">LP</div> 3%
-                        </div>
+                    <div style={allocationBarStyle} role="img" aria-label={tokenAllocations.map(({ label, percent }) => `${label} ${percent}%`).join(', ')}>
+                        {tokenAllocations.map(({ label, percent, color }) => (
+                            <div key={label} title={`${label} ${percent}%`} style={{ flex: `${percent} 1 0`, backgroundColor: color }} />
+                        ))}
                     </div>
+                    <ul style={allocationLegendStyle}>
+                        {tokenAllocations.map(({ label, percent, color }) => (
+                            <li key={label}>
+                                <span style={{ ...allocationSwatchStyle, backgroundColor: color }} />
+                                {label}
+                                <strong style={{ color: '#fff', marginLeft: '6px' }}>{percent}%</strong>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </section>
 
@@ -87,7 +111,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={team_syous} alt="member1 syous" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Syous</a></h4>
+                                <h4 className="team-title mb-8">Syous</h4>
                                 <div className="dsc">Founder</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
@@ -98,7 +122,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={team_alice} alt="member2 alice" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Alice</a></h4>
+                                <h4 className="team-title mb-8">Alice</h4>
                                 <div className="dsc">Programmer / NFT Artist</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
@@ -109,7 +133,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={team_olly} alt="member3 olly" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Olly</a></h4>
+                                <h4 className="team-title mb-8">Olly</h4>
                                 <div className="dsc">Programmer</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
@@ -120,7 +144,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="member4" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <h4 className="team-title mb-8">Vacancy</h4>
                                 <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
@@ -131,7 +155,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="member5" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <h4 className="team-title mb-8">Vacancy</h4>
                                 <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
@@ -142,7 +166,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="team6" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <h4 className="team-title mb-8">Vacancy</h4>
                                 <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
@@ -153,7 +177,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={veil2_png} alt="team7" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <h4 className="team-title mb-8">Vacancy</h4>
                                 <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
@@ -164,7 +188,7 @@ const IndexPage = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="team-item text-center active-shape">
                                 <img src={veil1_png} alt="team8" />
-                                <h4 className="team-title mb-8"><a href="teamdetails.html">Vacancy</a></h4>
+                                <h4 className="team-title mb-8">Vacancy</h4>
                                 <div className="dsc">waiting to participate</div>
                                 <span className="border-shadow shadow-1"></span>
                                 <span className="border-shadow shadow-2"></span>
