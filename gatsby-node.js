@@ -1,8 +1,14 @@
 exports.onCreateWebpackConfig = ({
+  stage,
   actions,
 }) => {
-  const { setWebpackConfig } = actions;
-  setWebpackConfig({
+  // Browser bundle only. SSR needs Gatsby's own Node built-in externals
+  // (react-dom/server uses util.TextEncoder), and jQuery/WOW are imported only in
+  // gatsby-browser.js.
+  if (stage === 'build-html' || stage === 'develop-html') {
+    return;
+  }
+  actions.setWebpackConfig({
     resolve: {
       fallback: {
         crypto: false,

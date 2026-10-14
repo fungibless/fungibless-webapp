@@ -2,7 +2,7 @@
 
 ## Environments
 
-- node 18 (`.nvmrc`)
+- node 24 (`.nvmrc`)
 - gatsby
 - npm
 

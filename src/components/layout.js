@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { useLocation } from '@reach/router';
 
 import { graphql, useStaticQuery, withPrefix } from 'gatsby';
 import HeaderSection from '../sections/HeaderSection';
@@ -8,8 +7,8 @@ import FooterSection from '../sections/FooterSection';
 import WalletSection from '../sections/WalletSection';
 import SocialSection from '../sections/SocialSection';
 
-function Layout({ children }) {
-  const { pathname } = useLocation();
+function Layout({ children, location }) {
+  const { pathname } = location;
   const data = useStaticQuery(graphql`
     query {
       site {

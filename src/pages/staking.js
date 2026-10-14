@@ -122,10 +122,9 @@ function StakingPage() {
     }
   }, [walletConnected]);
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     if (account) {
-      await loadStakingContractDetail();
-      loadOwnedTww();
+      loadStakingContractDetail().then(loadOwnedTww);
     }
   }, [account, stakingContract, twwContract]);
 

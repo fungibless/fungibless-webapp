@@ -9,14 +9,6 @@ module.exports = {
     twitterUsername: '@syous_seo',
   },
   plugins: [
-    // {
-    //   resolve: 'gatsby-plugin-remove-console',
-    //   options: {
-    //     exclude: ['error', 'warn'],
-    //   },
-    // },
-    'gatsby-plugin-emotion',
-    'gatsby-plugin-image',
     {
       resolve: 'gatsby-plugin-google-fonts',
       options: {
@@ -32,15 +24,6 @@ module.exports = {
       options: {
         icon: 'src/images/icon.png',
       },
-    },
-    'gatsby-plugin-sharp',
-    'gatsby-transformer-sharp', {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        name: 'images',
-        path: './src/images/',
-      },
-      __key: 'images',
     },
     {
       resolve: 'gatsby-plugin-google-gtag',

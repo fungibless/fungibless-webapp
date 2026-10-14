@@ -473,12 +473,14 @@ function TypicalWageWorkersPage() {
     }
   }, [walletConnected]);
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     if (account) {
-      await loadFungiBalance();
-      await checkFungiAllowance();
-      await loadTWWInfo();
-      await loadOwnedTww();
+      (async () => {
+        await loadFungiBalance();
+        await checkFungiAllowance();
+        await loadTWWInfo();
+        await loadOwnedTww();
+      })();
     }
   }, [account, fungiContract, twwContract]);
 
