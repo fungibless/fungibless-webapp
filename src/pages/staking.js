@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
@@ -15,6 +14,7 @@ import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
 import rakingImg from '../assets/images/project/raking.png';
 import raking2Img from '../assets/images/project/raking2.png';
 import { walletModule } from '../features/wallet';
+import { toTwwToken, loadOwnedTwwTokens } from '../features/tww';
 
 const stakingABI = require('../../static/config/abi/staking_tww.json');
 const twwABI = require('../../static/config/abi/tww.json');
@@ -79,6 +79,7 @@ function StakingPage() {
       setStakedAmount(userInfo.tokensStaked);
       setStakedEconomicPower(userInfo.totalEconomicPowers);
       setLastClaimableUpdate(userInfo.lastUpdated);
+      setStakedTokenList(userInfo.stakedTokenIds.map(toTwwToken));
     } catch (err) {
       console.error(err);
     }
@@ -101,49 +102,15 @@ function StakingPage() {
     }
   }, 2000);
 
-  const loadStakedTww = React.useCallback(async () => {
-    const staked = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/staked`);
-    const stakedTokens = await staked.json();
-
-    const tokens = [];
-    if (stakedTokens !== null) {
-      for (const r of stakedTokens) {
-        tokens.push(
-          {
-            tokenId: r.TOKEN_ID,
-            name: r.NAME,
-            job: r.COSTUME,
-            grade: r.GRADE,
-            ep: r.EP,
-            image: r.IMAGE,
-          },
-        );
-      }
-    }
-    setStakedTokenList(tokens);
-  });
-
   const loadOwnedTww = React.useCallback(async () => {
-    const owned = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/owned`);
-    const ownedTokenList = await owned.json();
-    console.log(ownedTokenList);
-
-    const tokens = [];
-    if (ownedTokenList !== null) {
-      for (const r of ownedTokenList) {
-        tokens.push(
-          {
-            tokenId: r.TOKEN_ID,
-            name: r.NAME,
-            job: r.COSTUME,
-            grade: r.GRADE,
-            ep: r.EP,
-            image: r.IMAGE,
-          },
-        );
+    try {
+      if (account == null || twwContract == null) {
+        return;
       }
+      setTokenList(await loadOwnedTwwTokens(twwContract, account));
+    } catch (err) {
+      console.error(err);
     }
-    setTokenList(tokens);
   });
 
   React.useEffect(() => {
@@ -159,7 +126,6 @@ function StakingPage() {
     if (account) {
       await loadStakingContractDetail();
       loadOwnedTww();
-      loadStakedTww();
     }
   }, [account, stakingContract, twwContract]);
 
@@ -181,7 +147,6 @@ function StakingPage() {
       const stakingResult = await tx.wait();
       console.log(stakingResult);
       await loadStakingContractDetail();
-      await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
       console.error(err);
@@ -199,7 +164,6 @@ function StakingPage() {
       const stakingResult = await tx.wait();
       console.log(stakingResult);
       await loadStakingContractDetail();
-      await loadStakedTww();
       await loadOwnedTww();
     } catch (err) {
       console.error(err);
@@ -327,7 +291,7 @@ function StakingPage() {
                 <div className="col" style={{ display: '-webkit-box' }}>
                   <h3>MY STAKED NFT LIST</h3>
                   &nbsp;
-                  <Button variant="outline-light" onClick={loadStakedTww}><IoRefresh /></Button>
+                  <Button variant="outline-light" onClick={loadStakingContractDetail}><IoRefresh /></Button>
                 </div>
                 <table className="table text-center">
                   <thead>
@@ -353,7 +317,7 @@ function StakingPage() {
                           <td>{value.tokenId}</td>
                           <td>{value.name}</td>
                           <td>{value.ep}</td>
-                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/${value.image}.png`} width={24} height={24} alt={value.name} /></td>
+                          <td><img src={value.image} width={24} height={24} alt={value.name} style={{ imageRendering: 'pixelated' }} /></td>
                           <td>{value.grade}</td>
                           <td>
                             <button
@@ -413,7 +377,7 @@ function StakingPage() {
                           <td>{value.tokenId}</td>
                           <td>{value.name}</td>
                           <td>{value.ep}</td>
-                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/${value.image}.png`} width={24} height={24} alt={value.name} /></td>
+                          <td><img src={value.image} width={24} height={24} alt={value.name} style={{ imageRendering: 'pixelated' }} /></td>
                           <td>{value.grade}</td>
                           <td>
                             <button

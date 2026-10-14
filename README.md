@@ -2,7 +2,7 @@
 
 ## Environments
 
-- node v16.13.2
+- node 18 (`.nvmrc`)
 - gatsby
 - npm
 
@@ -14,10 +14,14 @@ npm run develop
 
 ## How to deploy
 
-- develop branch에 커밋하면 AWS Amplify에서 빌드하고, <https://develop.d283j5qdofmkqu.amplifyapp.com/> 여기로 바인딩 됌
-- main branch에 커밋하면 AWS Amplify에서 빌드하고, <https://www.fungibless.xyz>로 바인딩 됌
+- main branch에 커밋하면 GitHub Actions(`.github/workflows/deploy-pages.yml`)가 빌드해서 GitHub Pages로 배포함
+- 주소: <https://fungibless.github.io/fungibless-webapp/>
 
-## Zone
-- Develop: <https://develop.d283j5qdofmkqu.amplifyapp.com/>
-  - Polygon Mumbai Testnet과 연결되어 있음
-- Main: Polygon Mainnet
+## Network
+
+- Polygon Mainnet. 개발 서버도 메인넷 컨트랙트에 연결되므로 트랜잭션은 실제로 실행됨
+
+## NFT Assets
+
+- `static/images/tww/{tokenId}.png`: TWW 원본 이미지 (IPFS `bafybeigqa6z3gbsqro34rgphuypoekshnxxo2hp2tlrvrcj6wkwowce3oe`)
+- `src/data/tww-tokens.json`: TWW 메타데이터 요약 (IPFS `bafybeifuvi4iopnwdgr2h6grsg3t3dmz56fwbhfocy6clx7ehotertddti`)

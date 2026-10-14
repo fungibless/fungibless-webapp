@@ -4,6 +4,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import numeral from 'numeral';
+import { withPrefix } from 'gatsby';
 import { OutboundLink } from 'gatsby-plugin-google-gtag';
 import { BigNumber, ethers } from 'ethers';
 import { shortenAddress } from '@fungibless/wallet-module';
@@ -12,6 +13,7 @@ import { IoRefresh } from 'react-icons/io5';
 import PageSection from '../components/PageSection';
 import BreadcrumbPageSection from '../sections/BreadcrumbPageSection';
 import { walletModule } from '../features/wallet';
+import { loadOwnedTwwTokens } from '../features/tww';
 
 import { setInteracting, setFungiBalance } from '../features/wallet-slice';
 
@@ -168,7 +170,7 @@ function TwwInformation({
                   <strong style={strongText}>
                     {ethers.utils.formatEther(price, 'ether')}
                     {' '}
-                    MATIC
+                    POL
                   </strong>
                 </li>
                 <li>
@@ -196,7 +198,7 @@ function TwwInformation({
                 {' '}
                 {numeral(ethers.utils.formatEther(ethBalance)).format('0.000')}
                 {' '}
-                MATIC
+                POL
                 {' / '}
                 {numeral(ethers.utils.formatEther(fungiBalance)).format('0.000')}
                 {' '}
@@ -220,7 +222,7 @@ function TwwInformation({
 
               <div className="project-form-list mb-27">
                 <h5 className="mb-18">
-                  Mint with MATIC
+                  Mint with POL
                 </h5>
                 <button
                   type="button"
@@ -330,16 +332,16 @@ function TypicalWageWorkersPage() {
 
   const roundData = {
     100: {
-      no: 1, saleAmount: 100, maxSupply: 100, price: '1.0 MATIC',
+      no: 1, saleAmount: 100, maxSupply: 100, price: '1.0 POL',
     },
     200: {
-      no: 2, saleAmount: 100, maxSupply: 200, price: '1.5 MATIC',
+      no: 2, saleAmount: 100, maxSupply: 200, price: '1.5 POL',
     },
     300: {
-      no: 3, saleAmount: 100, maxSupply: 300, price: '2 MATIC, 100 FUNGI',
+      no: 3, saleAmount: 100, maxSupply: 300, price: '2 POL, 100 FUNGI',
     },
     400: {
-      no: 4, saleAmount: 100, maxSupply: 400, price: '2 MATIC, 100 FUNGI',
+      no: 4, saleAmount: 100, maxSupply: 400, price: '2 POL, 100 FUNGI',
     },
     500: {
       no: 5, saleAmount: 100, maxSupply: 500, price: 'Based on voting',
@@ -454,28 +456,9 @@ function TypicalWageWorkersPage() {
   });
 
   const loadOwnedTww = React.useCallback(async () => {
-    const owned = await fetch(`${process.env.GATSBY_API_SERVER_HOST}account/${account}/tww/owned`);
-    const ownedTokenList = await owned.json();
-
-    const tokens = [];
-    if (ownedTokenList !== null) {
-      // eslint-disable-next-line no-restricted-syntax
-      for (const r of ownedTokenList) {
-        tokens.push(
-          {
-            tokenId: r.TOKEN_ID,
-            name: r.NAME,
-            job: r.COSTUME,
-            grade: r.GRADE,
-            ep: r.EP,
-            image: r.IMAGE,
-            // eslint-disable-next-line max-len
-            value: r.CONSTITUTION + r.EP + r.HP + r.INTELLIGENCE + r.LUCK + r.MP + r.SPEED + r.STRENGTH + r.WISDOM,
-          },
-        );
-      }
+    if (twwContract) {
+      setTokenList(await loadOwnedTwwTokens(twwContract, account));
     }
-    setTokenList(tokens);
   });
 
   React.useEffect(() => {
@@ -626,7 +609,7 @@ function TypicalWageWorkersPage() {
                   =&nbsp;
                   {ethers.utils.formatEther(price, 'ether')}
                   {' '}
-                  <span className="buse">MATIC</span>
+                  <span className="buse">POL</span>
                   {' '}
                   =&nbsp;
                   {ethers.utils.formatEther(fungiPrice, 'ether')}
@@ -734,7 +717,7 @@ function TypicalWageWorkersPage() {
                           <td>{value.tokenId}</td>
                           <td>{value.name}</td>
                           <td>{value.ep}</td>
-                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/${value.image}.png`} width={24} height={24} alt={value.tokenId} /></td>
+                          <td><img src={value.image} width={24} height={24} alt={value.name} style={{ imageRendering: 'pixelated' }} /></td>
                           <td>{value.grade}</td>
                           <td>{numeral(value.value).format('#,#')}</td>
                         </tr>
@@ -767,7 +750,7 @@ function TypicalWageWorkersPage() {
                         <tr key={key}>
                           <td>{value.level}</td>
                           <td>{value.grade}</td>
-                          <td><img src={`https://fungibless.s3.us-east-2.amazonaws.com/image/tww/grade/${key}.png`} width={24} height={24} alt={value.grade} /></td>
+                          <td><img src={withPrefix(`/images/tww/grade/${key}.png`)} width={24} height={24} alt={value.grade} style={{ imageRendering: 'pixelated' }} /></td>
                           <td>{numeral(value.count).format('#,#')}</td>
                           <td>{numeral(value.count / 10000).format('0.00%')}</td>
                         </tr>
