@@ -456,8 +456,12 @@ function TypicalWageWorkersPage() {
   });
 
   const loadOwnedTww = React.useCallback(async () => {
-    if (twwContract) {
-      setTokenList(await loadOwnedTwwTokens(twwContract, account));
+    try {
+      if (twwContract) {
+        setTokenList(await loadOwnedTwwTokens(twwContract, account));
+      }
+    } catch (err) {
+      console.error(err);
     }
   });
 
