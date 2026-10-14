@@ -50,11 +50,11 @@ function RoadmapPage() {
                           TWW Minting Rounds
                         </li>
                         <li>
-                          <span><img src={imgMuniesIcon} alt="icon" className="img-fluid" /></span>
+                          <span><img src={imgCheckIcon} alt="icon" className="img-fluid" /></span>
                           Launch of the FUNGI Token
                         </li>
                         <li>
-                          <span><img src={imgMuniesIcon} alt="icon" className="img-fluid" /></span>
+                          <span><img src={imgCheckIcon} alt="icon" className="img-fluid" /></span>
                           Launch Staking Feature
                         </li>
                       </ul>
@@ -71,7 +71,7 @@ function RoadmapPage() {
                           IDO(Initial Dex Offering)
                         </li>
                         <li>
-                          <span><img src={imgMuniesIcon} alt="icon" className="img-fluid" /></span>
+                          <span><img src={imgCheckIcon} alt="icon" className="img-fluid" /></span>
                           TWW Minting with FUNGI Token
                         </li>
                         <li>
