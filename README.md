@@ -15,7 +15,7 @@ npm run develop
 ## How to deploy
 
 - main branch에 커밋하면 GitHub Actions(`.github/workflows/deploy-pages.yml`)가 빌드해서 GitHub Pages로 배포함
-- 주소: <https://fungibless.github.io/fungibless-webapp/>
+- 주소: <https://fungibless.github.io/>
 
 ## Network
 

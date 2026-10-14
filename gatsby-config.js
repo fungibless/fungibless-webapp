@@ -1,12 +1,11 @@
 module.exports = {
-  pathPrefix: '/fungibless-webapp',
   siteMetadata: {
     title: 'Fun challenges in the blockchain world for the community.',
     titleTemplate: '%s | Fungibless',
     siteUrl: 'https://fungibless.github.io',
     description: 'Fungibless is the web3 based community. We do fun blockchain experiments such as NFTs, tokens, and staking on Polygon Network. This is the official minting site for Typical Wage Workers and provides some utilities for the NFT.',
     url: '/',
-    image: 'https://fungibless.github.io/fungibless-webapp/images/tww/1.png',
+    image: 'https://fungibless.github.io/images/tww/1.png',
     twitterUsername: '@syous_seo',
   },
   plugins: [
