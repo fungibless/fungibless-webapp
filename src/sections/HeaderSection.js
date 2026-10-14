@@ -57,9 +57,6 @@ function HeaderSection() {
                   <li>
                     <Link to="/staking">Staking</Link>
                   </li>
-                  {/* <li>
-                    <Link to="/tokenomics">Tokenomics</Link>
-                  </li> */}
                 </ul>
               </div>
             </div>
@@ -154,9 +151,6 @@ function HeaderSection() {
           </li>
           <li>
             <Link to="/staking">Staking</Link>
-          </li>
-          <li>
-            <Link to="/tokenomics">Tokenomics</Link>
           </li>
           <li>
             <button type="button" className="readon black-shape-big connectWalletBtnforMobile" data-bs-toggle="modal" data-bs-target="#modal">
