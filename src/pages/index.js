@@ -47,7 +47,7 @@ const allocationSwatchStyle = {
 
 const IndexPage = () => {
 
-    const GATSBY_OPENSEA_URI_TWW = process.env.GATSBY_OPENSEA_URI_TWW;
+    const GATSBY_RARIBLE_URI_TWW = process.env.GATSBY_RARIBLE_URI_TWW;
 
     return (
         <>
@@ -61,7 +61,7 @@ const IndexPage = () => {
                         <div className="description wow fadeInUp" data-wow-delay="300ms" data-wow-duration="2500ms">
                             community-based blockchain experiments such as NFTs, tokens, and staking. challenge together and share together.
                         </div>
-                        <OutboundLink className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href={GATSBY_OPENSEA_URI_TWW}>
+                        <OutboundLink className="banner-btn wow fadeInUp black-shape-big" data-wow-delay="300ms" data-wow-duration="2500ms" href={GATSBY_RARIBLE_URI_TWW}>
                             <span className="btn-text">Explore Collections</span>
                             <span className="hover-shape1"></span>
                             <span className="hover-shape2"></span>
